@@ -21,8 +21,9 @@ import img20 from '../assets/jewellery/img20.png';
 import img21 from '../assets/jewellery/img21.png';
 import img22 from '../assets/jewellery/img22.png';
 import img23 from '../assets/jewellery/img23.png';
+import imgRings from '../assets/jewellery/img-rings.png';
+import imgOrbitalRing from '../assets/jewellery/img-orbital-ring.jpg';
 
-import exploreRings from '../img/c559d1bbd8e9ea7ac911cb236d14ef44da5c228a.png';
 import exploreNecklaces from '../img/e4b0eaf06279e1b86e5fa1867bdefb9d821d7650.png';
 import exploreBracelets from '../img/1359503369d0dfac3d59f2d4283fa24a6f4172e3.png';
 import exploreEarrings from '../img/50314b9527ec49f9d179871a256d9e1221b65189.png';
@@ -40,26 +41,26 @@ export const jewellery = {
 export const hero = {
   main: img07,
   thumb1: img12,
-  thumb2: img03,
+  thumb2: img04,
 };
 
 export const categories = [
-  { name: 'RINGS', image: img09 },
-  { name: 'EARRINGS', image: img16 },
-  { name: 'NECKLACES', image: img18 },
-  { name: 'BRACELETS', image: img01 },
+  { name: 'RINGS', image: img05 },
+  { name: 'EARRINGS', image: img13 },
+  { name: 'NECKLACES', image: img21 },
+  { name: 'BRACELETS', image: img23 },
 ];
 
 export const collections = [
-  { image: img21, tall: true },
-  { image: img14 },
-  { image: img05 },
-  { image: img23 },
-  { image: img02 },
+  { image: img17, slot: 'tall', alt: 'Floral gemstone necklace set' },
+  { image: img06, slot: 'right-top', alt: 'Emerald gold bangle' },
+  { image: img11, slot: 'mid-left', alt: 'Enamel floral bangles' },
+  { image: img10, slot: 'mid-right', alt: 'Hand chain bracelet' },
+  { image: img14, slot: 'right-bot', alt: 'Gemstone bracelets display' },
 ];
 
 export const exploreCategories = [
-  { name: 'RINGS', image: exploreRings },
+  { name: 'RINGS', image: imgRings },
   { name: 'NECKLACES', image: exploreNecklaces },
   { name: 'BRACELETS', image: exploreBracelets },
   { name: 'EARRINGS', image: exploreEarrings },
@@ -72,7 +73,7 @@ export const exploreGallery = {
 };
 
 export const featured = [
-  { name: 'ORBITAL RING', price: '$420', image: img09 },
+  { name: 'ORBITAL RING', price: '$420', image: imgOrbitalRing },
   { name: 'TEXTURE COIL', price: '$550', image: img02 },
   { name: 'RAW CHARM', price: '$320', image: img14 },
   { name: 'DUO BAND', price: '$460', image: img16 },
@@ -80,9 +81,13 @@ export const featured = [
 
 export const bestSellers = [
   { name: 'Velina Drop Necklace', price: '₹563', rating: '4.9', image: img01, tall: true },
-  { name: 'Ruby Oval Bracelet', price: '₹899', rating: '4.8', image: img05 },
+  { name: 'Ruby Oval Bracelet', price: '₹899', rating: '4.8', image: img19, tall: true },
   { name: 'Pearl Bloom Pendant', price: '₹1,240', rating: '5.0', image: img03, tall: true },
-  { name: 'Amber Leaf Set', price: '₹1,560', rating: '4.9', image: img20 },
+  { name: 'Amber Leaf Set', price: '₹1,560', rating: '4.9', image: img20, tall: true },
+  { name: 'Floral Enamel Bangle', price: '₹720', rating: '4.9', image: img05 },
+  { name: 'Emerald Filigree Cuff', price: '₹980', rating: '5.0', image: img14, tall: true },
+  { name: 'Hand Chain Grace', price: '₹640', rating: '4.8', image: img10 },
+  { name: 'Rose Pearl Stud', price: '₹450', rating: '4.9', image: img04, tall: true },
 ];
 
 export const curated = [

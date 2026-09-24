@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowLeft, ArrowRight, Star, Recycle, Hand, Award } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
@@ -16,7 +16,18 @@ import {
 
 const Home = () => {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
-  const [sellerOffset, setSellerOffset] = useState(0);
+  const sellersViewportRef = useRef(null);
+
+  const scrollSellers = (direction) => {
+    const viewport = sellersViewportRef.current;
+    if (!viewport) return;
+    const card = viewport.querySelector('.stagger-card');
+    if (!card) return;
+    const styles = window.getComputedStyle(viewport.querySelector('.stagger-track'));
+    const gap = parseFloat(styles.gap) || 22;
+    const step = card.getBoundingClientRect().width + gap;
+    viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+  };
 
   const nextTestimonial = () =>
     setTestimonialIndex((i) => (i + 1) % testimonials.length);
@@ -37,14 +48,14 @@ const Home = () => {
       <section className="hero">
         <img src={hero.main} alt="Woman wearing layered gold chains" className="hero-bg" />
         <div className="hero-overlay" />
-        <div className="store-container hero-content">
+        <div className="hero-content">
           <h1>
             <span>Discover</span>
             <em>Your Sparkles</em>
           </h1>
-          <p>
-            Discover beautifully crafted pieces designed to celebrate every moment—from everyday
-            elegance to unforgettable occasions.
+          <p className="hero-copy">
+            <span>Discover beautifully crafted pieces designed to celebrate every moment—from</span>
+            <span>everyday elegance to unforgettable occasions.</span>
           </p>
           <Link to="/collections" className="hero-cta">
             Explore Collections
@@ -52,7 +63,7 @@ const Home = () => {
         </div>
         <div className="hero-thumbs">
           <img src={hero.thumb1} alt="Green gemstone necklace" />
-          <img src={hero.thumb2} alt="Gold floral earrings" />
+          <img src={hero.thumb2} alt="Pearl flower earring" />
         </div>
       </section>
 
@@ -74,25 +85,23 @@ const Home = () => {
       {/* Sophisticated Collections */}
       <section className="section collections-section" id="collections">
         <div className="store-container">
-          <div className="section-head center">
+          <div className="section-head center collections-head">
             <span className="pill">New Arrivals</span>
-            <h2 className="section-title">Sophisticated Collections for Every Moment</h2>
-            <Link to="/collections" className="text-link">
+            <h2 className="section-title collections-title">
+              Sophisticated Collections for
+              <br />
+              Every Moment
+            </h2>
+            <Link to="/collections" className="text-link collections-link">
               View All Collections <ArrowUpRight size={16} />
             </Link>
           </div>
-          <div className="masonry-grid">
-            <div className="masonry-tall">
-              <img src={collections[0].image} alt="Collection piece" />
-            </div>
-            <div className="masonry-stack">
-              <img src={collections[1].image} alt="Collection piece" />
-              <img src={collections[2].image} alt="Collection piece" />
-            </div>
-            <div className="masonry-stack">
-              <img src={collections[3].image} alt="Collection piece" />
-              <img src={collections[4].image} alt="Collection piece" />
-            </div>
+          <div className="collections-mosaic">
+            {collections.map((item) => (
+              <figure key={item.slot} className={`mosaic-cell mosaic-${item.slot}`}>
+                <img src={item.image} alt={item.alt} />
+              </figure>
+            ))}
           </div>
         </div>
       </section>
@@ -129,8 +138,9 @@ const Home = () => {
           <div className="section-head row">
             <div>
               <span className="pill">Best Sellers</span>
-              <h2 className="section-title narrow">
-                Explore pieces that blend modern design with classic beauty
+              <h2 className="section-title bestsellers-title">
+                <span>Explore pieces that blend modern</span>
+                <span>design with classic beauty</span>
               </h2>
             </div>
             <div className="carousel-nav">
@@ -138,7 +148,7 @@ const Home = () => {
                 type="button"
                 className="nav-circle outline"
                 aria-label="Previous"
-                onClick={() => setSellerOffset((o) => Math.max(0, o - 1))}
+                onClick={() => scrollSellers(-1)}
               >
                 <ArrowLeft size={18} />
               </button>
@@ -146,30 +156,32 @@ const Home = () => {
                 type="button"
                 className="nav-circle solid"
                 aria-label="Next"
-                onClick={() => setSellerOffset((o) => Math.min(bestSellers.length - 1, o + 1))}
+                onClick={() => scrollSellers(1)}
               >
                 <ArrowRight size={18} />
               </button>
             </div>
           </div>
-          <div className="stagger-grid" style={{ transform: `translateX(-${sellerOffset * 8}%)` }}>
-            {bestSellers.map((item, i) => (
-              <article
-                key={item.name}
-                className={`stagger-card ${item.tall ? 'tall' : ''} offset-${i % 2}`}
-              >
-                <div className="stagger-meta">
-                  <div>
-                    <h3>{item.name}</h3>
-                    <span className="rating">
-                      <Star size={14} fill="#E8B923" stroke="none" /> {item.rating}
-                    </span>
+          <div className="bestsellers-viewport" ref={sellersViewportRef}>
+            <div className="stagger-track">
+              {bestSellers.map((item, i) => (
+                <article
+                  key={`${item.name}-${i}`}
+                  className={`stagger-card ${item.tall ? 'tall' : ''} ${i % 2 === 1 ? 'offset-1' : ''}`}
+                >
+                  <div className="stagger-meta">
+                    <div>
+                      <h3>{item.name}</h3>
+                      <span className="rating">
+                        <Star size={14} fill="#E8B923" stroke="none" /> {item.rating}
+                      </span>
+                    </div>
+                    <strong>{item.price}</strong>
                   </div>
-                  <strong>{item.price}</strong>
-                </div>
-                <img src={item.image} alt={item.name} />
-              </article>
-            ))}
+                  <img src={item.image} alt={item.name} />
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
