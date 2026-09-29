@@ -1,0 +1,26 @@
+/* Admin layout shell */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.page-wrapper {
+  padding: 2rem;
+  flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .main-content { margin-left: 80px; }
+}

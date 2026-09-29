@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/components/StatCard.css';
 
 const StatCard = ({ title, value, icon: Icon, trend }) => {
   return (
@@ -10,7 +11,7 @@ const StatCard = ({ title, value, icon: Icon, trend }) => {
         <div className="stat-title">{title}</div>
         <div className="stat-value">{value}</div>
         {trend && (
-          <div style={{ fontSize: '0.75rem', color: 'var(--status-active)', marginTop: '0.25rem' }}>
+          <div className="stat-trend">
             ↑ {trend} from last month
           </div>
         )}

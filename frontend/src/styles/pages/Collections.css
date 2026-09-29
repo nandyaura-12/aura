@@ -1,0 +1,114 @@
+/* Collections page */
+/* Explore Our Collections page */
+.explore-section {
+  padding-top: 3.5rem;
+  padding-bottom: 5rem;
+}
+
+.explore-head {
+  margin-bottom: 2.75rem;
+}
+
+.explore-title em {
+  font-style: italic;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.explore-head .section-sub {
+  margin-top: 0.85rem;
+  max-width: 480px;
+  font-size: 0.95rem;
+}
+
+.explore-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.35rem;
+}
+
+.explore-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.explore-category-media {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--cream-deep);
+}
+
+.explore-category-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.explore-category-card:hover .explore-category-media img {
+  transform: scale(1.05);
+}
+
+.explore-category-card span {
+  display: inline-block;
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  padding: 0.5rem 1.35rem;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.explore-category-card:hover span {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: var(--white);
+}
+
+.explore-gallery {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 1.25rem;
+  margin-top: 2.75rem;
+  align-items: stretch;
+}
+
+.explore-gallery-tall img {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.explore-gallery-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.explore-gallery-stack img {
+  width: 100%;
+  height: 248px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
+  .explore-category-grid { grid-template-columns: repeat(2, 1fr); }
+  .explore-gallery { grid-template-columns: 1fr 1fr; }
+  .explore-gallery-tall img { height: 360px; min-height: 360px; }
+}
+@media (max-width: 720px) {
+  .explore-category-grid,
+  .explore-gallery { grid-template-columns: 1fr; }
+}

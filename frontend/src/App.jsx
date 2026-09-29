@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -11,6 +11,8 @@ import Orders from './pages/Orders';
 import Customers from './pages/Customers';
 import Offers from './pages/Offers';
 import Reports from './pages/Reports';
+import './styles/pages/AdminLayout.css';
+import './styles/components/AdminShared.css';
 
 function AdminLayout() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,9 +38,30 @@ function AdminLayout() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const id = hash.slice(1);
+      const scrollToSection = () => {
+        const section = document.getElementById(id);
+        if (section) section.scrollIntoView();
+        else window.scrollTo(0, 0);
+      };
+      requestAnimationFrame(scrollToSection);
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
+
+  return null;
+}
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collections" element={<Collections />} />

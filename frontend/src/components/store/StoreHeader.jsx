@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Heart, User, ShoppingBag, Menu, X } from 'lucide-react';
-import logo from '../../img/logo.png';
+import { brandLogo } from '../../data/images';
+import '../../styles/components/StoreHeader.css';
 
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,7 +30,7 @@ const StoreHeader = () => {
           </div>
 
           <Link to="/" className="brand-mark" aria-label="Nandys Aura home">
-            <img src={logo} alt="Nandys Aura" className="brand-logo-img" />
+            <img src={brandLogo} alt="Nandys Aura" className="brand-logo-img" />
           </Link>
 
           <div className="brand-actions">

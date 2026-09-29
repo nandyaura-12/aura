@@ -1,5 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import '../styles/components/Modal.css';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;

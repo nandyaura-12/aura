@@ -8,7 +8,8 @@ import {
   uploadImageApi,
 } from '../services/api';
 import Modal from '../components/Modal';
-import { Plus, Edit2, Trash2, Search, Upload, Gem, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, Upload } from 'lucide-react';
+import '../styles/pages/Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -17,12 +18,10 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
 
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  // Form State
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -156,7 +155,7 @@ const Products = () => {
       </div>
 
       <div className="filter-bar">
-        <div className="search-box" style={{ flex: 1 }}>
+        <div className="search-box search-box--grow">
           <Search size={18} />
           <input
             type="text"
@@ -167,8 +166,7 @@ const Products = () => {
         </div>
 
         <select
-          className="form-control"
-          style={{ width: '220px' }}
+          className="form-control filter-select"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
@@ -193,7 +191,7 @@ const Products = () => {
                 <th>Price</th>
                 <th>Stock</th>
                 <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
+                <th className="th-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -201,25 +199,19 @@ const Products = () => {
                 products.map((product) => (
                   <tr key={product._id}>
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                      <div className="product-cell">
                         <img
-                          src={product.images[0] || 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=100&q=80'}
+                          src={product.images[0] || 'https://res.cloudinary.com/mxihlfki/image/upload/f_auto,q_auto,w_100/aura/jewellery/img18'}
                           alt={product.name}
-                          style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '8px',
-                            objectFit: 'cover',
-                            border: '1px solid var(--border-color)',
-                          }}
+                          className="product-cell__thumb"
                         />
                         <div>
-                          <div style={{ fontWeight: '700' }}>{product.name}</div>
-                          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                            SKU: <span style={{ fontFamily: 'var(--font-mono)' }}>{product.sku}</span>
+                          <div className="product-cell__name">{product.name}</div>
+                          <div className="product-cell__sku">
+                            SKU: <span className="product-cell__sku-code">{product.sku}</span>
                           </div>
                           {product.offerTag && (
-                            <span className="badge badge-gold" style={{ fontSize: '0.7rem', marginTop: '0.2rem' }}>
+                            <span className="badge badge-gold product-cell__offer">
                               🏷️ {product.offerTag}
                             </span>
                           )}
@@ -230,28 +222,28 @@ const Products = () => {
                     <td>
                       <span className="badge badge-gold">{product.purity}</span>
                     </td>
-                    <td style={{ fontWeight: '700' }}>{product.weightGrams ? `${product.weightGrams} g` : 'N/A'}</td>
+                    <td className="td-weight">{product.weightGrams ? `${product.weightGrams} g` : 'N/A'}</td>
                     <td>
-                      <span style={{ fontWeight: '800', color: 'var(--primary-gold)' }}>
+                      <span className="product-price">
                         ₹{product.price?.toLocaleString()}
                       </span>
                       {product.discountPrice > 0 && (
-                        <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', textDecoration: 'line-through' }}>
+                        <div className="product-price--strike">
                           ₹{product.discountPrice?.toLocaleString()}
                         </div>
                       )}
                     </td>
-                    <td style={{ fontWeight: '600' }}>{product.stock} pcs</td>
+                    <td className="td-stock">{product.stock} pcs</td>
                     <td>
                       <span className={`badge badge-${product.status.toLowerCase().replace(/\s+/g, '-')}`}>
                         {product.status}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="td-right">
                       <button className="btn-icon" onClick={() => handleOpenModal(product)}>
                         <Edit2 size={16} />
                       </button>
-                      <button className="btn-icon" style={{ color: 'var(--status-cancelled)' }} onClick={() => handleDelete(product._id)}>
+                      <button className="btn-icon btn-icon--danger" onClick={() => handleDelete(product._id)}>
                         <Trash2 size={16} />
                       </button>
                     </td>
@@ -259,7 +251,7 @@ const Products = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="8" style={{ textAlign: 'center', padding: '2rem' }}>
+                  <td colSpan="8" className="td-empty">
                     {loading ? 'Loading jewellery catalogue...' : 'No jewellery pieces found.'}
                   </td>
                 </tr>
@@ -269,7 +261,6 @@ const Products = () => {
         </div>
       </div>
 
-      {/* Add / Edit Jewellery Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -389,9 +380,9 @@ const Products = () => {
           <div className="form-group">
             <label>Upload High-Res Photo</label>
             <div className="upload-dropzone" onClick={() => document.getElementById('jewelImageInput').click()}>
-              <Upload size={24} style={{ color: 'var(--primary-gold)', marginBottom: '0.5rem' }} />
+              <Upload size={24} className="upload-dropzone__icon--lg" />
               <div>{uploadingImage ? 'Uploading High-Res Photo...' : 'Click or Drag & Drop Jewellery Photo'}</div>
-              <input id="jewelImageInput" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
+              <input id="jewelImageInput" type="file" accept="image/*" className="sr-only-file" onChange={handleImageUpload} />
             </div>
             {formData.images.length > 0 && (
               <div className="image-preview-grid">
@@ -402,7 +393,7 @@ const Products = () => {
             )}
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
+          <div className="modal-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
               Cancel
             </button>

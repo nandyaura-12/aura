@@ -1,0 +1,133 @@
+/* StoreHeader */
+.store-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.announce-bar {
+  background: var(--olive);
+  color: var(--white);
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  padding: 0.55rem 1rem;
+}
+
+.nav-links-bar {
+  background: var(--cream);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-links-inner {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 0.85rem 0;
+}
+
+.nav-links-inner a {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.nav-links-inner a:hover {
+  color: var(--olive);
+}
+
+.brand-bar {
+  background: var(--olive);
+  color: var(--white);
+}
+
+.brand-bar-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  min-height: 56px;
+  padding: 0.35rem 0;
+}
+
+.store-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-pill);
+  padding: 0.35rem 0.85rem;
+  max-width: 220px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.store-search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.store-search input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.brand-mark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+}
+
+.brand-logo-img {
+  height: 56px;
+  width: auto;
+  max-width: min(260px, 52vw);
+  object-fit: contain;
+}
+
+.brand-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-actions button {
+  background: transparent;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 1.25rem;
+  background: var(--olive-deep);
+  color: var(--white);
+}
+
+.mobile-nav a {
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+  .nav-links-inner { display: none; }
+  .mobile-menu-btn { display: inline-flex; }
+  .mobile-nav { display: flex; }
+  .brand-bar-inner { grid-template-columns: auto 1fr auto; }
+  .store-search { display: none; }
+}

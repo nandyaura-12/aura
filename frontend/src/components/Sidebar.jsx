@@ -9,7 +9,8 @@ import {
   Tag,
   BarChart3,
 } from 'lucide-react';
-import logo from '../img/logo.png';
+import { brandLogo } from '../data/images';
+import '../styles/components/Sidebar.css';
 
 const Sidebar = () => {
   const navItems = [
@@ -26,7 +27,7 @@ const Sidebar = () => {
     <aside className="sidebar">
       <div className="sidebar-header">
         <Link to="/" className="sidebar-brand" aria-label="Nandys Aura home">
-          <img src={logo} alt="Nandys Aura" className="sidebar-logo-img" />
+          <img src={brandLogo} alt="Nandys Aura" className="sidebar-logo-img" />
         </Link>
       </div>
 

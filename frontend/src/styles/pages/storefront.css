@@ -1,0 +1,92 @@
+/* Shared storefront shell */
+.storefront {
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.store-container {
+  width: min(1180px, calc(100% - 3rem));
+  margin: 0 auto;
+}
+
+/* Sections */
+.section {
+  padding: 4.5rem 0;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  font-weight: 500;
+  color: var(--olive);
+  line-height: 1.15;
+}
+
+.section-title.center,
+.section-head.center {
+  text-align: center;
+}
+
+.section-title.narrow {
+  max-width: 520px;
+}
+
+.section-sub {
+  color: var(--muted);
+  margin-top: 0.6rem;
+  max-width: 420px;
+}
+
+.section-head.center .section-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-head.row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.section-head.center {
+  margin-bottom: 2.25rem;
+}
+
+.pill {
+  display: inline-block;
+  border: 1px solid var(--olive);
+  color: var(--olive);
+  border-radius: var(--radius-pill);
+  padding: 0.28rem 0.85rem;
+  font-size: 0.75rem;
+  font-family: var(--font-serif);
+  margin-bottom: 0.75rem;
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--olive);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.text-link.underline {
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--olive);
+  padding-bottom: 0.15rem;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.text-link.light {
+  color: var(--white);
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  font-weight: 600;
+}

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
 import { exploreCategories, exploreGallery } from '../data/images';
+import '../styles/pages/storefront.css';
+import '../styles/pages/Collections.css';
 
 const Collections = () => {
   return (

@@ -29,7 +29,7 @@ app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static uploads
+// Local /uploads kept only for any old records; new uploads go to Cloudinary
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health Check

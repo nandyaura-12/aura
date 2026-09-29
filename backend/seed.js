@@ -9,6 +9,9 @@ import Offer from './models/Offer.js';
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/aura_admin';
+const CLOUD = process.env.CLOUDINARY_CLOUD_NAME || 'mxihlfki';
+const cld = (id) =>
+  `https://res.cloudinary.com/${CLOUD}/image/upload/f_auto,q_auto/${id}`;
 
 const seedData = async () => {
   try {
@@ -30,7 +33,7 @@ const seedData = async () => {
         name: 'Gold Jewellery',
         slug: 'gold-jewellery',
         description: '22K & 18K BIS 916 Hallmarked Gold Necklaces, Chains, Bangles, and Earrings',
-        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80',
+        image: cld('aura/jewellery/img18'),
         productCount: 4,
         status: 'Active',
       },
@@ -38,7 +41,7 @@ const seedData = async () => {
         name: 'Diamond Collection',
         slug: 'diamond-collection',
         description: 'Certified VVS-EF Diamond Solitaire Rings, Necklaces, Nose Pins, and Bracelets',
-        image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80',
+        image: cld('aura/jewellery/img09'),
         productCount: 3,
         status: 'Active',
       },
@@ -46,7 +49,7 @@ const seedData = async () => {
         name: 'Bridal & Royal Sets',
         slug: 'bridal-royal-sets',
         description: 'Exquisite Heritage Temple, Antique, and Kundan Grand Bridal Jewellery Sets',
-        image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80',
+        image: cld('aura/jewellery/img14'),
         productCount: 2,
         status: 'Active',
       },
@@ -54,7 +57,7 @@ const seedData = async () => {
         name: 'Silver & Platinum',
         slug: 'silver-platinum',
         description: 'Pure 925 Sterling Silver Payals & Rare Platinum Couple Bands',
-        image: 'https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=600&q=80',
+        image: cld('aura/jewellery/img01'),
         productCount: 2,
         status: 'Active',
       },
@@ -76,7 +79,7 @@ const seedData = async () => {
         purity: '22K Gold (916 Hallmarked)',
         weightGrams: 32.5,
         makingCharge: 12,
-        images: ['https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80'],
+        images: [cld('aura/jewellery/img18')],
         isFeatured: true,
         offerTag: 'AKSHAYA TRITIYA SPECIAL - 0% MAKING CHARGE',
         status: 'Active',
@@ -93,7 +96,7 @@ const seedData = async () => {
         purity: '18K Rose Gold + VVS1 Diamond',
         weightGrams: 4.8,
         makingCharge: 8,
-        images: ['https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=600&q=80'],
+        images: [cld('aura/jewellery/img09')],
         isFeatured: true,
         offerTag: 'CERTIFIED VVS SOLITAIRE',
         status: 'Active',
@@ -110,7 +113,7 @@ const seedData = async () => {
         purity: '22K Gold & Uncut Polki Diamonds',
         weightGrams: 78.4,
         makingCharge: 14,
-        images: ['https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80'],
+        images: [cld('aura/jewellery/img14')],
         isFeatured: true,
         offerTag: 'EXCLUSIVE WEDDING EDITION',
         status: 'Active',
@@ -127,7 +130,7 @@ const seedData = async () => {
         purity: 'Pt 950 Platinum',
         weightGrams: 14.2,
         makingCharge: 6,
-        images: ['https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=600&q=80'],
+        images: [cld('aura/jewellery/img02')],
         isFeatured: false,
         offerTag: 'COUPLE SPECIAL',
         status: 'Active',
@@ -144,7 +147,7 @@ const seedData = async () => {
         purity: '22K Gold (916 Hallmarked)',
         weightGrams: 9.6,
         makingCharge: 10,
-        images: ['https://images.unsplash.com/photo-1630019852942-f89202989a59?w=600&q=80'],
+        images: [cld('aura/jewellery/img16')],
         isFeatured: false,
         offerTag: 'POPULAR CHOICE',
         status: 'Active',
@@ -193,7 +196,7 @@ const seedData = async () => {
         code: 'AKSHAYA2026',
         discountType: 'Percentage',
         discountValue: 15,
-        bannerImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80',
+        bannerImage: cld('aura/jewellery/img07'),
         startDate: new Date('2026-09-01'),
         endDate: new Date('2026-10-31'),
         status: 'Active',
@@ -204,7 +207,7 @@ const seedData = async () => {
         code: 'BRIDAL5000',
         discountType: 'Fixed Amount',
         discountValue: 5000,
-        bannerImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
+        bannerImage: cld('aura/jewellery/img14'),
         startDate: new Date('2026-01-01'),
         endDate: new Date('2026-12-31'),
         status: 'Active',

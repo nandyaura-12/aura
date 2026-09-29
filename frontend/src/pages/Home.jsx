@@ -13,6 +13,8 @@ import {
   grace,
   testimonials,
 } from '../data/images';
+import '../styles/pages/storefront.css';
+import '../styles/pages/Home.css';
 
 const Home = () => {
   const [testimonialIndex, setTestimonialIndex] = useState(0);

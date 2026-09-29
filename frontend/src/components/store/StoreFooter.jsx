@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../img/logo.png';
+import { brandLogo } from '../../data/images';
+import '../../styles/components/StoreFooter.css';
 
 const StoreFooter = () => {
   return (
@@ -8,7 +9,7 @@ const StoreFooter = () => {
       <div className="store-container footer-grid">
         <div className="footer-brand">
           <div className="footer-logo">
-            <img src={logo} alt="Nandys Aura — Made to complement every version of you" className="footer-logo-img" />
+            <img src={brandLogo} alt="Nandys Aura — Made to complement every version of you" className="footer-logo-img" />
           </div>
 
           <div className="footer-newsletter">

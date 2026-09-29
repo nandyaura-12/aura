@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search, Bell, Sparkles } from 'lucide-react';
+import '../styles/components/Navbar.css';
 
 const Navbar = ({ searchTerm, setSearchTerm }) => {
   return (
@@ -15,16 +16,7 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
       </div>
 
       <div className="navbar-actions">
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            fontSize: '0.85rem',
-            color: 'var(--olive)',
-            fontWeight: '700',
-          }}
-        >
+        <div className="gold-rate">
           <Sparkles size={16} /> 22K Gold Rate: ₹6,850/g
         </div>
 
@@ -35,8 +27,8 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
         <div className="admin-badge">
           <div className="avatar">NA</div>
           <div>
-            <div style={{ fontSize: '0.85rem', fontWeight: '800' }}>Nandys Aura</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Store Manager</div>
+            <div className="admin-badge__name">Nandys Aura</div>
+            <div className="admin-badge__role">Store Manager</div>
           </div>
         </div>
       </div>

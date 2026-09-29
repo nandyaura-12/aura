@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCategories, createCategoryApi, updateCategoryApi, deleteCategoryApi, uploadImageApi } from '../services/api';
 import Modal from '../components/Modal';
-import { Plus, Edit2, Trash2, Layers, Upload } from 'lucide-react';
+import { Plus, Edit2, Trash2, Upload } from 'lucide-react';
+import '../styles/pages/Categories.css';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -101,30 +102,30 @@ const Categories = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+      <div className="categories-grid">
         {categories.map((cat) => (
-          <div key={cat._id} className="stat-card" style={{ flexDirection: 'column', alignItems: 'flex-start', position: 'relative' }}>
+          <div key={cat._id} className="stat-card category-admin-card">
             <img
-              src={cat.image || 'https://images.unsplash.com/photo-1498049860654-af1a5c566876?w=500&q=80'}
+              src={cat.image || 'https://res.cloudinary.com/mxihlfki/image/upload/f_auto,q_auto,w_500/aura/jewellery/img09'}
               alt={cat.name}
-              style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: 'var(--radius-md)', marginBottom: '0.75rem' }}
+              className="category-admin-card__image"
             />
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: '700' }}>{cat.name}</h3>
+            <div className="category-admin-card__header">
+              <h3 className="category-admin-card__title">{cat.name}</h3>
               <span className={`badge badge-${cat.status.toLowerCase()}`}>{cat.status}</span>
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.35rem', lineClamp: 2 }}>
+            <p className="category-admin-card__desc">
               {cat.description || 'No description provided'}
             </p>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
-              <span style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--primary-orange)' }}>
+            <div className="category-admin-card__footer">
+              <span className="category-admin-card__count">
                 {cat.productCount || 0} Products
               </span>
-              <div>
+              <div className="category-admin-card__actions">
                 <button className="btn-icon" onClick={() => handleOpenModal(cat)}>
                   <Edit2 size={16} />
                 </button>
-                <button className="btn-icon" style={{ color: 'var(--status-cancelled)' }} onClick={() => handleDelete(cat._id)}>
+                <button className="btn-icon btn-icon--danger" onClick={() => handleDelete(cat._id)}>
                   <Trash2 size={16} />
                 </button>
               </div>
@@ -133,7 +134,6 @@ const Categories = () => {
         ))}
       </div>
 
-      {/* Category Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -162,15 +162,15 @@ const Categories = () => {
           <div className="form-group">
             <label>Category Image</label>
             <div className="upload-dropzone" onClick={() => document.getElementById('catImageInput').click()}>
-              <Upload size={20} style={{ color: 'var(--primary-orange)', marginBottom: '0.4rem' }} />
+              <Upload size={20} className="upload-dropzone__icon" />
               <div>Click to upload category banner</div>
-              <input id="catImageInput" type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
+              <input id="catImageInput" type="file" accept="image/*" className="sr-only-file" onChange={handleImageUpload} />
             </div>
             {formData.image && (
-              <img src={formData.image} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '0.75rem' }} />
+              <img src={formData.image} alt="preview" className="category-form-preview" />
             )}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
+          <div className="modal-actions">
             <button type="button" className="btn btn-secondary" onClick={() => setIsModalOpen(false)}>
               Cancel
             </button>
