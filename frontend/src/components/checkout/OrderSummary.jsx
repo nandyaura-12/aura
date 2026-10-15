@@ -33,7 +33,7 @@ const OrderSummary = ({
       setMessageTone('error');
       return;
     }
-    setMessage('10% off applied');
+    setMessage('Offer applied');
     setMessageTone('ok');
   };
 

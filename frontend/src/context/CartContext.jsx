@@ -7,7 +7,7 @@ import {
   initialContact,
   roundMoney,
 } from '../data/checkout';
-import { createOrderApi } from '../services/api';
+import { createOrderApi, fetchOffers } from '../services/api';
 
 const STORAGE_KEY = 'aura-checkout-v1';
 const CartContext = createContext(null);
@@ -26,6 +26,7 @@ const defaultState = {
   contact: initialContact,
   promoCode: '',
   discountRate: 0,
+  discountFixed: 0,
   paymentMethod: 'card',
   upiApp: 'gpay',
   upiId: '',
@@ -46,7 +47,7 @@ const loadState = () => {
   }
 };
 
-const buildTotals = (items, discountRate) => {
+const buildTotals = (items, discountRate, discountFixed = 0) => {
   const groups = new Map();
   items.forEach((item) => {
     const current = groups.get(item.currency) || {
@@ -60,7 +61,9 @@ const buildTotals = (items, discountRate) => {
   });
 
   return [...groups.values()].map((group) => {
-    const discount = roundMoney(group.subtotal * discountRate);
+    const rateDiscount = roundMoney(group.subtotal * discountRate);
+    const fixed = group.currency === 'INR' || groups.size === 1 ? discountFixed : 0;
+    const discount = roundMoney(Math.min(group.subtotal, rateDiscount + fixed));
     const taxable = roundMoney(group.subtotal - discount);
     const tax = roundMoney(taxable * TAX_RATE);
     const shipping = 0;
@@ -71,14 +74,27 @@ const buildTotals = (items, discountRate) => {
 
 export const CartProvider = ({ children }) => {
   const [state, setState] = useState(loadState);
+  const [offers, setOffers] = useState([]);
 
   useEffect(() => {
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }, [state]);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchOffers()
+      .then((res) => {
+        if (!cancelled) setOffers(res.data || []);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const totals = useMemo(
-    () => buildTotals(state.items, state.discountRate),
-    [state.items, state.discountRate]
+    () => buildTotals(state.items, state.discountRate, state.discountFixed || 0),
+    [state.items, state.discountRate, state.discountFixed]
   );
 
   const itemCount = state.items.reduce((sum, item) => sum + item.qty, 0);
@@ -133,15 +149,43 @@ export const CartProvider = ({ children }) => {
   const applyPromo = (code) => {
     const normalized = code.trim().toUpperCase();
     if (!normalized) return 'Enter a promo code';
+
+    const subtotal = state.items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+    const offer = offers.find(
+      (item) => item.code?.toUpperCase() === normalized && item.status === 'Active'
+    );
+
+    if (offer) {
+      if (offer.minimumPurchase && subtotal < Number(offer.minimumPurchase)) {
+        return `Add ₹${Number(offer.minimumPurchase).toLocaleString('en-IN')} to use this code`;
+      }
+      if (offer.discountType === 'Fixed Amount') {
+        setState((prev) => ({
+          ...prev,
+          promoCode: normalized,
+          discountRate: 0,
+          discountFixed: Number(offer.discountValue) || 0,
+        }));
+        return '';
+      }
+      setState((prev) => ({
+        ...prev,
+        promoCode: normalized,
+        discountRate: (Number(offer.discountValue) || 0) / 100,
+        discountFixed: 0,
+      }));
+      return '';
+    }
+
     if (normalized === 'AURA10') {
-      setState((prev) => ({ ...prev, promoCode: normalized, discountRate: 0.1 }));
+      setState((prev) => ({ ...prev, promoCode: normalized, discountRate: 0.1, discountFixed: 0 }));
       return '';
     }
     return "That code isn't valid";
   };
 
   const clearPromo = () => {
-    setState((prev) => ({ ...prev, promoCode: '', discountRate: 0 }));
+    setState((prev) => ({ ...prev, promoCode: '', discountRate: 0, discountFixed: 0 }));
   };
 
   const setContact = (contact) => {
@@ -217,6 +261,7 @@ export const CartProvider = ({ children }) => {
       items: [],
       promoCode: '',
       discountRate: 0,
+      discountFixed: 0,
     }));
     return order;
   };
