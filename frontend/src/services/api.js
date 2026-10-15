@@ -25,6 +25,7 @@ export const deleteCategoryApi = (id) => api.delete(`/categories/${id}`);
 // Orders API
 export const fetchOrders = (status = '', search = '') =>
   api.get(`/orders`, { params: { status, search } });
+export const createOrderApi = (orderData) => api.post(`/orders`, orderData);
 export const updateOrderStatusApi = (id, statusData) =>
   api.put(`/orders/${id}/status`, statusData);
 export const deleteOrderApi = (id) => api.delete(`/orders/${id}`);

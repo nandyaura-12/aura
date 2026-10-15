@@ -4,6 +4,13 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
+import About from './pages/About';
+import Cart from './pages/Cart';
+import Shipping from './pages/Shipping';
+import Payment from './pages/Payment';
+import OrderConfirmed from './pages/OrderConfirmed';
+import { CartProvider } from './context/CartContext';
+import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Categories from './pages/Categories';
@@ -61,12 +68,20 @@ function ScrollToTop() {
 function App() {
   return (
     <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/collections" element={<Collections />} />
-        <Route path="/admin/*" element={<AdminLayout />} />
-      </Routes>
+      <CartProvider>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/collections" element={<Collections />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout/shipping" element={<Shipping />} />
+          <Route path="/checkout/payment" element={<Payment />} />
+          <Route path="/checkout/confirmation" element={<OrderConfirmed />} />
+          <Route path="/admin/*" element={<AdminLayout />} />
+        </Routes>
+      </CartProvider>
     </Router>
   );
 }

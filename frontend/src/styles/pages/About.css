@@ -1,0 +1,504 @@
+/* About Us Page Styling */
+
+/* Common Utilities */
+.text-center {
+  text-align: center;
+}
+
+.about-pill {
+  display: inline-block;
+  border: 1px solid #bfa15f;
+  color: #8c7336;
+  border-radius: 9999px;
+  padding: 0.28rem 0.95rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.85rem;
+  background: rgba(197, 160, 89, 0.06);
+}
+
+.about-pill.center-pill {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-section-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(2.2rem, 3.5vw, 2.85rem);
+  font-weight: 500;
+  color: var(--olive-deep, #2f3418);
+  line-height: 1.2;
+}
+
+.about-section-title.center-title {
+  margin-bottom: 3rem;
+}
+
+/* 1. Hero Section */
+.about-hero-section {
+  padding: 3.5rem 0 4.5rem 0;
+  background: #ffffff;
+}
+
+.about-page-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(3rem, 5vw, 4.2rem);
+  font-weight: 400;
+  color: var(--ink, #1a1a14);
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+}
+
+.about-page-title em {
+  font-style: italic;
+  color: var(--gold, #c5a059);
+  font-weight: 400;
+}
+
+.about-page-sub {
+  font-size: 0.95rem;
+  color: var(--muted, #66665c);
+  margin-bottom: 3.5rem;
+}
+
+.about-hero-statement {
+  margin-bottom: 3.5rem;
+}
+
+.about-statement-headline {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(2.4rem, 4vw, 3.6rem);
+  font-weight: 400;
+  color: var(--olive-deep, #2f3418);
+  line-height: 1.22;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.about-statement-headline em {
+  font-style: italic;
+  color: var(--gold, #c5a059);
+  font-weight: 500;
+}
+
+.about-statement-body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--muted, #5c5c52);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.about-hero-banner {
+  width: 100%;
+  height: clamp(380px, 50vh, 560px);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.about-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+/* 2. Our Story Section */
+.about-story-section {
+  padding: 5.5rem 0;
+  background: var(--cream, #f9f7f2);
+}
+
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.about-story-media {
+  width: 100%;
+  aspect-ratio: 4 / 4.2;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #eae5dc;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.about-story-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-story-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.about-story-copy .about-section-title {
+  margin-bottom: 1.5rem;
+}
+
+.story-para {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--muted, #5c5c52);
+  margin-bottom: 1.2rem;
+  max-width: 480px;
+}
+
+.story-signature {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #8c7336;
+  margin-top: 1rem;
+}
+
+/* 3. Our Craftsmanship Section */
+.about-craft-section {
+  padding: 5.5rem 0;
+  background: #ffffff;
+}
+
+.craft-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.craft-sub-text {
+  font-size: 0.95rem;
+  color: var(--muted, #66665c);
+  max-width: 340px;
+  line-height: 1.5;
+  text-align: right;
+  margin-bottom: 0.3rem;
+}
+
+.craft-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+.craft-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.craft-media-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #eae5dc;
+  margin-bottom: 1.35rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.craft-media-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.craft-card:hover .craft-media-wrap img {
+  transform: scale(1.04);
+}
+
+.craft-card-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--ink, #1a1a14);
+  margin-bottom: 0.5rem;
+}
+
+.craft-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted, #5c5c52);
+}
+
+/* 4. Our Values Section */
+.about-values-section {
+  padding: 5.5rem 0 6.5rem 0;
+  background: var(--cream, #f9f7f2);
+}
+
+.values-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+}
+
+.value-card {
+  background: #f2eee5;
+  border-radius: 18px;
+  padding: 2.75rem 2rem;
+  text-align: left;
+  border: 1px solid rgba(61, 67, 30, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.value-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.value-icon-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid #d4c5a3;
+  background: #fbf9f4;
+  color: #6b5c32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.value-card-title {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: var(--ink, #1a1a14);
+  margin-bottom: 0.65rem;
+}
+
+.value-card-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted, #5c5c52);
+}
+
+/* 5. Testimonials Quote Section */
+.about-quote-section {
+  padding: 6.5rem 0 5.5rem 0;
+  background: #ffffff;
+}
+
+.quote-featured-block {
+  max-width: 860px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.featured-quote-serif {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(2rem, 3.8vw, 3rem);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink, #1a1a14);
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.featured-quote-author {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #8c7336;
+  text-transform: uppercase;
+}
+
+.about-reviews-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin-bottom: 3.5rem;
+}
+
+.reviews-trio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  text-align: left;
+}
+
+.review-trio-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-stars-row {
+  display: flex;
+  gap: 0.2rem;
+  margin-bottom: 0.85rem;
+}
+
+.review-trio-body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--muted, #5c5c52);
+  margin-bottom: 0.85rem;
+  flex-grow: 1;
+}
+
+.review-trio-buyer {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #8c7336;
+}
+
+/* 6. CTA Banner Section */
+.about-cta-banner {
+  position: relative;
+  width: 100%;
+  min-height: 360px;
+  padding: 5.5rem 1.5rem;
+  overflow: hidden;
+  background-color: #1a1612;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cta-banner-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 38%;
+  opacity: 0.95;
+  filter: brightness(0.92) contrast(1.05);
+}
+
+.cta-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(35, 27, 20, 0.55) 0%,
+    rgba(22, 17, 12, 0.72) 65%,
+    rgba(14, 11, 8, 0.82) 100%
+  );
+}
+
+.cta-banner-content {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cta-banner-headline {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(2.1rem, 3.8vw, 3.1rem);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.9rem 0;
+}
+
+.cta-gold-accent,
+.cta-gold-em {
+  color: #cca762;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.cta-period-white {
+  color: #ffffff;
+  font-style: normal;
+}
+
+.cta-banner-sub {
+  font-family: var(--font-sans, 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: clamp(0.85rem, 1.4vw, 0.92rem);
+  font-weight: 400;
+  color: rgba(245, 240, 230, 0.78);
+  line-height: 1.5;
+  letter-spacing: 0.015em;
+  margin: 0 0 1.85rem 0;
+  max-width: 580px;
+}
+
+.cta-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background-color: #cca762;
+  color: #1c1813;
+  font-family: var(--font-sans, 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 0.82rem 2rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cta-banner-btn:hover {
+  background-color: #d8b471;
+  color: #0d0a07;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+/* Responsive Breakdown */
+@media (max-width: 992px) {
+  .about-story-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .craft-head-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .craft-sub-text {
+    text-align: left;
+  }
+
+  .craft-cards-grid,
+  .values-cards-grid,
+  .reviews-trio-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .desktop-only-br {
+    display: none;
+  }
+
+  .about-statement-headline {
+    font-size: 2.1rem;
+  }
+
+  .value-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .cta-banner-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

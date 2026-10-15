@@ -1,24 +1,74 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ArrowLeft, ArrowRight, Star, Recycle, Hand, Award } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
 import {
   hero,
-  categories,
+  categories as staticCategories,
   collections,
-  featured,
-  bestSellers,
-  curated,
+  featured as staticFeatured,
+  bestSellers as staticBestSellers,
+  curated as staticCurated,
   grace,
   testimonials,
+  jewellery,
 } from '../data/images';
+import { formatInr } from '../data/catalog';
+import { fetchCategories, fetchProducts } from '../services/api';
 import '../styles/pages/storefront.css';
 import '../styles/pages/Home.css';
 
 const Home = () => {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [categories, setCategories] = useState(staticCategories);
+  const [featured, setFeatured] = useState(staticFeatured);
+  const [bestSellers, setBestSellers] = useState(staticBestSellers);
+  const [curated, setCurated] = useState(staticCurated);
   const sellersViewportRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.allSettled([fetchProducts(), fetchCategories()]).then(([productResult, categoryResult]) => {
+      if (cancelled) return;
+
+      if (productResult.status === 'fulfilled') {
+        const active = (productResult.value.data || []).filter((product) => product.status === 'Active');
+        if (active.length) {
+          const cards = active.map((product, index) => ({
+            name: product.name,
+            price: formatInr(product.discountPrice > 0 ? product.discountPrice : product.price),
+            image: product.images?.[0] || jewellery.img01,
+            slug: product.slug,
+            rating: '4.9',
+            tall: index % 2 === 0,
+          }));
+          setFeatured(cards.slice(0, 4));
+          setBestSellers(cards);
+          setCurated(cards.slice(0, 4));
+        }
+      }
+
+      if (categoryResult.status === 'fulfilled') {
+        const activeCategories = (categoryResult.value.data || []).filter(
+          (category) => category.status !== 'Inactive'
+        );
+        if (activeCategories.length) {
+          setCategories(
+            activeCategories.map((category) => ({
+              name: category.name,
+              image: category.image || jewellery.img05,
+            }))
+          );
+        }
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const scrollSellers = (direction) => {
     const viewport = sellersViewportRef.current;
@@ -75,10 +125,10 @@ const Home = () => {
           <h2 className="section-title center">Shop By Category</h2>
           <div className="category-grid">
             {categories.map((cat) => (
-              <a key={cat.name} href="#collections" className="category-card">
+              <Link key={cat.name} to="/collections" className="category-card">
                 <img src={cat.image} alt={cat.name} />
                 <span>{cat.name}</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -100,9 +150,9 @@ const Home = () => {
           </div>
           <div className="collections-mosaic">
             {collections.map((item) => (
-              <figure key={item.slot} className={`mosaic-cell mosaic-${item.slot}`}>
+              <Link key={item.slot} to="/collections" className={`mosaic-cell mosaic-${item.slot}`}>
                 <img src={item.image} alt={item.alt} />
-              </figure>
+              </Link>
             ))}
           </div>
         </div>
@@ -116,19 +166,23 @@ const Home = () => {
               <span className="pill">Featured Collections</span>
               <h2 className="section-title">Creating, Crafting &amp; Wearing.</h2>
             </div>
-            <a href="#bestsellers" className="text-link underline">
+            <Link to="/collections" className="text-link underline">
               VIEW COLLECTION
-            </a>
+            </Link>
           </div>
           <div className="product-row">
             {featured.map((item) => (
-              <article key={item.name} className="product-card">
+              <Link
+                key={item.slug || item.name}
+                to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
+                className="product-card"
+              >
                 <img src={item.image} alt={item.name} />
                 <div className="product-meta">
                   <span>{item.name}</span>
                   <strong>{item.price}</strong>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -167,8 +221,9 @@ const Home = () => {
           <div className="bestsellers-viewport" ref={sellersViewportRef}>
             <div className="stagger-track">
               {bestSellers.map((item, i) => (
-                <article
-                  key={`${item.name}-${i}`}
+                <Link
+                  key={`${item.slug || item.name}-${i}`}
+                  to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
                   className={`stagger-card ${item.tall ? 'tall' : ''} ${i % 2 === 1 ? 'offset-1' : ''}`}
                 >
                   <div className="stagger-meta">
@@ -181,7 +236,7 @@ const Home = () => {
                     <strong>{item.price}</strong>
                   </div>
                   <img src={item.image} alt={item.name} />
-                </article>
+                </Link>
               ))}
             </div>
           </div>
@@ -219,13 +274,17 @@ const Home = () => {
           <p className="section-sub">Foundation pieces meant to be layered, lived in, and loved.</p>
           <div className="curated-grid">
             {curated.map((item, i) => (
-              <article key={item.name} className={`curated-card h-${i}`}>
+              <Link
+                key={item.slug || item.name}
+                to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
+                className={`curated-card h-${i}`}
+              >
                 <img src={item.image} alt={item.name} />
                 <div className="product-meta">
                   <span>{item.name}</span>
                   <strong>{item.price}</strong>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

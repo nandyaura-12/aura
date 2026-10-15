@@ -23,8 +23,8 @@ const StoreFooter = () => {
 
         <div className="footer-col">
           <h4>Quick Links</h4>
-          <Link to="/#about">About Us</Link>
-          <Link to="/#contact">Contact Us</Link>
+          <Link to="/about">About Us</Link>
+          <Link to="/contact">Contact Us</Link>
           <a href="#">Blog & Insights</a>
           <a href="#">FAQ&apos;s</a>
         </div>

@@ -1,9 +1,9 @@
 import express from 'express';
-import { getOrders, updateOrderStatus, deleteOrder } from '../controllers/orderController.js';
+import { getOrders, createOrder, updateOrderStatus, deleteOrder } from '../controllers/orderController.js';
 
 const router = express.Router();
 
-router.route('/').get(getOrders);
+router.route('/').get(getOrders).post(createOrder);
 router.route('/:id/status').put(updateOrderStatus);
 router.route('/:id').delete(deleteOrder);
 
