@@ -5,19 +5,12 @@ const fallbackGallery = [jewellery.img21, jewellery.img07, jewellery.img12, jewe
 export const formatInr = (amount) =>
   `₹${Number(amount || 0).toLocaleString('en-IN')}`;
 
-const padGallery = (images) => {
-  const list = (images || []).filter(Boolean);
-  const source = list.length ? list : fallbackGallery;
-  const padded = [...source];
-  while (padded.length < 4) padded.push(source[0]);
-  return padded.slice(0, 4);
-};
-
 export const toStoreProduct = (product) => {
   const listPrice = Number(product.price) || 0;
   const salePrice = Number(product.discountPrice) || 0;
   const onSale = salePrice > 0 && salePrice < listPrice;
   const unitPrice = onSale ? salePrice : listPrice;
+  const images = (product.images || []).filter(Boolean);
 
   return {
     id: product.slug || product._id,
@@ -29,17 +22,25 @@ export const toStoreProduct = (product) => {
     reviewsCount: 24,
     onSale,
     description: product.description || '',
-    styles: [product.purity || 'Standard'],
-    images: padGallery(product.images),
-    stock: Number(product.stock) || 1,
-    sku: product.sku || product.slug || '',
+    styles: [],
+    images: images.length ? images : [fallbackGallery[0]],
+    stock: Number(product.stock) || 0,
+    sku: product.sku || '',
+    specs: {
+      category: product.category || '',
+      purity: product.purity || '',
+      weightGrams: Number(product.weightGrams) || 0,
+      makingCharge: Number(product.makingCharge) || 0,
+      offerTag: product.offerTag || '',
+    },
     details: {
       description: product.description || '',
       sizeAndMaterial: [
         product.purity,
-        product.weightGrams ? `Weight ${product.weightGrams} g` : '',
+        product.weightGrams ? `Gross weight ${product.weightGrams} g` : '',
         product.makingCharge ? `Making charge ${product.makingCharge}%` : '',
         product.category,
+        product.sku ? `SKU ${product.sku}` : '',
       ]
         .filter(Boolean)
         .join('. ')

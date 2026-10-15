@@ -81,11 +81,6 @@ const Home = () => {
     viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
   };
 
-  const nextTestimonial = () =>
-    setTestimonialIndex((i) => (i + 1) % testimonials.length);
-  const prevTestimonial = () =>
-    setTestimonialIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
-
   const visibleTestimonials = [
     testimonials[testimonialIndex],
     testimonials[(testimonialIndex + 1) % testimonials.length],
@@ -199,26 +194,17 @@ const Home = () => {
                 <span>design with classic beauty</span>
               </h2>
             </div>
-            <div className="carousel-nav">
-              <button
-                type="button"
-                className="nav-circle outline"
-                aria-label="Previous"
-                onClick={() => scrollSellers(-1)}
-              >
-                <ArrowLeft size={18} />
-              </button>
-              <button
-                type="button"
-                className="nav-circle solid"
-                aria-label="Next"
-                onClick={() => scrollSellers(1)}
-              >
-                <ArrowRight size={18} />
-              </button>
-            </div>
           </div>
-          <div className="bestsellers-viewport" ref={sellersViewportRef}>
+          <div className="bestsellers-frame">
+            <button
+              type="button"
+              className="seller-arrow prev"
+              aria-label="Previous"
+              onClick={() => scrollSellers(-1)}
+            >
+              <ArrowLeft size={16} />
+            </button>
+            <div className="bestsellers-viewport" ref={sellersViewportRef}>
             <div className="stagger-track">
               {bestSellers.map((item, i) => (
                 <Link
@@ -239,6 +225,15 @@ const Home = () => {
                 </Link>
               ))}
             </div>
+          </div>
+            <button
+              type="button"
+              className="seller-arrow next"
+              aria-label="Next"
+              onClick={() => scrollSellers(1)}
+            >
+              <ArrowRight size={16} />
+            </button>
           </div>
         </div>
       </section>
@@ -341,13 +336,16 @@ const Home = () => {
               </article>
             ))}
           </div>
-          <div className="carousel-nav center-nav">
-            <button type="button" className="nav-circle outline" onClick={prevTestimonial} aria-label="Previous">
-              <ArrowLeft size={18} />
-            </button>
-            <button type="button" className="nav-circle solid" onClick={nextTestimonial} aria-label="Next">
-              <ArrowRight size={18} />
-            </button>
+          <div className="testimonial-dots" role="tablist" aria-label="Feedback">
+            {testimonials.map((item, index) => (
+              <button
+                key={item.name}
+                type="button"
+                className={`testimonial-dot ${index === testimonialIndex ? 'active' : ''}`}
+                aria-label={`Show feedback from ${item.name}`}
+                onClick={() => setTestimonialIndex(index)}
+              />
+            ))}
           </div>
         </div>
       </section>

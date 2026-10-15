@@ -224,13 +224,19 @@ const Products = () => {
                     </td>
                     <td className="td-weight">{product.weightGrams ? `${product.weightGrams} g` : 'N/A'}</td>
                     <td>
-                      <span className="product-price">
-                        ₹{product.price?.toLocaleString()}
-                      </span>
-                      {product.discountPrice > 0 && (
-                        <div className="product-price--strike">
-                          ₹{product.discountPrice?.toLocaleString()}
-                        </div>
+                      {product.discountPrice > 0 && product.discountPrice < product.price ? (
+                        <>
+                          <span className="product-price">
+                            ₹{product.discountPrice?.toLocaleString('en-IN')}
+                          </span>
+                          <div className="product-price--strike">
+                            ₹{product.price?.toLocaleString('en-IN')}
+                          </div>
+                        </>
+                      ) : (
+                        <span className="product-price">
+                          ₹{product.price?.toLocaleString('en-IN')}
+                        </span>
                       )}
                     </td>
                     <td className="td-stock">{product.stock} pcs</td>

@@ -216,6 +216,7 @@ const Collections = () => {
   };
 
   const pushCurrentToCart = () => {
+    if (!currentProduct || currentProduct.stock === 0) return;
     const unitPrice =
       currentProduct.unitPrice ??
       (Number(String(currentProduct.price).replace(/[^\d.]/g, '')) || 0);
@@ -294,14 +295,15 @@ const Collections = () => {
             <div className="product-gallery-col">
               <div className="main-image-card">
                 <img
-                  src={currentProduct.images[selectedImageIndex]}
+                  src={currentProduct.images[selectedImageIndex] || currentProduct.images[0]}
                   alt={currentProduct.title}
                   className="main-product-img"
                 />
               </div>
 
               {/* 4 Thumbnails */}
-              <div className="thumbnails-grid">
+              {currentProduct.images.length > 1 && (
+              <div className="thumbnails-grid" style={{ gridTemplateColumns: `repeat(${Math.min(currentProduct.images.length, 4)}, 1fr)` }}>
                 {currentProduct.images.map((imgUrl, idx) => (
                   <button
                     key={idx}
@@ -314,10 +316,14 @@ const Collections = () => {
                   </button>
                 ))}
               </div>
+              )}
             </div>
 
             {/* Right Column: Product Information */}
             <div className="product-info-col">
+              {currentProduct.specs?.category && (
+                <p className="product-category-label">{currentProduct.specs.category}</p>
+              )}
               <h1 className="product-title-serif">{currentProduct.title}</h1>
 
               {/* Price & Sale Badge */}
@@ -328,6 +334,9 @@ const Collections = () => {
                 <span className="price-current">{currentProduct.price}</span>
                 {currentProduct.onSale && <span className="badge-sale">SALE</span>}
               </div>
+              {currentProduct.specs?.offerTag && (
+                <p className="product-offer-tag">{currentProduct.specs.offerTag}</p>
+              )}
 
               {/* Rating */}
               <div className="product-rating-row">
@@ -342,22 +351,48 @@ const Collections = () => {
               {/* Product Lead Copy */}
               <p className="product-lead-copy">{currentProduct.description}</p>
 
-              {/* Style Selector */}
-              <div className="selector-group">
-                <label className="selector-label">Style</label>
-                <div className="style-pills">
-                  {currentProduct.styles.map((styleOpt) => (
-                    <button
-                      key={styleOpt}
-                      type="button"
-                      className={`style-pill-btn ${selectedStyle === styleOpt ? 'active' : ''}`}
-                      onClick={() => setSelectedStyle(styleOpt)}
-                    >
-                      {styleOpt}
-                    </button>
-                  ))}
+              {currentProduct.specs ? (
+                <dl className="product-spec-grid">
+                  <div>
+                    <dt>Purity</dt>
+                    <dd>{currentProduct.specs.purity || '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>Weight</dt>
+                    <dd>{currentProduct.specs.weightGrams ? `${currentProduct.specs.weightGrams} g` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>Making charge</dt>
+                    <dd>{currentProduct.specs.makingCharge ? `${currentProduct.specs.makingCharge}%` : '—'}</dd>
+                  </div>
+                  <div>
+                    <dt>Stock</dt>
+                    <dd>{currentProduct.stock > 0 ? `${currentProduct.stock} pcs` : 'Out of stock'}</dd>
+                  </div>
+                  {currentProduct.sku && (
+                    <div>
+                      <dt>SKU</dt>
+                      <dd>{currentProduct.sku}</dd>
+                    </div>
+                  )}
+                </dl>
+              ) : (
+                <div className="selector-group">
+                  <label className="selector-label">Style</label>
+                  <div className="style-pills">
+                    {currentProduct.styles.map((styleOpt) => (
+                      <button
+                        key={styleOpt}
+                        type="button"
+                        className={`style-pill-btn ${selectedStyle === styleOpt ? 'active' : ''}`}
+                        onClick={() => setSelectedStyle(styleOpt)}
+                      >
+                        {styleOpt}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Quantity Selector */}
               <div className="selector-group">
@@ -389,19 +424,21 @@ const Collections = () => {
               <div className="trust-badges-bar">
                 <div className="trust-badge">
                   <Package size={22} className="badge-icon" />
-                  <span>14K GOLD</span>
+                  <span>{currentProduct.specs?.purity || 'Hallmarked'}</span>
                 </div>
                 <div className="trust-badge">
                   <Truck size={22} className="badge-icon" />
-                  <span>FREE EXPRESS SHIPPING</span>
+                  <span>Free express shipping</span>
                 </div>
                 <div className="trust-badge">
                   <RotateCcw size={22} className="badge-icon" />
-                  <span>EASY 30 DAYS RETURN</span>
+                  <span>Easy 30 days return</span>
                 </div>
                 <div className="trust-badge">
                   <Gem size={22} className="badge-icon" />
-                  <span>CERTIFIED NATURAL DIAMONDS</span>
+                  <span>
+                    {currentProduct.stock > 0 ? `${currentProduct.stock} in stock` : 'Out of stock'}
+                  </span>
                 </div>
               </div>
 
@@ -411,13 +448,15 @@ const Collections = () => {
                   type="button"
                   className="cta-btn btn-add-cart"
                   onClick={handleAddToCart}
+                  disabled={currentProduct.stock === 0}
                 >
-                  ADD TO CART
+                  {currentProduct.stock === 0 ? 'OUT OF STOCK' : 'ADD TO CART'}
                 </button>
                 <button
                   type="button"
                   className="cta-btn btn-buy-now"
                   onClick={handleBuyNow}
+                  disabled={currentProduct.stock === 0}
                 >
                   BUY NOW
                 </button>

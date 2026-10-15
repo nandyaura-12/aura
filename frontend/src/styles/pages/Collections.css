@@ -43,8 +43,8 @@
 .product-detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 3.5rem;
-  align-items: start;
+  gap: 2.5rem;
+  align-items: stretch;
 }
 
 /* Gallery Column */
@@ -52,11 +52,13 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-height: 100%;
 }
 
 .main-image-card {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  flex: 1;
+  min-height: 520px;
   border-radius: 20px;
   overflow: hidden;
   background: #eae5dc;
@@ -123,6 +125,62 @@
   line-height: 1.15;
   margin-bottom: 0.85rem;
   letter-spacing: -0.01em;
+}
+
+.product-category-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a7340;
+}
+
+.product-offer-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  margin: -0.25rem 0 1rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(197, 160, 89, 0.16);
+  color: #6d5420;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.product-spec-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1.35rem;
+}
+
+.product-spec-grid div {
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e4dfd4;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.product-spec-grid dt {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8a7e;
+}
+
+.product-spec-grid dd {
+  margin: 0.2rem 0 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink, #1a1a14);
+}
+
+.cta-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 /* Price & Sale Badge */
@@ -479,7 +537,13 @@
 @media (max-width: 992px) {
   .product-detail-grid {
     grid-template-columns: 1fr;
-    gap: 2.5rem;
+    gap: 1.5rem;
+  }
+
+  .main-image-card {
+    flex: none;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
   }
 
   .related-cards-grid {
