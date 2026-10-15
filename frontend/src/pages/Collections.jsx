@@ -190,19 +190,11 @@ const Collections = () => {
 
   useEffect(() => {
     const piece = searchParams.get('piece');
-    if (piece) {
-      const idx = catalog.findIndex((product) => product.id === piece);
-      if (idx >= 0) {
-        setActiveProductIndex(idx);
-        setSelectedImageIndex(0);
-        setSelectedStyle(catalog[idx].styles[0] || 'Medium');
-        setQuantity(1);
-        return;
-      }
-    }
-    setActiveProductIndex((index) => Math.min(index, Math.max(catalog.length - 1, 0)));
+    const found = piece ? catalog.findIndex((product) => product.id === piece) : 0;
+    const next = found >= 0 ? found : 0;
+    setActiveProductIndex(next);
     setSelectedImageIndex(0);
-    setSelectedStyle(catalog[0]?.styles[0] || 'Medium');
+    setSelectedStyle(catalog[next]?.styles[0] || 'Medium');
     setQuantity(1);
   }, [catalog, searchParams]);
 
