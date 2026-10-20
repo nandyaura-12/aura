@@ -36,9 +36,9 @@ export const toStoreProduct = (product) => {
     details: {
       description: product.description || '',
       sizeAndMaterial: [
-        product.purity,
-        product.weightGrams ? `Gross weight ${product.weightGrams} g` : '',
-        product.makingCharge ? `Making charge ${product.makingCharge}%` : '',
+        product.purity || 'Antique matte finish on brass alloy',
+        product.weightGrams ? `Approx. weight ${product.weightGrams} g` : '',
+        'Hand-finished nakshi detailing',
         product.category,
         product.sku ? `SKU ${product.sku}` : '',
       ]
@@ -46,7 +46,7 @@ export const toStoreProduct = (product) => {
         .join('. ')
         .concat('.'),
       shippingAndReturns:
-        'Free insured express shipping across India. Standard delivery within 3-5 business days. Easy 30-day return in original condition with certificate.',
+        'Free shipping across India. Standard delivery within 3-5 business days. Easy 7-day return in original condition. Keep away from water and perfume to preserve the antique finish.',
     },
   };
 };

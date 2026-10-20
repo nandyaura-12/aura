@@ -355,30 +355,60 @@
   position: relative;
 }
 
-.seller-arrow {
-  position: absolute;
-  top: 42%;
-  z-index: 2;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--white);
-  color: var(--olive);
-  display: inline-flex;
+/* Arrow-ku badhila — segment navigation */
+.seller-controls {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(47, 52, 24, 0.08);
+  gap: 1.25rem;
+  margin-top: 0.5rem;
 }
 
-.seller-arrow.prev { left: -6px; }
-.seller-arrow.next { right: -6px; }
+.seller-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
 
-.seller-arrow:hover {
+.seller-segments {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.seller-seg {
+  height: 4px;
+  width: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #ddd5c3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.seller-seg:hover { background: var(--gold); }
+
+.seller-seg.active {
+  width: 48px;
   background: var(--olive);
-  color: var(--white);
-  border-color: var(--olive);
+}
+
+.seller-count {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .seller-hint { display: none; }
 }
 
 .bestsellers-viewport {

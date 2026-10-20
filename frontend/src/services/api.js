@@ -42,6 +42,11 @@ export const createOfferApi = (offerData) => api.post(`/offers`, offerData);
 export const updateOfferApi = (id, offerData) => api.put(`/offers/${id}`, offerData);
 export const deleteOfferApi = (id) => api.delete(`/offers/${id}`);
 
+// Storefront User Auth API
+export const registerUserApi = (userData) => api.post(`/customers/register`, userData);
+export const loginUserApi = (credentials) => api.post(`/customers/login`, credentials);
+export const fetchMyOrders = (email) => api.get(`/orders`, { params: { email } });
+
 // Reports API (Customized date range & product based)
 export const fetchReports = (startDate = '', endDate = '', productId = '') =>
   api.get(`/reports`, { params: { startDate, endDate, productId } });

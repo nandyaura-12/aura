@@ -5,14 +5,14 @@ const productSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true },
     description: { type: String, required: true },
-    category: { type: String, required: true }, // Gold, Diamond, Silver, Gemstone, Platinum, Bridal
+    category: { type: String, required: true }, // Temple Sets, Jhumkas, Antique Harams, Bangles & Kadas, Bridal Antique Sets
     price: { type: Number, required: true, min: 0 },
     discountPrice: { type: Number, default: 0 },
     stock: { type: Number, required: true, default: 0 },
     sku: { type: String, required: true, unique: true },
-    purity: { type: String, default: '22K Gold (916 Hallmarked)' }, // 22K, 18K, 24K, VVS Diamond, Sterling 925
-    weightGrams: { type: Number, default: 0 }, // weight in grams
-    makingCharge: { type: Number, default: 0 }, // making charges
+    purity: { type: String, default: 'Antique Matte Finish (Brass Alloy)' }, // finish / material — antique-finish, NOT solid gold or silver
+    weightGrams: { type: Number, default: 0 }, // approx. weight in grams
+    makingCharge: { type: Number, default: 0 }, // crafting charge (%)
     images: [{ type: String }],
     isFeatured: { type: Boolean, default: false },
     offerTag: { type: String, default: '' },

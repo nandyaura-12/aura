@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -10,6 +10,7 @@ import Shipping from './pages/Shipping';
 import Payment from './pages/Payment';
 import OrderConfirmed from './pages/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
@@ -18,16 +19,57 @@ import Orders from './pages/Orders';
 import Customers from './pages/Customers';
 import Offers from './pages/Offers';
 import Reports from './pages/Reports';
+import AdminLogin from './pages/AdminLogin';
+import UserLogin from './pages/UserLogin';
+import Account from './pages/Account';
+import Wishlist from './pages/Wishlist';
+import FestivalOfferPopup from './components/store/FestivalOfferPopup';
+import { isAdminLoggedIn } from './data/adminAuth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './styles/pages/AdminLayout.css';
 import './styles/components/AdminShared.css';
+import './styles/components/Toast.css';
 
 function AdminLayout() {
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
+  // Sidebar starts collapsed on every screen — hover/touch opens it.
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarDragWidth, setSidebarDragWidth] = useState(null);
+  const [sidebarHoverOpen, setSidebarHoverOpen] = useState(false);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth <= 1024) setSidebarExpanded(false);
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  if (!isAdminLoggedIn()) {
+    return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
+  }
 
   return (
     <div className="app-container">
-      <Sidebar />
-      <div className="main-content">
+      <Sidebar
+        expanded={sidebarExpanded}
+        onToggle={() => setSidebarExpanded((open) => !open)}
+        onSetExpanded={setSidebarExpanded}
+        dragWidth={sidebarDragWidth}
+        setDragWidth={setSidebarDragWidth}
+        hoverOpen={sidebarHoverOpen}
+        onHoverChange={setSidebarHoverOpen}
+      />
+      <div
+        className={`main-content ${sidebarExpanded || sidebarHoverOpen ? '' : 'sidebar-collapsed'}`}
+        style={
+          sidebarDragWidth != null
+            ? { marginLeft: `${sidebarDragWidth}px`, transition: 'none' }
+            : undefined
+        }
+      >
         <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <div className="page-wrapper">
           <Routes>
@@ -69,18 +111,34 @@ function App() {
   return (
     <Router>
       <CartProvider>
+       <WishlistProvider>
         <ScrollToTop />
+        <ToastContainer
+          position="top-right"
+          autoClose={3500}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
+        <FestivalOfferPopup />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<UserLogin />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/checkout/shipping" element={<Shipping />} />
           <Route path="/checkout/payment" element={<Payment />} />
           <Route path="/checkout/confirmation" element={<OrderConfirmed />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />
         </Routes>
+       </WishlistProvider>
       </CartProvider>
     </Router>
   );

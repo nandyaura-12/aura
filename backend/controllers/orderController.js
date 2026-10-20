@@ -5,9 +5,12 @@ import Customer from '../models/Customer.js';
 // @route   GET /api/orders
 export const getOrders = async (req, res) => {
   try {
-    const { status, search } = req.query;
+    const { status, search, email } = req.query;
     let query = {};
 
+    if (email) {
+      query.customerEmail = String(email).trim().toLowerCase();
+    }
     if (status && status !== 'All') {
       query.orderStatus = status;
     }

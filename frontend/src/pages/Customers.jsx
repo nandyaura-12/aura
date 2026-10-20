@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCustomers, updateCustomerStatusApi } from '../services/api';
+import { toast } from 'react-toastify';
 import { Search, User, ShieldAlert, CheckCircle } from 'lucide-react';
+import { formatInr } from '../data/catalog';
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -27,9 +29,10 @@ const Customers = () => {
     const newStatus = currentStatus === 'Active' ? 'Blocked' : 'Active';
     try {
       await updateCustomerStatusApi(id, newStatus);
+      toast.success(`Customer ${newStatus === 'Active' ? 'activated' : 'blocked'}`);
       loadCustomers();
     } catch (err) {
-      alert('Error updating customer status: ' + err.message);
+      toast.error('Error updating customer status: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -83,7 +86,7 @@ const Customers = () => {
                     <td>{cust.phone || 'N/A'}</td>
                     <td style={{ fontWeight: '600' }}>{cust.ordersCount || 0} orders</td>
                     <td style={{ fontWeight: '700', color: 'var(--primary-orange)' }}>
-                      ₹{(cust.totalSpent || 0).toLocaleString()}
+                      {formatInr(cust.totalSpent)}
                     </td>
                     <td>
                       <span className={`badge badge-${cust.status.toLowerCase()}`}>

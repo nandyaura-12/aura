@@ -6,10 +6,10 @@ import '../styles/pages/storefront.css';
 import '../styles/pages/Contact.css';
 
 const SUBJECTS = [
-  'Product enquiry',
-  'Custom design',
+  'Antique piece enquiry',
+  'Bridal / temple set styling',
   'Order support',
-  'Repairs & resizing',
+  'Finish care & repair',
   'Feedback',
 ];
 

@@ -127,7 +127,7 @@ const OrderSummary = ({
       {showGift && (
         <p className="co-assurance">
           <Gift size={14} strokeWidth={1.75} />
-          Free insured delivery in a signature gift box
+          Free delivery in protective antique gift packaging
         </p>
       )}
     </aside>

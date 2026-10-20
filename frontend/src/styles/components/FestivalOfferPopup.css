@@ -1,0 +1,67 @@
+/* Festival Offer Popup + Button */
+.fest-fab {
+  position: fixed; left: 1.25rem; bottom: 1.25rem; z-index: 999;
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: var(--olive); color: #fff; border: 1px solid var(--gold);
+  border-radius: var(--radius-pill); padding: .65rem 1.1rem;
+  font-size: .82rem; font-weight: 700; letter-spacing: .04em; cursor: pointer;
+  box-shadow: 0 10px 26px rgba(47,52,24,.35);
+  animation: festFabIn .3s ease;
+}
+.fest-fab:hover { background: var(--olive-deep); transform: translateY(-1px); }
+@keyframes festFabIn { from { opacity: 0; transform: translateY(10px) } }
+.fest-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(18,20,10,.62); backdrop-filter: blur(3px);
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  animation: festFade .25s ease;
+}
+.fest-popup {
+  position: relative; display: grid; grid-template-columns: 1fr 1.1fr;
+  width: min(680px, 100%); max-height: 92vh; overflow: auto;
+  background: var(--cream); border-radius: var(--radius-lg);
+  border: 1px solid rgba(197,160,89,.45); box-shadow: 0 24px 70px rgba(0,0,0,.35);
+  animation: festPop .35s cubic-bezier(.2,.9,.3,1.2);
+}
+@keyframes festFade { from { opacity: 0 } }
+@keyframes festPop { from { opacity: 0; transform: translateY(18px) scale(.96) } }
+.fest-close {
+  position: absolute; top: .7rem; right: .7rem; z-index: 2;
+  width: 34px; height: 34px; border: none; border-radius: 50%;
+  background: rgba(255,255,255,.92); color: var(--olive);
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+}
+.fest-close:hover { background: var(--olive); color: #fff; }
+.fest-media { position: relative; }
+.fest-media img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; display: block; }
+.fest-badge {
+  position: absolute; left: 1rem; bottom: 1rem;
+  display: inline-flex; align-items: center; gap: .35rem;
+  background: var(--gold); color: #221d0d; font-size: .78rem; font-weight: 800;
+  padding: .45rem .8rem; border-radius: var(--radius-pill);
+}
+.fest-body { padding: 2rem 1.75rem 1.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.fest-eyebrow { color: var(--gold); font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.fest-title { font-family: var(--font-serif); font-size: clamp(1.7rem,4vw,2.3rem); font-weight: 600; color: var(--olive); line-height: 1.1; margin: .45rem 0 .2rem; }
+.fest-highlight { font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; color: #9a7a35; }
+.fest-desc { color: var(--muted); font-size: .9rem; line-height: 1.6; margin: .6rem 0 1rem; max-width: 300px; }
+.fest-countdown { display: flex; gap: .45rem; margin-bottom: 1rem; }
+.fest-time { background: var(--olive); color: #fff; border-radius: 10px; min-width: 52px; padding: .4rem .2rem; display: flex; flex-direction: column; }
+.fest-time strong { font-size: 1rem; line-height: 1; }
+.fest-time small { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; opacity: .75; margin-top: .2rem; }
+.fest-code {
+  display: inline-flex; align-items: center; gap: .6rem;
+  border: 1.5px dashed var(--gold); background: #fff; color: var(--olive);
+  border-radius: var(--radius-pill); padding: .55rem 1.1rem; cursor: pointer;
+  font-family: var(--font-mono); font-weight: 800; letter-spacing: .12em; font-size: .9rem;
+}
+.fest-cta { margin-top: 1rem; width: 100%; text-align: center; background: var(--olive); color: #fff; border-radius: var(--radius-pill); padding: .85rem 1rem; font-weight: 700; letter-spacing: .06em; font-size: .9rem; }
+.fest-cta:hover { background: var(--olive-deep); color: #fff; }
+.fest-later { margin-top: .75rem; background: none; border: none; color: var(--muted); font-size: .8rem; cursor: pointer; text-decoration: underline; }
+@media (max-width: 640px) {
+  .fest-popup { grid-template-columns: 1fr; }
+  .fest-media img { min-height: 180px; max-height: 200px; }
+  .fest-body { padding: 1.4rem 1.25rem 1.25rem; }
+  .fest-fab { left: 1rem; bottom: 1rem; }
+}

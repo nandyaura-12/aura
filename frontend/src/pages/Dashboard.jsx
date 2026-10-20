@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import StatCard from '../components/StatCard';
-import { DollarSign, ShoppingBag, Gem, Users, ArrowUpRight, Award, Sparkles } from 'lucide-react';
+import { IndianRupee, ShoppingBag, Gem, Users, ArrowUpRight, Award, Sparkles } from 'lucide-react';
 import { fetchOrders, fetchProducts, fetchCustomers } from '../services/api';
+import { formatInr } from '../data/catalog';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    totalRevenue: 659000,
+    totalRevenue: 7496,
     totalOrders: 3,
     totalProducts: 5,
     totalCustomers: 3,
@@ -31,7 +32,7 @@ const Dashboard = () => {
         const rev = ordersData.reduce((acc, curr) => acc + (curr.totalAmount || 0), 0);
 
         setStats({
-          totalRevenue: rev || 659000,
+          totalRevenue: rev || 7496,
           totalOrders: ordersData.length || 3,
           totalProducts: productsData.length || 5,
           totalCustomers: customersData.length || 3,
@@ -50,23 +51,23 @@ const Dashboard = () => {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Jewellery Admin Dashboard</h1>
-          <p className="page-subtitle">Welcome to Nandys Aura — olive & cream boutique portal</p>
+          <h1 className="page-title">Antique Jewellery Dashboard</h1>
+          <p className="page-subtitle">Welcome to Nandys Aura — antique &amp; temple jewellery boutique portal</p>
         </div>
         <Link to="/admin/products" className="btn btn-primary">
-          <Sparkles size={18} /> + Add New Jewellery Piece
+          <Sparkles size={18} /> + Add New Antique Piece
         </Link>
       </div>
 
       <div className="stats-grid">
         <StatCard
-          title="Total Jewellery Revenue"
-          value={`₹${stats.totalRevenue.toLocaleString()}`}
-          icon={DollarSign}
+          title="Total Antique Revenue"
+          value={formatInr(stats.totalRevenue)}
+          icon={IndianRupee}
           trend="18.5%"
         />
         <StatCard
-          title="Jewellery Orders"
+          title="Antique Orders"
           value={stats.totalOrders}
           icon={ShoppingBag}
           trend="12.0%"
@@ -87,9 +88,9 @@ const Dashboard = () => {
       <div className="card-table-wrapper">
         <div className="table-header-bar">
           <div>
-            <h3 style={{ fontSize: '1.15rem', fontWeight: '800' }}>Recent Jewellery Purchases</h3>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: '800' }}>Recent Antique Purchases</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Insured deliveries and hallmarked purchases
+              Temple, nakshi and heritage piece orders
             </p>
           </div>
           <Link to="/admin/orders" className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
@@ -120,7 +121,7 @@ const Dashboard = () => {
                       <div style={{ fontWeight: '700' }}>{order.customerName}</div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{order.customerEmail}</div>
                     </td>
-                    <td style={{ fontWeight: '800' }}>₹{order.totalAmount?.toLocaleString()}</td>
+                    <td style={{ fontWeight: '800' }}>{formatInr(order.totalAmount)}</td>
                     <td>
                       <span className={`badge badge-${order.paymentStatus?.toLowerCase()}`}>
                         {order.paymentStatus}
@@ -139,7 +140,7 @@ const Dashboard = () => {
               ) : (
                 <tr>
                   <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
-                    Loading recent jewellery purchases...
+                    Loading recent antique purchases...
                   </td>
                 </tr>
               )}

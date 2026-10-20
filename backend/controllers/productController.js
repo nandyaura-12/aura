@@ -30,7 +30,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Jewellery item not found' });
+    if (!product) return res.status(404).json({ message: 'Antique item not found' });
     res.json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -67,8 +67,8 @@ export const createProduct = async (req, res) => {
       price: Number(price),
       discountPrice: Number(discountPrice) || 0,
       stock: Number(stock),
-      sku: sku || `SKU-JW-${Math.floor(1000 + Math.random() * 9000)}`,
-      purity: purity || '22K Gold (916 Hallmarked)',
+      sku: sku || `SKU-AQ-${Math.floor(1000 + Math.random() * 9000)}`,
+      purity: purity || 'Antique Matte Finish (Brass Alloy)',
       weightGrams: Number(weightGrams) || 0,
       makingCharge: Number(makingCharge) || 0,
       images: images || [],
@@ -88,7 +88,7 @@ export const createProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Jewellery item not found' });
+    if (!product) return res.status(404).json({ message: 'Antique item not found' });
 
     Object.assign(product, req.body);
     if (req.body.name) {
@@ -107,10 +107,10 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: 'Jewellery item not found' });
+    if (!product) return res.status(404).json({ message: 'Antique item not found' });
 
     await product.deleteOne();
-    res.json({ message: 'Jewellery item deleted successfully' });
+    res.json({ message: 'Antique item deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

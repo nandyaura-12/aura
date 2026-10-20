@@ -11,6 +11,9 @@ const offerSchema = new mongoose.Schema(
     endDate: { type: Date, required: true },
     status: { type: String, enum: ['Active', 'Expired', 'Scheduled'], default: 'Active' },
     minimumPurchase: { type: Number, default: 0 },
+    // Festival Offer Popup (Admin > Offers la "Set as Festival Popup" set pannalam)
+    showAsPopup: { type: Boolean, default: false },
+    popupButtonText: { type: String, default: 'Shop Now' },
   },
   { timestamps: true }
 );

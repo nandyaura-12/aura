@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { fetchCategories, createCategoryApi, updateCategoryApi, deleteCategoryApi, uploadImageApi } from '../services/api';
 import Modal from '../components/Modal';
+import { toast } from 'react-toastify';
+import { confirmToast } from '../lib/confirmToast';
 import { Plus, Edit2, Trash2, Upload } from 'lucide-react';
 import '../styles/pages/Categories.css';
 
@@ -60,8 +62,9 @@ const Categories = () => {
     try {
       const res = await uploadImageApi(file);
       setFormData((prev) => ({ ...prev, image: res.data.url }));
+      toast.success('Category image uploaded');
     } catch (err) {
-      alert('Upload failed: ' + err.message);
+      toast.error('Upload failed: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -74,19 +77,21 @@ const Categories = () => {
         await createCategoryApi(formData);
       }
       setIsModalOpen(false);
+      toast.success(editingCategory ? 'Category updated successfully' : 'Category added successfully');
       loadCategories();
     } catch (err) {
-      alert('Error saving category: ' + err.message);
+      toast.error('Error saving category: ' + (err.response?.data?.message || err.message));
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
+    if (!(await confirmToast('Are you sure you want to delete this category?'))) return;
     try {
       await deleteCategoryApi(id);
+      toast.success('Category deleted');
       loadCategories();
     } catch (err) {
-      alert('Error deleting category: ' + err.message);
+      toast.error('Error deleting category: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -94,8 +99,8 @@ const Categories = () => {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Manage Categories</h1>
-          <p className="page-subtitle">Organize products into categories for easy browsing</p>
+          <h1 className="page-title">Manage Antique Categories</h1>
+          <p className="page-subtitle">Organize temple sets, jhumkas, harams and bangles for easy browsing</p>
         </div>
         <button className="btn btn-primary" onClick={() => handleOpenModal()}>
           <Plus size={18} /> Add Category

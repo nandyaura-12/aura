@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   fetchProducts,
   createProductApi,
@@ -8,15 +9,24 @@ import {
   uploadImageApi,
 } from '../services/api';
 import Modal from '../components/Modal';
+import { toast } from 'react-toastify';
+import { confirmToast } from '../lib/confirmToast';
 import { Plus, Edit2, Trash2, Search, Upload } from 'lucide-react';
 import '../styles/pages/Products.css';
 
 const Products = () => {
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get('category') || 'All';
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const [loading, setLoading] = useState(true);
+
+  // Sidebar Collections dropdown links here with ?category=…
+  useEffect(() => {
+    setSelectedCategory(categoryParam);
+  }, [categoryParam]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -30,7 +40,7 @@ const Products = () => {
     discountPrice: '',
     stock: '',
     sku: '',
-    purity: '22K Gold (916 Hallmarked)',
+    purity: 'Antique Matte Finish (Brass Alloy)',
     weightGrams: '',
     makingCharge: '',
     images: [],
@@ -70,7 +80,7 @@ const Products = () => {
         discountPrice: product.discountPrice || '',
         stock: product.stock,
         sku: product.sku || '',
-        purity: product.purity || '22K Gold (916 Hallmarked)',
+        purity: product.purity || 'Antique Matte Finish (Brass Alloy)',
         weightGrams: product.weightGrams || '',
         makingCharge: product.makingCharge || '',
         images: product.images || [],
@@ -82,14 +92,14 @@ const Products = () => {
       setFormData({
         name: '',
         description: '',
-        category: categories[0]?.name || 'Gold Jewellery',
+        category: categories[0]?.name || 'Temple Sets',
         price: '',
         discountPrice: '',
         stock: '1',
-        sku: `SKU-JW-${Math.floor(1000 + Math.random() * 9000)}`,
-        purity: '22K Gold (916 Hallmarked)',
+        sku: `SKU-AQ-${Math.floor(1000 + Math.random() * 9000)}`,
+        purity: 'Antique Matte Finish (Brass Alloy)',
         weightGrams: '',
-        makingCharge: '10',
+        makingCharge: '',
         images: [],
         offerTag: '',
         status: 'Active',
@@ -110,8 +120,9 @@ const Products = () => {
         ...prev,
         images: [...prev.images, imageUrl],
       }));
+      toast.success('Image uploaded successfully');
     } catch (err) {
-      alert('Image upload failed: ' + err.message);
+      toast.error('Image upload failed: ' + (err.response?.data?.message || err.message));
     } finally {
       setUploadingImage(false);
     }
@@ -126,19 +137,21 @@ const Products = () => {
         await createProductApi(formData);
       }
       setIsModalOpen(false);
+      toast.success(editingProduct ? 'Antique piece updated successfully' : 'Antique piece added successfully');
       loadData();
     } catch (err) {
-      alert('Error saving jewellery item: ' + (err.response?.data?.message || err.message));
+      toast.error('Error saving antique item: ' + (err.response?.data?.message || err.message));
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Remove this jewellery piece from catalogue?')) return;
+    if (!(await confirmToast('Remove this antique piece from catalogue?'))) return;
     try {
       await deleteProductApi(id);
+      toast.success('Antique piece deleted');
       loadData();
     } catch (err) {
-      alert('Error deleting product: ' + err.message);
+      toast.error('Error deleting product: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -146,11 +159,11 @@ const Products = () => {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Jewellery Catalogue Management</h1>
-          <p className="page-subtitle">Manage 22K Gold, Solitaires, Gemstones, and Bridal Collections</p>
+          <h1 className="page-title">Antique Jewellery Catalogue</h1>
+          <p className="page-subtitle">Manage Temple Sets, Kemp Jhumkas, Antique Harams, Bangles &amp; Bridal Antique Sets</p>
         </div>
         <button className="btn btn-primary" onClick={() => handleOpenModal()}>
-          <Plus size={18} /> Add Jewellery Piece
+          <Plus size={18} /> Add Antique Piece
         </button>
       </div>
 
@@ -159,7 +172,7 @@ const Products = () => {
           <Search size={18} />
           <input
             type="text"
-            placeholder="Search by piece name, purity, SKU..."
+            placeholder="Search by piece name, finish, SKU..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -184,9 +197,9 @@ const Products = () => {
           <table className="custom-table">
             <thead>
               <tr>
-                <th>Jewellery Piece</th>
+                <th>Antique Piece</th>
                 <th>Category</th>
-                <th>Purity / Metal</th>
+                <th>Finish / Material</th>
                 <th>Weight (g)</th>
                 <th>Price</th>
                 <th>Stock</th>
@@ -258,7 +271,7 @@ const Products = () => {
               ) : (
                 <tr>
                   <td colSpan="8" className="td-empty">
-                    {loading ? 'Loading jewellery catalogue...' : 'No jewellery pieces found.'}
+                    {loading ? 'Loading antique catalogue...' : 'No antique pieces found.'}
                   </td>
                 </tr>
               )}
@@ -270,7 +283,7 @@ const Products = () => {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={editingProduct ? 'Edit Jewellery Piece' : 'Add New Jewellery Piece'}
+        title={editingProduct ? 'Edit Antique Piece' : 'Add New Antique Piece'}
       >
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -279,7 +292,7 @@ const Products = () => {
               type="text"
               className="form-control"
               required
-              placeholder="e.g. 22K Gold Antique Lakshmi Necklace"
+              placeholder="e.g. Lakshmi Nakshi Temple Haram"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
@@ -301,12 +314,12 @@ const Products = () => {
               </select>
             </div>
             <div className="form-group">
-              <label>Purity / Metal Hallmark</label>
+              <label>Finish / Material</label>
               <input
                 type="text"
                 className="form-control"
                 required
-                placeholder="e.g. 22K Gold (916 BIS) or VVS Diamond"
+                placeholder="e.g. Antique Matte Finish (Brass Alloy)"
                 value={formData.purity}
                 onChange={(e) => setFormData({ ...formData, purity: e.target.value })}
               />
@@ -315,32 +328,31 @@ const Products = () => {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Gross Weight (Grams)</label>
+              <label>Sale Price (₹)</label>
+              <input
+                type="number"
+                className="form-control"
+                placeholder="e.g. 2999 — blank-na MRP-e sale price"
+                value={formData.discountPrice}
+                onChange={(e) => setFormData({ ...formData, discountPrice: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Approx. Weight (Grams) — Optional</label>
               <input
                 type="number"
                 step="0.01"
                 className="form-control"
-                required
                 placeholder="e.g. 32.50"
                 value={formData.weightGrams}
                 onChange={(e) => setFormData({ ...formData, weightGrams: e.target.value })}
-              />
-            </div>
-            <div className="form-group">
-              <label>Making Charge (%)</label>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="e.g. 12"
-                value={formData.makingCharge}
-                onChange={(e) => setFormData({ ...formData, makingCharge: e.target.value })}
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label>Final Price (₹)</label>
+              <label>MRP Price (₹)</label>
               <input
                 type="number"
                 className="form-control"
@@ -366,7 +378,7 @@ const Products = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="e.g. AKSHAYA TRITIYA SPECIAL - 0% MAKING CHARGE"
+              placeholder="e.g. FESTIVE SPECIAL - ANTIQUE TEMPLE EDIT"
               value={formData.offerTag}
               onChange={(e) => setFormData({ ...formData, offerTag: e.target.value })}
             />
@@ -387,7 +399,7 @@ const Products = () => {
             <label>Upload High-Res Photo</label>
             <div className="upload-dropzone" onClick={() => document.getElementById('jewelImageInput').click()}>
               <Upload size={24} className="upload-dropzone__icon--lg" />
-              <div>{uploadingImage ? 'Uploading High-Res Photo...' : 'Click or Drag & Drop Jewellery Photo'}</div>
+              <div>{uploadingImage ? 'Uploading High-Res Photo...' : 'Click or Drag & Drop Antique Photo'}</div>
               <input id="jewelImageInput" type="file" accept="image/*" className="sr-only-file" onChange={handleImageUpload} />
             </div>
             {formData.images.length > 0 && (
@@ -404,7 +416,7 @@ const Products = () => {
               Cancel
             </button>
             <button type="submit" className="btn btn-primary">
-              {editingProduct ? 'Save Changes' : 'Save Jewellery Piece'}
+              {editingProduct ? 'Save Changes' : 'Save Antique Piece'}
             </button>
           </div>
         </form>

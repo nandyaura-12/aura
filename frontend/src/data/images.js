@@ -42,25 +42,25 @@ export const hero = {
 };
 
 export const categories = [
-  { name: 'RINGS', image: jewellery.img05 },
-  { name: 'EARRINGS', image: jewellery.img13 },
-  { name: 'NECKLACES', image: jewellery.img21 },
-  { name: 'BRACELETS', image: jewellery.img23 },
+  { name: 'TEMPLE SETS', image: jewellery.img21 },
+  { name: 'JHUMKAS', image: jewellery.img13 },
+  { name: 'ANTIQUE HARAMS', image: jewellery.img18 },
+  { name: 'BANGLES & KADAS', image: jewellery.img23 },
 ];
 
 export const collections = [
-  { image: jewellery.img17, slot: 'tall', alt: 'Floral gemstone necklace set' },
-  { image: jewellery.img06, slot: 'right-top', alt: 'Emerald gold bangle' },
-  { image: jewellery.img11, slot: 'mid-left', alt: 'Enamel floral bangles' },
-  { image: jewellery.img10, slot: 'mid-right', alt: 'Hand chain bracelet' },
-  { image: jewellery.img14, slot: 'right-bot', alt: 'Gemstone bracelets display' },
+  { image: jewellery.img17, slot: 'tall', alt: 'Antique temple necklace set with kemp stones' },
+  { image: jewellery.img06, slot: 'right-top', alt: 'Antique-finish bangle with green stones' },
+  { image: jewellery.img11, slot: 'mid-left', alt: 'Vintage enamel bangles' },
+  { image: jewellery.img10, slot: 'mid-right', alt: 'Antique hand ornament' },
+  { image: jewellery.img14, slot: 'right-bot', alt: 'Heritage bridal antique set' },
 ];
 
 export const exploreCategories = [
-  { name: 'RINGS', image: imgRings },
+  { name: 'ANTIQUE RINGS', image: imgRings },
   { name: 'NECKLACES', image: cld('aura/explore/necklaces') },
-  { name: 'BRACELETS', image: cld('aura/explore/bracelets') },
-  { name: 'EARRINGS', image: cld('aura/explore/earrings') },
+  { name: 'BANGLES', image: cld('aura/explore/bracelets') },
+  { name: 'JHUMKAS', image: cld('aura/explore/earrings') },
 ];
 
 export const exploreGallery = {
@@ -70,28 +70,28 @@ export const exploreGallery = {
 };
 
 export const featured = [
-  { name: 'ORBITAL RING', price: '$420', image: imgOrbitalRing },
-  { name: 'TEXTURE COIL', price: '$550', image: jewellery.img02 },
-  { name: 'RAW CHARM', price: '$320', image: jewellery.img14 },
-  { name: 'DUO BAND', price: '$460', image: jewellery.img16 },
+  { name: 'NAKSHI TEMPLE PENDANT', price: '₹2,499', image: imgOrbitalRing },
+  { name: 'ANTIQUE KADA', price: '₹1,899', image: jewellery.img02 },
+  { name: 'KEMP CHOKER', price: '₹2,199', image: jewellery.img14 },
+  { name: 'VINTAGE JHUMKA', price: '₹1,299', image: jewellery.img16 },
 ];
 
 export const bestSellers = [
-  { name: 'Velina Drop Necklace', price: '₹563', rating: '4.9', image: jewellery.img01, tall: true },
-  { name: 'Ruby Oval Bracelet', price: '₹899', rating: '4.8', image: jewellery.img19, tall: true },
-  { name: 'Pearl Bloom Pendant', price: '₹1,240', rating: '5.0', image: jewellery.img03, tall: true },
-  { name: 'Amber Leaf Set', price: '₹1,560', rating: '4.9', image: jewellery.img20, tall: true },
-  { name: 'Floral Enamel Bangle', price: '₹720', rating: '4.9', image: jewellery.img05 },
-  { name: 'Emerald Filigree Cuff', price: '₹980', rating: '5.0', image: jewellery.img14, tall: true },
-  { name: 'Hand Chain Grace', price: '₹640', rating: '4.8', image: jewellery.img10 },
-  { name: 'Rose Pearl Stud', price: '₹450', rating: '4.9', image: jewellery.img04, tall: true },
+  { name: 'Lakshmi Nakshi Haram', price: '₹2,999', rating: '4.9', image: jewellery.img01, tall: true },
+  { name: 'Kemp Stone Bracelet', price: '₹1,499', rating: '4.8', image: jewellery.img19, tall: true },
+  { name: 'Pearl Antique Pendant', price: '₹1,799', rating: '5.0', image: jewellery.img03, tall: true },
+  { name: 'Temple Mango Mala', price: '₹2,499', rating: '4.9', image: jewellery.img20, tall: true },
+  { name: 'Antique Floral Bangle', price: '₹1,199', rating: '4.9', image: jewellery.img05 },
+  { name: 'Peacock Nakshi Cuff', price: '₹1,699', rating: '5.0', image: jewellery.img14, tall: true },
+  { name: 'Heritage Hand Ornament', price: '₹1,399', rating: '4.8', image: jewellery.img10 },
+  { name: 'Vintage Pearl Stud', price: '₹899', rating: '4.9', image: jewellery.img04, tall: true },
 ];
 
 export const curated = [
-  { name: 'CLASSIC CHAIN', price: '$890', image: jewellery.img12 },
-  { name: 'DROP STUD', price: '$420', image: jewellery.img18 },
-  { name: 'EMERALD CUFF', price: '$640', image: jewellery.img14 },
-  { name: 'FLORAL SET', price: '$720', image: jewellery.img16 },
+  { name: 'TEMPLE HARAM', price: '₹2,999', image: jewellery.img12 },
+  { name: 'KEMP JHUMKA', price: '₹1,299', image: jewellery.img18 },
+  { name: 'ANTIQUE KADA', price: '₹1,899', image: jewellery.img14 },
+  { name: 'NAKSHI SET', price: '₹3,499', image: jewellery.img16 },
 ];
 
 export const grace = {
@@ -103,23 +103,23 @@ export const brandLogo = cld('aura/brand/logo');
 export const testimonials = [
   {
     name: 'Priya Sharma',
-    role: 'Designer, Mumbai',
+    role: 'Bride, Chennai',
     quote:
-      'Every piece feels curated with love. The craftsmanship is breathtaking and packaging was beautiful.',
+      'The temple set looked like my grandmother\u2019s heirloom. Beautiful antique finish and lovely packaging.',
     avatar: jewellery.img20,
   },
   {
     name: 'Ananya Reddy',
-    role: 'Founder, Atelier',
+    role: 'Festive Buyer, Hyderabad',
     quote:
-      'Nandys Aura elevated my bridal look. Soft gold tones and gemstones that catch every light.',
+      'Nandys Aura completed my traditional look. The kemp stones and dull antique tone are perfect — not shiny, just classic.',
     avatar: jewellery.img12,
   },
   {
     name: 'Meera Kapoor',
-    role: 'Stylist',
+    role: 'Collector, Bengaluru',
     quote:
-      'From everyday chains to statement sets, the collection blends modern design with classic beauty.',
+      'From jhumkas to harams, every piece feels like it came from an old temple town workshop.',
     avatar: jewellery.img03,
   },
 ];

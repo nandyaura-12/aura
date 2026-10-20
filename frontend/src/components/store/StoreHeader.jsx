@@ -1,15 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Heart, User, ShoppingBag, Menu, X } from 'lucide-react';
+import { Search, Heart, User, ShoppingBag, Menu, X, ChevronDown } from 'lucide-react';
 import { brandLogo } from '../../data/images';
+import { getStoredUser, USER_CHANGED_EVENT } from '../../data/userAuth';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { fetchOffers } from '../../services/api';
 import '../../styles/components/StoreHeader.css';
+import '../../styles/pages/Wishlist.css';
+
+const COLLECTION_CATEGORIES = [
+  'Harams & Necklaces',
+  'Temple Pendant Sets',
+  'Jhumkas & Earrings',
+  'Bangles & Kadas',
+  'Vanki / Arm Cuffs',
+  'Saree Brooches',
+];
 
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [banner, setBanner] = useState('Flat 20% off on VA for Online Gold Jewellery');
+  const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const collectionsRef = useRef(null);
+  const [banner, setBanner] = useState('Festive Sale — up to 25% off on Antique Temple Jewellery');
+  const [user, setUser] = useState(() => getStoredUser());
   const { itemCount } = useCart();
+  const { wishlistCount } = useWishlist();
+
+  useEffect(() => {
+    const refresh = () => setUser(getStoredUser());
+    window.addEventListener(USER_CHANGED_EVENT, refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener(USER_CHANGED_EVENT, refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!collectionsOpen) return undefined;
+    const onPointerDown = (e) => {
+      if (collectionsRef.current && !collectionsRef.current.contains(e.target)) {
+        setCollectionsOpen(false);
+      }
+    };
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setCollectionsOpen(false);
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [collectionsOpen]);
+
+  const closeCollections = () => setCollectionsOpen(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -38,10 +84,48 @@ const StoreHeader = () => {
       <nav className="nav-links-bar">
         <div className="store-container nav-links-inner">
           <Link to="/#shop">SHOP</Link>
-          <Link to="/collections">COLLECTIONS</Link>
+          <div
+            className="nav-dropdown"
+            ref={collectionsRef}
+            onMouseEnter={() => setCollectionsOpen(true)}
+            onMouseLeave={() => setCollectionsOpen(false)}
+          >
+            <button
+              type="button"
+              className="nav-dropdown__toggle"
+              onClick={() => setCollectionsOpen((open) => !open)}
+              aria-haspopup="true"
+              aria-expanded={collectionsOpen}
+            >
+              COLLECTIONS
+              <ChevronDown
+                size={15}
+                className={`nav-dropdown__chevron${collectionsOpen ? ' is-open' : ''}`}
+              />
+            </button>
+            {collectionsOpen && (
+              <div className="collections-dropdown">
+                <Link to="/collections" onClick={closeCollections}>Just Arrived</Link>
+                <Link to="/#bestsellers" onClick={closeCollections}>Best Sellers</Link>
+                <span className="collections-dropdown__label">Shop by Category</span>
+                {COLLECTION_CATEGORIES.map((category) => (
+                  <Link
+                    key={category}
+                    to="/#shop"
+                    className="collections-dropdown__sub"
+                    onClick={closeCollections}
+                  >
+                    {category}
+                  </Link>
+                ))}
+                <Link to="/collections" onClick={closeCollections}>Festive &amp; Bridal Wear</Link>
+                <Link to="/collections" onClick={closeCollections}>Everyday Essentials</Link>
+                <Link to="/collections" onClick={closeCollections}>Men&apos;s Collection</Link>
+              </div>
+            )}
+          </div>
           <Link to="/about">ABOUT US</Link>
           <Link to="/contact">CONTACT US</Link>
-          <Link to="/admin">ADMIN</Link>
         </div>
       </nav>
 
@@ -57,8 +141,31 @@ const StoreHeader = () => {
           </Link>
 
           <div className="brand-actions">
-            <button type="button" aria-label="Wishlist"><Heart size={20} strokeWidth={1.5} /></button>
-            <button type="button" aria-label="Account"><User size={20} strokeWidth={1.5} /></button>
+            <Link
+              to="/wishlist"
+              className={`wishlist-link${wishlistCount > 0 ? ' active' : ''}`}
+              aria-label={
+                wishlistCount
+                  ? `Wishlist, ${wishlistCount} ${wishlistCount === 1 ? 'item' : 'items'}`
+                  : 'Wishlist'
+              }
+              title="My Wishlist"
+            >
+              <Heart size={20} strokeWidth={1.5} />
+              {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
+            </Link>
+            <Link
+              to={user ? '/account' : '/login'}
+              aria-label={user ? `Account — ${user.name}` : 'Login'}
+              title={user ? `${user.name} · My Orders` : 'Login'}
+              className="account-link"
+            >
+              {user ? (
+                <span className="account-initial">{user.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+              ) : (
+                <User size={20} strokeWidth={1.5} />
+              )}
+            </Link>
             <Link
               to="/cart"
               className="cart-link"
@@ -86,10 +193,41 @@ const StoreHeader = () => {
       {menuOpen && (
         <div className="mobile-nav">
           <Link to="/#shop" onClick={() => setMenuOpen(false)}>SHOP</Link>
-          <Link to="/collections" onClick={() => setMenuOpen(false)}>COLLECTIONS</Link>
+          <button
+            type="button"
+            className="mobile-nav__toggle"
+            onClick={() => setCollectionsOpen((open) => !open)}
+            aria-expanded={collectionsOpen}
+          >
+            COLLECTIONS
+            <ChevronDown
+              size={15}
+              className={`nav-dropdown__chevron${collectionsOpen ? ' is-open' : ''}`}
+            />
+          </button>
+          {collectionsOpen && (
+            <div className="mobile-nav__sub">
+              <Link to="/collections" onClick={() => setMenuOpen(false)}>Just Arrived</Link>
+              <Link to="/#bestsellers" onClick={() => setMenuOpen(false)}>Best Sellers</Link>
+              <span>Shop by Category</span>
+              {COLLECTION_CATEGORIES.map((category) => (
+                <Link key={category} to="/#shop" onClick={() => setMenuOpen(false)}>
+                  {category}
+                </Link>
+              ))}
+              <Link to="/collections" onClick={() => setMenuOpen(false)}>Festive &amp; Bridal Wear</Link>
+              <Link to="/collections" onClick={() => setMenuOpen(false)}>Everyday Essentials</Link>
+              <Link to="/collections" onClick={() => setMenuOpen(false)}>Men&apos;s Collection</Link>
+            </div>
+          )}
           <Link to="/about" onClick={() => setMenuOpen(false)}>ABOUT US</Link>
           <Link to="/contact" onClick={() => setMenuOpen(false)}>CONTACT US</Link>
-          <Link to="/admin" onClick={() => setMenuOpen(false)}>ADMIN</Link>
+          <Link to="/wishlist" onClick={() => setMenuOpen(false)}>
+            WISHLIST{wishlistCount ? ` (${wishlistCount})` : ''}
+          </Link>
+          <Link to={user ? '/account' : '/login'} onClick={() => setMenuOpen(false)}>
+            {user ? 'MY ORDERS' : 'LOGIN'}
+          </Link>
         </div>
       )}
     </header>

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ArrowLeft, ArrowRight, Star, Recycle, Hand, Award } from 'lucide-react';
+import { ArrowUpRight, Star, Recycle, Hand, Award, Heart, MoveHorizontal } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
+import { useWishlist } from '../context/WishlistContext';
 import StoreFooter from '../components/store/StoreFooter';
 import {
   hero,
@@ -25,7 +26,29 @@ const Home = () => {
   const [featured, setFeatured] = useState(staticFeatured);
   const [bestSellers, setBestSellers] = useState(staticBestSellers);
   const [curated, setCurated] = useState(staticCurated);
+  const [sellerIndex, setSellerIndex] = useState(0);
   const sellersViewportRef = useRef(null);
+  const { toggleWishlist, isWishlisted } = useWishlist();
+
+  const renderHeart = (item) => {
+    const id = item.slug || item.name;
+    const active = isWishlisted(id);
+    return (
+      <button
+        type="button"
+        className={`wishlist-heart-btn${active ? ' active' : ''}`}
+        aria-label={active ? `Remove ${item.name} from wishlist` : `Add ${item.name} to wishlist`}
+        aria-pressed={active}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleWishlist(item);
+        }}
+      >
+        <Heart size={17} />
+      </button>
+    );
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -70,15 +93,31 @@ const Home = () => {
     };
   }, []);
 
-  const scrollSellers = (direction) => {
+  // Arrow illa — segment click / swipe panna sellers move aagum
+  const sellerStep = () => {
     const viewport = sellersViewportRef.current;
-    if (!viewport) return;
+    if (!viewport) return 0;
     const card = viewport.querySelector('.stagger-card');
-    if (!card) return;
-    const styles = window.getComputedStyle(viewport.querySelector('.stagger-track'));
-    const gap = parseFloat(styles.gap) || 22;
-    const step = card.getBoundingClientRect().width + gap;
-    viewport.scrollBy({ left: direction * step, behavior: 'smooth' });
+    if (!card) return 0;
+    const track = viewport.querySelector('.stagger-track');
+    const gap = track ? parseFloat(window.getComputedStyle(track).gap) || 22 : 22;
+    return card.getBoundingClientRect().width + gap;
+  };
+
+  const scrollToSeller = (index) => {
+    const viewport = sellersViewportRef.current;
+    const step = sellerStep();
+    if (!viewport || !step) return;
+    viewport.scrollTo({ left: index * step, behavior: 'smooth' });
+    setSellerIndex(index);
+  };
+
+  const handleSellersScroll = () => {
+    const viewport = sellersViewportRef.current;
+    const step = sellerStep();
+    if (!viewport || !step) return;
+    const index = Math.round(viewport.scrollLeft / step);
+    setSellerIndex(Math.max(0, Math.min(index, bestSellers.length - 1)));
   };
 
   const visibleTestimonials = [
@@ -93,31 +132,31 @@ const Home = () => {
 
       {/* Hero */}
       <section className="hero">
-        <img src={hero.main} alt="Woman wearing layered gold chains" className="hero-bg" />
+        <img src={hero.main} alt="Woman wearing antique temple jewellery" className="hero-bg" />
         <div className="hero-overlay" />
         <div className="hero-content">
           <h1>
-            <span>Discover</span>
-            <em>Your Sparkles</em>
+            <span>Heritage,</span>
+            <em>Worn Again</em>
           </h1>
           <p className="hero-copy">
-            <span>Discover beautifully crafted pieces designed to celebrate every moment—from</span>
-            <span>everyday elegance to unforgettable occasions.</span>
+            <span>Handcrafted antique &amp; temple jewellery inspired by old South Indian</span>
+            <span>craft — nakshi work, kemp stones and timeless vintage finishes.</span>
           </p>
           <Link to="/collections" className="hero-cta">
-            Explore Collections
+            Explore Antique Collections
           </Link>
         </div>
         <div className="hero-thumbs">
-          <img src={hero.thumb1} alt="Green gemstone necklace" />
-          <img src={hero.thumb2} alt="Pearl flower earring" />
+          <img src={hero.thumb1} alt="Antique necklace with green kemp stones" />
+          <img src={hero.thumb2} alt="Vintage pearl-drop jhumka earring" />
         </div>
       </section>
 
       {/* Shop by Category */}
       <section className="section category-section" id="shop">
         <div className="store-container">
-          <h2 className="section-title center">Shop By Category</h2>
+          <h2 className="section-title center">Shop By Antique Category</h2>
           <div className="category-grid">
             {categories.map((cat) => (
               <Link key={cat.name} to="/collections" className="category-card">
@@ -133,11 +172,11 @@ const Home = () => {
       <section className="section collections-section" id="collections">
         <div className="store-container">
           <div className="section-head center collections-head">
-            <span className="pill">New Arrivals</span>
+            <span className="pill">Heritage Arrivals</span>
             <h2 className="section-title collections-title">
-              Sophisticated Collections for
+              Antique Collections for
               <br />
-              Every Moment
+              Every Occasion
             </h2>
             <Link to="/collections" className="text-link collections-link">
               View All Collections <ArrowUpRight size={16} />
@@ -158,8 +197,8 @@ const Home = () => {
         <div className="store-container">
           <div className="section-head row">
             <div>
-              <span className="pill">Featured Collections</span>
-              <h2 className="section-title">Creating, Crafting &amp; Wearing.</h2>
+              <span className="pill">Featured Antique Pieces</span>
+              <h2 className="section-title">Cast, Carved &amp; Hand-Finished.</h2>
             </div>
             <Link to="/collections" className="text-link underline">
               VIEW COLLECTION
@@ -172,6 +211,7 @@ const Home = () => {
                 to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
                 className="product-card"
               >
+                {renderHeart(item)}
                 <img src={item.image} alt={item.name} />
                 <div className="product-meta">
                   <span>{item.name}</span>
@@ -188,23 +228,15 @@ const Home = () => {
         <div className="store-container">
           <div className="section-head row">
             <div>
-              <span className="pill">Best Sellers</span>
+              <span className="pill">Most Loved</span>
               <h2 className="section-title bestsellers-title">
-                <span>Explore pieces that blend modern</span>
-                <span>design with classic beauty</span>
+                <span>Temple classics and vintage</span>
+                <span>pieces, loved for generations</span>
               </h2>
             </div>
           </div>
           <div className="bestsellers-frame">
-            <button
-              type="button"
-              className="seller-arrow prev"
-              aria-label="Previous"
-              onClick={() => scrollSellers(-1)}
-            >
-              <ArrowLeft size={16} />
-            </button>
-            <div className="bestsellers-viewport" ref={sellersViewportRef}>
+            <div className="bestsellers-viewport" ref={sellersViewportRef} onScroll={handleSellersScroll}>
             <div className="stagger-track">
               {bestSellers.map((item, i) => (
                 <Link
@@ -212,6 +244,7 @@ const Home = () => {
                   to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
                   className={`stagger-card ${item.tall ? 'tall' : ''} ${i % 2 === 1 ? 'offset-1' : ''}`}
                 >
+                  {renderHeart(item)}
                   <div className="stagger-meta">
                     <div>
                       <h3>{item.name}</h3>
@@ -226,14 +259,27 @@ const Home = () => {
               ))}
             </div>
           </div>
-            <button
-              type="button"
-              className="seller-arrow next"
-              aria-label="Next"
-              onClick={() => scrollSellers(1)}
-            >
-              <ArrowRight size={16} />
-            </button>
+            {/* Arrow-ku badhila segment navigation */}
+            <div className="seller-controls">
+              <span className="seller-hint">
+                <MoveHorizontal size={15} /> Swipe to explore
+              </span>
+              <div className="seller-segments" role="tablist" aria-label="Best sellers">
+                {bestSellers.map((item, i) => (
+                  <button
+                    key={`${item.slug || item.name}-seg-${i}`}
+                    type="button"
+                    className={`seller-seg ${i === sellerIndex ? 'active' : ''}`}
+                    aria-label={`Show ${item.name}`}
+                    aria-current={i === sellerIndex}
+                    onClick={() => scrollToSeller(i)}
+                  />
+                ))}
+              </div>
+              <span className="seller-count">
+                {String(sellerIndex + 1).padStart(2, '0')} / {String(bestSellers.length).padStart(2, '0')}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -242,18 +288,18 @@ const Home = () => {
       <section className="grace-section" id="about">
         <div className="store-container grace-grid">
           <div className="grace-image">
-            <img src={grace.image} alt="Hand chain bracelet on champagne silk" />
+            <img src={grace.image} alt="Antique hand ornament with nakshi detailing" />
           </div>
           <div className="grace-copy">
-            <p className="eyebrow">HAND CHAIN BRACELET</p>
+            <p className="eyebrow">ANTIQUE HAND ORNAMENT</p>
             <h2>
               Grace in Every
               <br />
               Detail
             </h2>
             <p>
-              A delicate gold chain flows from wrist to finger, accented with a filigree centerpiece
-              and softly colored charms. A graceful finishing touch for every occasion.
+              An antique-finish hand ornament with nakshi filigree work and kemp accents,
+              inspired by ornaments worn in old temple towns. A graceful finishing touch for festive wear.
             </p>
             <a href="#curated" className="text-link light">
               EXPLORE MORE →
@@ -265,8 +311,8 @@ const Home = () => {
       {/* Curated Essentials */}
       <section className="section curated-section" id="curated">
         <div className="store-container">
-          <h2 className="section-title">Curated Essentials</h2>
-          <p className="section-sub">Foundation pieces meant to be layered, lived in, and loved.</p>
+          <h2 className="section-title">Curated Heirlooms</h2>
+          <p className="section-sub">Heritage pieces meant to be treasured, gifted and passed on.</p>
           <div className="curated-grid">
             {curated.map((item, i) => (
               <Link
@@ -274,6 +320,7 @@ const Home = () => {
                 to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
                 className={`curated-card h-${i}`}
               >
+                {renderHeart(item)}
                 <img src={item.image} alt={item.name} />
                 <div className="product-meta">
                   <span>{item.name}</span>
@@ -290,18 +337,18 @@ const Home = () => {
         <div className="store-container trust-grid">
           <div className="trust-item">
             <Recycle size={28} strokeWidth={1.25} />
-            <h3>ETHICAL SOURCING</h3>
-            <p>Responsibly sourced materials chosen with care for people and planet.</p>
+            <h3>HERITAGE DESIGNS</h3>
+            <p>Motifs drawn from temple art, old nakshi work and vintage family heirlooms.</p>
           </div>
           <div className="trust-item">
             <Hand size={28} strokeWidth={1.25} />
             <h3>MASTER CRAFTSMANSHIP</h3>
-            <p>Hand-finished details that honour tradition and modern design.</p>
+            <p>Cast, carved and antique-finished by hand using time-honoured techniques.</p>
           </div>
           <div className="trust-item">
             <Award size={28} strokeWidth={1.25} />
-            <h3>LIFETIME WARRANTY</h3>
-            <p>Pieces built to last—backed by our lifetime care promise.</p>
+            <h3>CARE &amp; RESTORATION</h3>
+            <p>Antique-finish care, re-polishing and repair support for every piece.</p>
           </div>
         </div>
       </section>
@@ -310,10 +357,10 @@ const Home = () => {
       <section className="section testimonials-section">
         <div className="store-container">
           <div className="section-head center">
-            <span className="pill">Valuable Insights</span>
-            <h2 className="section-title">User feedback</h2>
+            <span className="pill">Wearer Stories</span>
+            <h2 className="section-title">Loved like an heirloom</h2>
             <p className="section-sub">
-              Discover our community of clients who celebrate every sparkle with us.
+              Brides, festive wearers and collectors who treasure our antique pieces.
             </p>
           </div>
           <div className="testimonial-grid">

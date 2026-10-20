@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { fetchOrders, updateOrderStatusApi, deleteOrderApi } from '../services/api';
 import Modal from '../components/Modal';
+import { toast } from 'react-toastify';
 import { Eye, Search, Filter, ShoppingBag } from 'lucide-react';
+import { formatInr } from '../data/catalog';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -31,9 +33,10 @@ const Orders = () => {
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await updateOrderStatusApi(orderId, { orderStatus: newStatus });
+      toast.success(`Order status updated to ${newStatus}`);
       loadOrders();
     } catch (err) {
-      alert('Error updating order status: ' + err.message);
+      toast.error('Error updating order status: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -41,8 +44,8 @@ const Orders = () => {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Manage Customer Orders</h1>
-          <p className="page-subtitle">Track, update order statuses, and inspect purchase invoices</p>
+          <h1 className="page-title">Manage Antique Orders</h1>
+          <p className="page-subtitle">Track antique piece orders, update delivery statuses, and inspect purchase invoices</p>
         </div>
       </div>
 
@@ -116,7 +119,7 @@ const Orders = () => {
                         <option value="Cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td style={{ fontWeight: '700' }}>₹{order.totalAmount}</td>
+                    <td style={{ fontWeight: '700' }}>{formatInr(order.totalAmount)}</td>
                     <td style={{ color: 'var(--text-muted)' }}>
                       {new Date(order.createdAt || Date.now()).toLocaleDateString()}
                     </td>
@@ -165,16 +168,16 @@ const Orders = () => {
                 <div key={idx} style={{ display: 'flex', alignItems: 'center', justify: 'space-between', padding: '0.6rem 0', borderBottom: '1px solid var(--border-color)' }}>
                   <div>
                     <div style={{ fontWeight: '600' }}>{item.productName}</div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Qty: {item.quantity} × ₹{item.price}</div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Qty: {item.quantity} × {formatInr(item.price)}</div>
                   </div>
-                  <div style={{ fontWeight: '700' }}>₹{item.quantity * item.price}</div>
+                  <div style={{ fontWeight: '700' }}>{formatInr(item.quantity * item.price)}</div>
                 </div>
               ))}
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '1rem', borderTop: '2px solid var(--border-color)', fontWeight: '800', fontSize: '1.1rem' }}>
               <span>Total Amount</span>
-              <span style={{ color: 'var(--primary-orange)' }}>₹{selectedOrder.totalAmount}</span>
+              <span style={{ color: 'var(--primary-orange)' }}>{formatInr(selectedOrder.totalAmount)}</span>
             </div>
           </div>
         )}

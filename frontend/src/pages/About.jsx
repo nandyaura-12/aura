@@ -29,27 +29,27 @@ const About = () => {
               About <em>Us</em>
             </h1>
             <p className="about-page-sub">
-              Discover the perfect jewelry to complement your style.
+              Antique &amp; temple jewellery inspired by the heirlooms of old South India.
             </p>
           </div>
 
           <div className="about-hero-statement text-center">
             <h2 className="about-statement-headline">
-              Jewelry made to be <em>lived in</em>,
+              Heirlooms made to be <em>worn again</em>,
               <br />
-              and loved for life.
+              and treasured for life.
             </h2>
             <p className="about-statement-body">
-              Nandys Aura creates fine jewelry by hand in India — quiet, considered pieces
+              Nandys Aura creates antique-finish temple jewellery by hand in India — nakshi,
               <br className="desktop-only-br" />
-              designed to be worn every day and passed on.
+              kemp and mango motifs made to be worn at celebrations and passed on.
             </p>
           </div>
 
           <div className="about-hero-banner">
             <img
               src={aboutImages.hero}
-              alt="Model wearing elegant gold clover necklace"
+              alt="Model wearing an antique temple necklace set"
               className="about-banner-img"
             />
           </div>
@@ -63,23 +63,24 @@ const About = () => {
             <div className="about-story-media">
               <img
                 src={aboutImages.story}
-                alt="Flatlay of handcrafted gold jewelry and tools"
+                alt="Flatlay of handcrafted antique jewellery and traditional tools"
               />
             </div>
             <div className="about-story-copy">
               <span className="about-pill">Our Story</span>
               <h2 className="about-section-title">
-                It began at a small bench,
+                It began with a grandmother&apos;s
                 <br />
-                with a single ring.
+                temple haram.
               </h2>
               <p className="story-para">
-                Nandys Aura made the first piece as a gift — a simple gold band, shaped and
-                polished by hand. Friends asked for their own, and a studio slowly took shape.
+                Nandys Aura began when we tried to recreate a treasured family heirloom — a
+                dull-antique Lakshmi haram that no new, shiny piece could match. Friends asked
+                for their own, and a small workshop slowly took shape.
               </p>
               <p className="story-para">
-                Today our small team still works the same way: fewer pieces, made carefully,
-                from materials we can trace.
+                Today our small team still works the same way: fewer pieces, cast and carved
+                carefully, then antique-finished by hand so they look loved for generations.
               </p>
               <span className="story-signature">— Nandys Aura Founder</span>
             </div>
@@ -105,31 +106,32 @@ const About = () => {
           <div className="craft-cards-grid">
             <div className="craft-card">
               <div className="craft-media-wrap">
-                <img src={aboutImages.materials} alt="Gold bangles stack" />
+                <img src={aboutImages.materials} alt="Antique-finish bangles stack" />
               </div>
               <h3 className="craft-card-title">Materials</h3>
               <p className="craft-card-text">
-                Recycled 14k &amp; 18k gold and certified gemstones, sourced from partners we know by name.
+                Brass alloy with a matte antique finish, kemp-style stones and faux pearls —
+                skin-friendly and lead-free, never bright or newly polished.
               </p>
             </div>
 
             <div className="craft-card">
               <div className="craft-media-wrap">
-                <img src={aboutImages.shaping} alt="Artisan shaping jewelry at workbench" />
+                <img src={aboutImages.shaping} alt="Artisan carving nakshi jewellery at a workbench" />
               </div>
               <h3 className="craft-card-title">Shaping</h3>
               <p className="craft-card-text">
-                Each form is cast, filed and set at the bench using traditional tools and techniques.
+                Each Lakshmi, peacock and mango motif is cast and carved by hand using traditional nakshi techniques.
               </p>
             </div>
 
             <div className="craft-card">
               <div className="craft-media-wrap">
-                <img src={aboutImages.finishing} alt="Artisan soldering gold with flame" />
+                <img src={aboutImages.finishing} alt="Artisan applying an antique finish by hand" />
               </div>
               <h3 className="craft-card-title">Finishing</h3>
               <p className="craft-card-text">
-                Polished, inspected under magnification, and hallmarked before it leaves the studio.
+                Oxidised and antique-finished by hand, then inspected piece by piece before it leaves the workshop.
               </p>
             </div>
           </div>
@@ -147,9 +149,9 @@ const About = () => {
               <div className="value-icon-circle">
                 <Gem size={22} strokeWidth={1.5} />
               </div>
-              <h3 className="value-card-title">Uncompromising quality</h3>
+              <h3 className="value-card-title">True antique character</h3>
               <p className="value-card-text">
-                Solid precious metals, never plated. Backed by a lifetime warranty.
+                A dull, aged finish modelled on real heirlooms — never bright, shiny or mass-polished.
               </p>
             </div>
 
@@ -157,9 +159,9 @@ const About = () => {
               <div className="value-icon-circle">
                 <Sparkles size={22} strokeWidth={1.5} />
               </div>
-              <h3 className="value-card-title">Thoughtful design</h3>
+              <h3 className="value-card-title">Heritage design</h3>
               <p className="value-card-text">
-                Timeless shapes designed to layer, stack and be worn every single day.
+                Temple, nakshi and vintage motifs drawn from old South Indian family jewellery.
               </p>
             </div>
 
@@ -169,7 +171,7 @@ const About = () => {
               </div>
               <h3 className="value-card-title">Genuine care</h3>
               <p className="value-card-text">
-                Free resizing, cleaning and repairs, with a real person ready to help.
+                Antique-finish care guidance, re-finishing and repair support, with a real person ready to help.
               </p>
             </div>
           </div>
@@ -181,7 +183,7 @@ const About = () => {
         <div className="store-container text-center">
           <div className="quote-featured-block">
             <blockquote className="featured-quote-serif">
-              “The ring is even more beautiful in person — I haven't taken it off since it arrived.”
+              “The temple haram looks exactly like my grandmother&apos;s heirloom — I wore it all through my wedding.”
             </blockquote>
             <span className="featured-quote-author">PRIYA SHARMA · MUMBAI</span>
           </div>
@@ -196,7 +198,7 @@ const About = () => {
                 ))}
               </div>
               <p className="review-trio-body">
-                Beautiful packaging and the necklace is perfect for everyday wear.
+                Beautiful packaging, and the mango mala paired perfectly with my silk saree.
               </p>
               <span className="review-trio-buyer">Ananya R. · Verified buyer</span>
             </div>
@@ -208,7 +210,7 @@ const About = () => {
                 ))}
               </div>
               <p className="review-trio-body">
-                They resized my ring quickly and the team was so warm to deal with.
+                They exchanged my kada for the right bangle size quickly, and the team was so warm to deal with.
               </p>
               <span className="review-trio-buyer">Meera K. · Verified buyer</span>
             </div>
@@ -232,7 +234,7 @@ const About = () => {
       <section className="about-cta-banner">
         <img
           src={aboutImages.ctaBg}
-          alt="Handcrafted fine gold jewelry bangles, rings and necklaces"
+          alt="Handcrafted antique temple jewellery — harams, jhumkas and bangles"
           className="cta-banner-bg-img"
         />
         <div className="cta-banner-overlay" />
@@ -244,10 +246,10 @@ const About = () => {
             <span className="cta-period-white">.</span>
           </h2>
           <p className="cta-banner-sub">
-            Rings, necklaces and earrings — handmade and ready to wear.
+            Harams, jhumkas, chokers and kadas — hand-finished and ready to wear.
           </p>
           <Link to="/collections" className="cta-banner-btn">
-            EXPLORE OUR JEWELRY <ArrowRight size={15} strokeWidth={1.75} />
+            EXPLORE ANTIQUE JEWELLERY <ArrowRight size={15} strokeWidth={1.75} />
           </Link>
         </div>
       </section>

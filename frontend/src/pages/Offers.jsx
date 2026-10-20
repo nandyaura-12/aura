@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { fetchOffers, createOfferApi, updateOfferApi, deleteOfferApi, uploadImageApi } from '../services/api';
 import Modal from '../components/Modal';
-import { Plus, Tag, Edit2, Trash2, Calendar, Upload } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { confirmToast } from '../lib/confirmToast';
+import { Plus, Tag, Edit2, Trash2, Calendar, Upload, Megaphone, Eye, X } from 'lucide-react';
+import '../styles/components/FestivalOfferPopup.css';
 
 const Offers = () => {
   const [offers, setOffers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOffer, setEditingOffer] = useState(null);
+  const [previewOffer, setPreviewOffer] = useState(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -19,7 +23,21 @@ const Offers = () => {
     endDate: '',
     status: 'Active',
     minimumPurchase: '',
+    showAsPopup: false,
+    popupButtonText: 'Shop Now',
   });
+
+  const popupOffer = offers.find((o) => o.showAsPopup);
+
+  const handleSetPopup = async (offer) => {
+    try {
+      await updateOfferApi(offer._id, { showAsPopup: !offer.showAsPopup });
+      toast.success(offer.showAsPopup ? 'Popup disabled' : 'Popup enabled');
+      loadOffers();
+    } catch (err) {
+      toast.error('Error setting popup: ' + (err.response?.data?.message || err.message));
+    }
+  };
 
   const loadOffers = async () => {
     try {
@@ -50,6 +68,8 @@ const Offers = () => {
         endDate: offer.endDate ? offer.endDate.split('T')[0] : '',
         status: offer.status || 'Active',
         minimumPurchase: offer.minimumPurchase || '',
+        showAsPopup: Boolean(offer.showAsPopup),
+        popupButtonText: offer.popupButtonText || 'Shop Now',
       });
     } else {
       setEditingOffer(null);
@@ -63,6 +83,8 @@ const Offers = () => {
         endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         status: 'Active',
         minimumPurchase: '',
+        showAsPopup: false,
+        popupButtonText: 'Shop Now',
       });
     }
     setIsModalOpen(true);
@@ -74,8 +96,9 @@ const Offers = () => {
     try {
       const res = await uploadImageApi(file);
       setFormData((prev) => ({ ...prev, bannerImage: res.data.url }));
+      toast.success('Offer banner uploaded');
     } catch (err) {
-      alert('Upload failed: ' + err.message);
+      toast.error('Upload failed: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -88,19 +111,21 @@ const Offers = () => {
         await createOfferApi(formData);
       }
       setIsModalOpen(false);
+      toast.success(editingOffer ? 'Offer updated successfully' : 'Offer created successfully');
       loadOffers();
     } catch (err) {
-      alert('Error saving offer: ' + err.message);
+      toast.error('Error saving offer: ' + (err.response?.data?.message || err.message));
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Delete this promotional offer?')) return;
+    if (!(await confirmToast('Delete this promotional offer?'))) return;
     try {
       await deleteOfferApi(id);
+      toast.success('Offer deleted');
       loadOffers();
     } catch (err) {
-      alert('Error deleting offer: ' + err.message);
+      toast.error('Error deleting offer: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -114,6 +139,29 @@ const Offers = () => {
         <button className="btn btn-primary" onClick={() => handleOpenModal()}>
           <Plus size={18} /> Create New Offer
         </button>
+      </div>
+
+      {/* Festival Offer Popup — Admin Setting */}
+      <div className="stat-card" style={{ width: '100%', marginBottom: '1.25rem', border: '1.5px solid var(--gold)', background: 'var(--cream)' }}>
+        <Megaphone size={26} style={{ color: 'var(--olive)', flexShrink: 0 }} />
+        <div style={{ flex: 1 }}>
+          <h3 style={{ fontSize: '1rem', fontWeight: 800 }}>🎉 Festival Offer Popup (Website)</h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+            {popupOffer
+              ? <>Live popup: <strong>{popupOffer.title}</strong> — {popupOffer.discountType === 'Percentage' ? `${popupOffer.discountValue}% OFF` : `₹${popupOffer.discountValue} OFF`} · code <strong>{popupOffer.code}</strong> ({popupOffer.status})</>
+              : 'Popup OFF — keela oru offer la "Set as Festival Popup" click panna website la popup varum.'}
+          </p>
+        </div>
+        {popupOffer && (
+          <>
+            <button type="button" className="btn btn-secondary" onClick={() => setPreviewOffer(popupOffer)}>
+              <Eye size={16} /> Preview Popup
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={() => handleSetPopup(popupOffer)}>
+              <X size={16} /> Turn Off
+            </button>
+          </>
+        )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
@@ -142,13 +190,33 @@ const Offers = () => {
               <Calendar size={14} /> Valid: {new Date(offer.startDate).toLocaleDateString()} - {new Date(offer.endDate).toLocaleDateString()}
             </div>
 
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
+            {offer.showAsPopup && (
+              <span className="badge" style={{ marginTop: '0.6rem', background: 'var(--olive)', color: '#fff' }}>
+                🎉 FESTIVAL POPUP LIVE
+              </span>
+            )}
+
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.5rem', marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)' }}>
+              <button
+                type="button"
+                className={offer.showAsPopup ? 'btn btn-secondary' : 'btn btn-primary'}
+                style={{ fontSize: '0.78rem', padding: '0.45rem 0.8rem' }}
+                onClick={() => handleSetPopup(offer)}
+                title="Website la festival popup-a indha offer-a kaatu"
+              >
+                <Megaphone size={14} /> {offer.showAsPopup ? 'Remove Popup' : 'Set as Festival Popup'}
+              </button>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button type="button" className="btn-icon" onClick={() => setPreviewOffer(offer)} title="Preview Popup">
+                  <Eye size={16} />
+                </button>
               <button className="btn-icon" onClick={() => handleOpenModal(offer)}>
                 <Edit2 size={16} />
               </button>
               <button className="btn-icon" style={{ color: 'var(--status-cancelled)' }} onClick={() => handleDelete(offer._id)}>
                 <Trash2 size={16} />
               </button>
+              </div>
             </div>
           </div>
         ))}
@@ -242,6 +310,32 @@ const Offers = () => {
             </div>
           </div>
 
+          <div className="form-group" style={{ background: 'var(--cream)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '0.9rem' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', margin: 0 }}>
+              <input
+                type="checkbox"
+                checked={formData.showAsPopup}
+                onChange={(e) => setFormData({ ...formData, showAsPopup: e.target.checked })}
+              />
+              🎉 Show as Festival Offer Popup on website
+            </label>
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '0.4rem 0 0 1.5rem' }}>
+              Oru time-la oru offer mattum popup-a varum. Website open aana idhu auto-popup aagum.
+            </p>
+            {formData.showAsPopup && (
+              <div style={{ marginTop: '0.75rem', marginLeft: '1.5rem' }}>
+                <label>Popup Button Text</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={formData.popupButtonText}
+                  onChange={(e) => setFormData({ ...formData, popupButtonText: e.target.value })}
+                  placeholder="Shop Now"
+                />
+              </div>
+            )}
+          </div>
+
           <div className="form-group">
             <label>Offer Banner Image</label>
             <div className="upload-dropzone" onClick={() => document.getElementById('offerBannerInput').click()}>
@@ -263,6 +357,32 @@ const Offers = () => {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* Festival Popup Preview */}
+      <Modal isOpen={Boolean(previewOffer)} onClose={() => setPreviewOffer(null)} title="Festival Popup Preview (Website la ipdi varum)">
+        {previewOffer && (
+          <div className="fest-popup" style={{ animation: 'none', width: '100%' }}>
+            <div className="fest-media">
+              {previewOffer.bannerImage
+                ? <img src={previewOffer.bannerImage} alt={previewOffer.title} />
+                : <div style={{ minHeight: 320, background: 'var(--cream-deep)' }} />}
+              <span className="fest-badge">
+                {previewOffer.discountType === 'Percentage' ? `${previewOffer.discountValue}% OFF` : `₹${previewOffer.discountValue} OFF`}
+              </span>
+            </div>
+            <div className="fest-body">
+              <p className="fest-eyebrow">✦ Festival Special ✦</p>
+              <h2 className="fest-title">{previewOffer.title}</h2>
+              <p className="fest-highlight">
+                {previewOffer.discountType === 'Percentage' ? `${previewOffer.discountValue}% OFF` : `₹${Number(previewOffer.discountValue).toLocaleString('en-IN')} OFF`}
+              </p>
+              <p className="fest-desc">Handcrafted antique &amp; temple jewellery for your festive look.</p>
+              <span className="fest-code"><span>{previewOffer.code}</span> Copy</span>
+              <span className="fest-cta">{previewOffer.popupButtonText || 'Shop Now'}</span>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

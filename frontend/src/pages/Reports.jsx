@@ -11,8 +11,9 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
-import { Calendar, Filter, Download, DollarSign, ShoppingBag, Gem, TrendingUp } from 'lucide-react';
+import { Calendar, Filter, Download, IndianRupee, ShoppingBag, Gem, TrendingUp } from 'lucide-react';
 import StatCard from '../components/StatCard';
+import { formatInr } from '../data/catalog';
 
 const Reports = () => {
   const todayStr = new Date().toISOString().split('T')[0];
@@ -60,7 +61,7 @@ const Reports = () => {
   }, [startDate, endDate, selectedProduct]);
 
   const handleExportCSV = () => {
-    let csv = 'Jewellery Piece,Revenue (₹),Units Sold,Orders\n';
+    let csv = 'Antique Piece,Revenue (₹),Units Sold,Orders\n';
     (reportData.topProducts || []).forEach((p) => {
       csv += `"${p.name}",${p.revenue},${p.units},${p.orders}\n`;
     });
@@ -69,7 +70,7 @@ const Reports = () => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Aura_Jewellery_Sales_Report_${startDate}_to_${endDate}.csv`;
+    a.download = `Aura_Antique_Sales_Report_${startDate}_to_${endDate}.csv`;
     a.click();
   };
 
@@ -77,9 +78,9 @@ const Reports = () => {
     <div>
       <div className="page-header">
         <div>
-          <h1 className="page-title">Sales & Gold Revenue Analytics</h1>
+          <h1 className="page-title">Sales & Revenue Analytics</h1>
           <p className="page-subtitle">
-            Generate customized sales reports based on custom date ranges and specific jewellery piece selection
+            Generate customized sales reports based on custom date ranges and specific antique piece selection
           </p>
         </div>
         <button className="btn btn-secondary" onClick={handleExportCSV}>
@@ -114,14 +115,14 @@ const Reports = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
           <Filter size={18} style={{ color: 'var(--primary-gold)' }} />
-          <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>Jewellery Piece Filter:</span>
+          <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>Antique Piece Filter:</span>
           <select
             className="form-control"
             style={{ width: '230px' }}
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value)}
           >
-            <option value="All">All Jewellery Pieces</option>
+            <option value="All">All Antique Pieces</option>
             {productsList.map((p) => (
               <option key={p._id || p.name} value={p.name}>
                 {p.name}
@@ -134,9 +135,9 @@ const Reports = () => {
       {/* Metric Cards */}
       <div className="stats-grid">
         <StatCard
-          title="Period Gold Revenue"
-          value={`₹${(reportData.summary?.totalRevenue || 0).toLocaleString()}`}
-          icon={DollarSign}
+          title="Period Revenue"
+          value={formatInr(reportData.summary?.totalRevenue)}
+          icon={IndianRupee}
         />
         <StatCard
           title="Orders Placed"
@@ -150,7 +151,7 @@ const Reports = () => {
         />
         <StatCard
           title="Avg Order Value"
-          value={`₹${(Number(reportData.summary?.avgOrderValue) || 0).toLocaleString()}`}
+          value={formatInr(reportData.summary?.avgOrderValue)}
           icon={TrendingUp}
         />
       </div>
@@ -159,7 +160,7 @@ const Reports = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '2rem' }}>
         <div className="card-table-wrapper" style={{ padding: '1.25rem' }}>
           <h3 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '1rem' }}>
-            Gold Revenue Trend ({startDate} to {endDate})
+            Revenue Trend ({startDate} to {endDate})
           </h3>
           <div style={{ width: '100%', height: 280 }}>
             {reportData.salesTrend && reportData.salesTrend.length > 0 ? (
@@ -176,6 +177,7 @@ const Reports = () => {
                   <YAxis stroke="#94a3b8" fontSize={12} />
                   <Tooltip
                     contentStyle={{ backgroundColor: '#13111c', borderColor: '#2a253c', color: '#fff' }}
+                    formatter={(value) => [formatInr(value), 'Revenue']}
                   />
                   <Area type="monotone" dataKey="revenue" stroke="#d4af37" fillOpacity={1} fill="url(#colorRevGold)" />
                 </AreaChart>
@@ -198,7 +200,10 @@ const Reports = () => {
                   <CartesianGrid strokeDasharray="3 3" stroke="#2a253c" />
                   <XAxis dataKey="name" stroke="#94a3b8" fontSize={10} tick={false} />
                   <YAxis stroke="#94a3b8" fontSize={12} />
-                  <Tooltip contentStyle={{ backgroundColor: '#13111c', borderColor: '#2a253c', color: '#fff' }} />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#13111c', borderColor: '#2a253c', color: '#fff' }}
+                    formatter={(value) => [formatInr(value), 'Revenue']}
+                  />
                   <Bar dataKey="revenue" fill="#f59e0b" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
@@ -214,13 +219,13 @@ const Reports = () => {
       {/* Breakdown Data Table */}
       <div className="card-table-wrapper">
         <div className="table-header-bar">
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Jewellery Sales Performance Breakdown</h3>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Antique Sales Performance Breakdown</h3>
         </div>
         <div className="table-container">
           <table className="custom-table">
             <thead>
               <tr>
-                <th>Jewellery Item</th>
+                <th>Antique Item</th>
                 <th>Revenue Generated</th>
                 <th>Units Sold</th>
                 <th>Total Orders</th>
@@ -232,7 +237,7 @@ const Reports = () => {
                   <tr key={idx}>
                     <td style={{ fontWeight: '700' }}>{prod.name}</td>
                     <td style={{ fontWeight: '800', color: 'var(--primary-gold)' }}>
-                      ₹{(prod.revenue || 0).toLocaleString()}
+                      {formatInr(prod.revenue)}
                     </td>
                     <td>{prod.units} pcs</td>
                     <td>{prod.orders} orders</td>

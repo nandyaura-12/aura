@@ -11,10 +11,12 @@ import {
   RotateCcw,
   Gem,
   CheckCircle2,
+  Heart,
 } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import { jewellery } from '../data/images';
 import { toStoreProduct } from '../data/catalog';
 import { fetchProducts } from '../services/api';
@@ -22,135 +24,111 @@ import '../styles/pages/storefront.css';
 import '../styles/pages/Collections.css';
 
 // Shown until the admin catalogue responds, and if the API is unavailable.
+// Antique / temple jewellery — antique-finish pieces, NOT solid gold or silver.
 const fallbackCatalog = [
   {
-    id: 'zodiac-sign-necklace',
-    title: 'Zodiac Sign Necklace',
+    id: 'lakshmi-nakshi-temple-haram',
+    title: 'Lakshmi Nakshi Temple Haram',
     originalPrice: '₹3,999',
-    price: '₹3,199',
+    price: '₹2,999',
     rating: '4.9',
     reviewsCount: 124,
     onSale: true,
     description:
-      'Handcrafted in solid 14k yellow gold, the Aurelia Cuff is a masterpiece in minimalist luxury. Its subtle curve reflects light beautifully, designed to be worn effortlessly day or night.',
-    styles: ['Small', 'Medium', 'Large'],
-    images: [
-      jewellery.img21,
-      jewellery.img07,
-      jewellery.img12,
-      jewellery.img20,
-    ],
+      'A long antique-finish haram with a hand-carved Goddess Lakshmi pendant, nakshi detailing and deep-red kemp stones. Inspired by heirloom temple jewellery of old Tamil Nadu.',
+    styles: ['Standard'],
+    images: [jewellery.img21, jewellery.img07, jewellery.img12, jewellery.img20],
     details: {
       description:
-        'Beautifully crafted design for everyday elegance. This stunning piece makes for a versatile addition to any wardrobe, catching the light perfectly with its polished finish.',
+        'Cast and carved by hand, then given a dull antique finish so it looks like a treasured family heirloom — never bright or newly polished.',
       sizeAndMaterial:
-        'Hand-finished 14K solid yellow gold. Adjustable chain length: 16 to 18 inches. Pendant diameter: 16mm. Average weight: 4.2 grams. Nickel-free, lead-free and hypoallergenic.',
+        'Antique matte finish on brass alloy. Kemp-style stones and faux pearl drops. Haram length: approx. 24 inches with adjustable back chain. Skin-friendly, lead-free.',
       shippingAndReturns:
-        'Free insured express shipping across India. Standard delivery within 3-5 business days. Easy 30-day hassle-free return and exchange policy in original condition with certificate.',
+        'Free shipping across India. Delivery in 3-5 business days. Easy 7-day return in original condition.',
     },
   },
   {
-    id: 'the-gilmore-ring',
-    title: 'The Gilmore Ring',
-    originalPrice: '₹350',
-    price: '₹280',
+    id: 'antique-kemp-jhumka',
+    title: 'Antique Kemp Jhumka Earrings',
+    originalPrice: '₹1,799',
+    price: '₹1,299',
     rating: '4.8',
     reviewsCount: 86,
     onSale: true,
     description:
-      'An exquisite solitaire ring featuring a cushion-cut crystal encased in warm 14k yellow gold. Designed for stacking or standing out on its own.',
-    styles: ['Small', 'Medium', 'Large'],
-    images: [
-      jewellery.img05,
-      jewellery.img02,
-      jewellery.img16,
-      jewellery.img04,
-    ],
+      'Classic temple jhumkas with peacock tops, kemp stones and tiny pearl drops, finished in a soft antique tone.',
+    styles: ['Standard'],
+    images: [jewellery.img05, jewellery.img02, jewellery.img16, jewellery.img04],
     details: {
       description:
-        'Hand-finished band crafted with polished gold detailing and sparkling gemstone setting for timeless sophistication.',
+        'Hand-finished jhumkas modelled on vintage Chettinad designs, with delicate nakshi work around the dome.',
       sizeAndMaterial:
-        'Solid 14k Yellow Gold, 2.5mm band width, conflict-free ethically sourced stone. Sizes available: 6, 7, 8.',
+        'Antique matte finish on brass alloy, kemp-style stones, faux pearls. Length: approx. 55mm. Push-back fitting.',
       shippingAndReturns:
-        'Ships next business day in signature gift packaging. 30-day money-back guarantee.',
+        'Ships in 1-2 business days in protective gift packaging. 7-day return policy.',
     },
   },
   {
-    id: 'minimalist-gold-chain',
-    title: 'Minimalist Gold Chain',
-    originalPrice: '₹400',
-    price: '₹320',
+    id: 'temple-mango-mala',
+    title: 'Temple Mango Mala Necklace',
+    originalPrice: '₹3,299',
+    price: '₹2,499',
     rating: '5.0',
     reviewsCount: 94,
     onSale: true,
     description:
-      'A sleek gold chain with a delicate bow pendant symbolising grace and connectivity. Lightweight, elegant, and durable.',
-    styles: ['Small', 'Medium', 'Large'],
-    images: [
-      jewellery.img01,
-      jewellery.img10,
-      jewellery.img14,
-      jewellery.img03,
-    ],
+      'A vintage mango-motif (manga malai) necklace — one of the oldest South Indian designs — in a rich antique finish with kemp accents.',
+    styles: ['Standard'],
+    images: [jewellery.img01, jewellery.img10, jewellery.img14, jewellery.img03],
     details: {
       description:
-        'Perfect for layering with longer chains or worn alone as a subtle statement of elegance.',
+        'Rows of carved mango motifs strung in the traditional style, made to pair with silk sarees and bridal wear.',
       sizeAndMaterial:
-        '14k Solid Gold, 18-inch chain with secure lobster clasp fastening.',
+        'Antique matte finish on brass alloy, kemp-style stones. Length: approx. 22 inches, adjustable back chain.',
       shippingAndReturns:
-        'Free standard shipping nationwide. Guaranteed authentic certification included.',
+        'Free standard shipping across India. Keep away from water and perfume to preserve the antique finish.',
     },
   },
   {
-    id: 'pearl-drop-earrings',
-    title: 'Pearl Drop Earrings',
-    originalPrice: '₹480',
-    price: '₹390',
+    id: 'peacock-nakshi-choker',
+    title: 'Peacock Nakshi Choker',
+    originalPrice: '₹2,899',
+    price: '₹2,199',
     rating: '4.9',
     reviewsCount: 68,
     onSale: true,
     description:
-      'Vintage-inspired drop earrings showcasing deep blue sapphire-tone crystals framed by intricate filigree gold craft.',
+      'A close-fitting antique choker with twin peacock nakshi work, green stones and pearl drops — a vintage bridal favourite.',
     styles: ['Standard'],
-    images: [
-      jewellery.img13,
-      jewellery.img18,
-      jewellery.img19,
-      jewellery.img06,
-    ],
+    images: [jewellery.img13, jewellery.img18, jewellery.img19, jewellery.img06],
     details: {
       description:
-        'Captivating drop earrings that capture light with every movement. Handcrafted by master artisans.',
+        'Peacocks carved in deep relief, oxidised by hand so every feather stands out against the dull antique surface.',
       sizeAndMaterial:
-        'Solid Gold with synthetic royal blue sapphire and micro-pave detailing. Length: 28mm.',
+        'Antique matte finish on brass alloy, stone and faux pearl detailing. Adjustable dori / back chain fitting.',
       shippingAndReturns:
-        'Free express shipping with signature requirement. 30 days return policy.',
+        'Free shipping across India. 7-day return in original condition.',
     },
   },
   {
-    id: 'diamond-solitaire-necklace',
-    title: 'Diamond Solitaire Necklace',
-    originalPrice: '₹550',
-    price: '₹450',
+    id: 'antique-kada-bangle',
+    title: 'Antique Kada Bangle',
+    originalPrice: '₹2,499',
+    price: '₹1,899',
     rating: '5.0',
     reviewsCount: 142,
     onSale: true,
     description:
-      'A geometric teal diamond solitaire pendant suspended on an intricate multi-strand gold chain.',
-    styles: ['Small', 'Medium', 'Large'],
-    images: [
-      jewellery.img03,
-      jewellery.img21,
-      jewellery.img17,
-      jewellery.img22,
-    ],
+      'A broad antique-finish kada with temple carvings and screw opening, modelled on bangles worn generations ago.',
+    styles: ['2.4', '2.6', '2.8'],
+    images: [jewellery.img03, jewellery.img21, jewellery.img17, jewellery.img22],
     details: {
       description:
-        'Striking modern geometry meets classic gold craftsmanship in this iconic centerpiece necklace.',
+        'Heavy nakshi carving all around, with an aged, matte surface that pairs beautifully with silk and cotton sarees alike.',
       sizeAndMaterial:
-        '14K Solid Gold, faceted teal gem crystal, 18-inch adjustable cable chain.',
+        'Antique matte finish on brass alloy. Screw-opening fitting. Sizes: 2.4, 2.6, 2.8.',
       shippingAndReturns:
-        'Includes complimentary velvet presentation box and certificate of authenticity.',
+        'Includes complimentary velvet pouch. Free shipping across India, 7-day returns.',
     },
   },
 ];
@@ -159,6 +137,7 @@ const Collections = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { addItem } = useCart();
+  const { toggleWishlist, isWishlisted } = useWishlist();
   const [catalog, setCatalog] = useState(fallbackCatalog);
   const [activeProductIndex, setActiveProductIndex] = useState(0);
   const currentProduct = catalog[activeProductIndex];
@@ -342,7 +321,7 @@ const Collections = () => {
               <div className="product-rating-row">
                 <div className="stars-flex">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={15} fill="#E8B923" stroke="none" />
+                    <Star key={i} size={15} fill="#b08d3e" stroke="none" />
                   ))}
                 </div>
                 <span className="review-count">({currentProduct.reviewsCount})</span>
@@ -354,7 +333,7 @@ const Collections = () => {
               {currentProduct.specs ? (
                 <dl className="product-spec-grid">
                   <div>
-                    <dt>Purity</dt>
+                    <dt>Finish</dt>
                     <dd>{currentProduct.specs.purity || '—'}</dd>
                   </div>
                   <div>
@@ -362,8 +341,8 @@ const Collections = () => {
                     <dd>{currentProduct.specs.weightGrams ? `${currentProduct.specs.weightGrams} g` : '—'}</dd>
                   </div>
                   <div>
-                    <dt>Making charge</dt>
-                    <dd>{currentProduct.specs.makingCharge ? `${currentProduct.specs.makingCharge}%` : '—'}</dd>
+                    <dt>Craft</dt>
+                    <dd>{currentProduct.specs.makingCharge ? `Hand-finished` : 'Hand-finished'}</dd>
                   </div>
                   <div>
                     <dt>Stock</dt>
@@ -424,7 +403,7 @@ const Collections = () => {
               <div className="trust-badges-bar">
                 <div className="trust-badge">
                   <Package size={22} className="badge-icon" />
-                  <span>{currentProduct.specs?.purity || 'Hallmarked'}</span>
+                  <span>{currentProduct.specs?.purity || 'Antique finish'}</span>
                 </div>
                 <div className="trust-badge">
                   <Truck size={22} className="badge-icon" />
@@ -432,7 +411,7 @@ const Collections = () => {
                 </div>
                 <div className="trust-badge">
                   <RotateCcw size={22} className="badge-icon" />
-                  <span>Easy 30 days return</span>
+                  <span>Easy 7-day return</span>
                 </div>
                 <div className="trust-badge">
                   <Gem size={22} className="badge-icon" />
@@ -459,6 +438,15 @@ const Collections = () => {
                   disabled={currentProduct.stock === 0}
                 >
                   BUY NOW
+                </button>
+                <button
+                  type="button"
+                  className={`cta-btn btn-wishlist${isWishlisted(currentProduct.id) ? ' active' : ''}`}
+                  onClick={() => toggleWishlist(currentProduct)}
+                  aria-pressed={isWishlisted(currentProduct.id)}
+                >
+                  <Heart size={17} />
+                  {isWishlisted(currentProduct.id) ? 'SAVED IN WISHLIST' : 'ADD TO WISHLIST'}
                 </button>
               </div>
 
@@ -554,6 +542,22 @@ const Collections = () => {
               >
                 <div className="related-card-media">
                   <img src={item.image} alt={item.name} />
+                  <button
+                    type="button"
+                    className={`wishlist-heart-btn${isWishlisted(item.id) ? ' active' : ''}`}
+                    aria-label={
+                      isWishlisted(item.id)
+                        ? `Remove ${item.name} from wishlist`
+                        : `Add ${item.name} to wishlist`
+                    }
+                    aria-pressed={isWishlisted(item.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleWishlist(item);
+                    }}
+                  >
+                    <Heart size={17} />
+                  </button>
                 </div>
                 <div className="related-card-meta">
                   <h3 className="related-card-name">{item.name}</h3>

@@ -9,7 +9,7 @@ import {
 } from '../data/checkout';
 import { createOrderApi, fetchOffers } from '../services/api';
 
-const STORAGE_KEY = 'aura-checkout-v1';
+const STORAGE_KEY = 'aura-checkout-v2';
 const CartContext = createContext(null);
 
 const defaultCard = {
@@ -137,7 +137,7 @@ export const CartProvider = ({ children }) => {
           ...prev.items,
           {
             stock: product.stock || 8,
-            currency: product.currency || 'USD',
+            currency: product.currency || 'INR',
             ...product,
             qty: Math.min(product.stock || 8, qty),
           },
