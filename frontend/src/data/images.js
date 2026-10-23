@@ -42,25 +42,25 @@ export const hero = {
 };
 
 export const categories = [
-  { name: 'TEMPLE SETS', image: jewellery.img21 },
-  { name: 'JHUMKAS', image: jewellery.img13 },
-  { name: 'ANTIQUE HARAMS', image: jewellery.img18 },
-  { name: 'BANGLES & KADAS', image: jewellery.img23 },
+  { name: 'NECKLACE SETS', image: jewellery.img21 },
+  { name: 'EARRINGS', image: jewellery.img13 },
+  { name: 'PENDANT SETS', image: jewellery.img18 },
+  { name: 'BANGLES', image: jewellery.img23 },
 ];
 
 export const collections = [
-  { image: jewellery.img17, slot: 'tall', alt: 'Antique temple necklace set with kemp stones' },
-  { image: jewellery.img06, slot: 'right-top', alt: 'Antique-finish bangle with green stones' },
-  { image: jewellery.img11, slot: 'mid-left', alt: 'Vintage enamel bangles' },
-  { image: jewellery.img10, slot: 'mid-right', alt: 'Antique hand ornament' },
-  { image: jewellery.img14, slot: 'right-bot', alt: 'Heritage bridal antique set' },
+  { image: jewellery.img17, slot: 'tall', alt: 'Floral necklace jewellery set' },
+  { image: jewellery.img06, slot: 'right-top', alt: 'Emerald open bangle' },
+  { image: jewellery.img11, slot: 'mid-left', alt: 'Floral enamel bangles' },
+  { image: jewellery.img10, slot: 'mid-right', alt: 'Gemstone hand chain' },
+  { image: jewellery.img14, slot: 'right-bot', alt: 'Emerald statement bangle' },
 ];
 
 export const exploreCategories = [
-  { name: 'ANTIQUE RINGS', image: imgRings },
+  { name: 'RINGS', image: imgRings },
   { name: 'NECKLACES', image: cld('aura/explore/necklaces') },
   { name: 'BANGLES', image: cld('aura/explore/bracelets') },
-  { name: 'JHUMKAS', image: cld('aura/explore/earrings') },
+  { name: 'EARRINGS', image: cld('aura/explore/earrings') },
 ];
 
 export const exploreGallery = {
@@ -70,28 +70,28 @@ export const exploreGallery = {
 };
 
 export const featured = [
-  { name: 'NAKSHI TEMPLE PENDANT', price: '₹2,499', image: imgOrbitalRing },
-  { name: 'ANTIQUE KADA', price: '₹1,899', image: jewellery.img02 },
-  { name: 'KEMP CHOKER', price: '₹2,199', image: jewellery.img14 },
-  { name: 'VINTAGE JHUMKA', price: '₹1,299', image: jewellery.img16 },
+  { name: 'HALO DIAMOND RING', price: '₹2,499', image: imgOrbitalRing },
+  { name: 'PENDANT EARRING SET', price: '₹1,899', image: jewellery.img02 },
+  { name: 'EMERALD STATEMENT BANGLE', price: '₹2,199', image: jewellery.img14 },
+  { name: 'FLORAL PENDANT SET', price: '₹1,299', image: jewellery.img16 },
 ];
 
 export const bestSellers = [
-  { name: 'Lakshmi Nakshi Haram', price: '₹2,999', rating: '4.9', image: jewellery.img01, tall: true },
-  { name: 'Kemp Stone Bracelet', price: '₹1,499', rating: '4.8', image: jewellery.img19, tall: true },
-  { name: 'Pearl Antique Pendant', price: '₹1,799', rating: '5.0', image: jewellery.img03, tall: true },
-  { name: 'Temple Mango Mala', price: '₹2,499', rating: '4.9', image: jewellery.img20, tall: true },
-  { name: 'Antique Floral Bangle', price: '₹1,199', rating: '4.9', image: jewellery.img05 },
-  { name: 'Peacock Nakshi Cuff', price: '₹1,699', rating: '5.0', image: jewellery.img14, tall: true },
-  { name: 'Heritage Hand Ornament', price: '₹1,399', rating: '4.8', image: jewellery.img10 },
-  { name: 'Vintage Pearl Stud', price: '₹899', rating: '4.9', image: jewellery.img04, tall: true },
+  { name: 'Floral Ruby Bangle', price: '₹2,999', rating: '4.9', image: jewellery.img01, tall: true },
+  { name: 'Ruby Gemstone Bangle', price: '₹1,499', rating: '4.8', image: jewellery.img19, tall: true },
+  { name: 'Ornate Pendant Necklace', price: '₹1,799', rating: '5.0', image: jewellery.img03, tall: true },
+  { name: 'Leaf Pendant Set', price: '₹2,499', rating: '4.9', image: jewellery.img20, tall: true },
+  { name: 'Floral Gemstone Bangle', price: '₹1,199', rating: '4.9', image: jewellery.img05 },
+  { name: 'Emerald Statement Bangle', price: '₹1,699', rating: '5.0', image: jewellery.img14, tall: true },
+  { name: 'Gemstone Hand Chain', price: '₹1,399', rating: '4.8', image: jewellery.img10 },
+  { name: 'Pearl Flower Studs', price: '₹899', rating: '4.9', image: jewellery.img04, tall: true },
 ];
 
 export const curated = [
-  { name: 'TEMPLE HARAM', price: '₹2,999', image: jewellery.img12 },
-  { name: 'KEMP JHUMKA', price: '₹1,299', image: jewellery.img18 },
-  { name: 'ANTIQUE KADA', price: '₹1,899', image: jewellery.img14 },
-  { name: 'NAKSHI SET', price: '₹3,499', image: jewellery.img16 },
+  { name: 'GREEN GEMSTONE NECKLACE', price: '₹2,999', image: jewellery.img12 },
+  { name: 'PEARL PENDANT SET', price: '₹1,299', image: jewellery.img18 },
+  { name: 'EMERALD STATEMENT BANGLE', price: '₹1,899', image: jewellery.img14 },
+  { name: 'FLORAL PENDANT SET', price: '₹3,499', image: jewellery.img16 },
 ];
 
 export const grace = {

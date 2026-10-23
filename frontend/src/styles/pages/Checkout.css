@@ -726,6 +726,58 @@
   padding: 2.4rem 1rem;
 }
 
+/* Empty cart — "There is nothing here!" */
+.cart-empty-hero {
+  min-height: 62vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem 2rem;
+}
+
+.cart-empty-art {
+  width: min(300px, 72vw);
+  height: auto;
+  margin-bottom: 1.2rem;
+}
+
+.cart-empty-hero h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  color: var(--ink, #1a1a14);
+  line-height: 1.15;
+}
+
+.cart-empty-hero p {
+  margin-top: 0.6rem;
+  font-size: 0.92rem;
+  color: var(--muted, #5c5c52);
+}
+
+.cart-empty-btn {
+  margin-top: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: linear-gradient(135deg, #a3903f, #8a7734);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.7rem;
+  border-radius: var(--radius-pill, 9999px);
+  box-shadow: 0 8px 20px rgba(138, 119, 52, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-empty-btn:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(138, 119, 52, 0.34);
+}
+
 .co-empty h2 {
   font-size: 1.8rem;
   margin-bottom: 0.4rem;

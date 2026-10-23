@@ -27,106 +27,106 @@ import '../styles/pages/Collections.css';
 // Antique / temple jewellery — antique-finish pieces, NOT solid gold or silver.
 const fallbackCatalog = [
   {
-    id: 'lakshmi-nakshi-temple-haram',
-    title: 'Lakshmi Nakshi Temple Haram',
+    id: 'mint-necklace-set',
+    title: 'Mint Necklace Set',
     originalPrice: '₹3,999',
     price: '₹2,999',
     rating: '4.9',
     reviewsCount: 124,
     onSale: true,
     description:
-      'A long antique-finish haram with a hand-carved Goddess Lakshmi pendant, nakshi detailing and deep-red kemp stones. Inspired by heirloom temple jewellery of old Tamil Nadu.',
+      'A soft mint and gold-tone necklace set with matching earrings — light, elegant and easy to pair with festive wear.',
     styles: ['Standard'],
     images: [jewellery.img21, jewellery.img07, jewellery.img12, jewellery.img20],
     details: {
       description:
-        'Cast and carved by hand, then given a dull antique finish so it looks like a treasured family heirloom — never bright or newly polished.',
+        'A coordinated necklace and earring set with delicate stone work in a soft mint palette.',
       sizeAndMaterial:
-        'Antique matte finish on brass alloy. Kemp-style stones and faux pearl drops. Haram length: approx. 24 inches with adjustable back chain. Skin-friendly, lead-free.',
+        'Gold-tone alloy with mint enamel and crystal accents. Necklace length: approx. 18 inches with adjustable chain.',
       shippingAndReturns:
         'Free shipping across India. Delivery in 3-5 business days. Easy 7-day return in original condition.',
     },
   },
   {
-    id: 'antique-kemp-jhumka',
-    title: 'Antique Kemp Jhumka Earrings',
+    id: 'floral-gemstone-bangle',
+    title: 'Floral Gemstone Bangle',
     originalPrice: '₹1,799',
     price: '₹1,299',
     rating: '4.8',
     reviewsCount: 86,
     onSale: true,
     description:
-      'Classic temple jhumkas with peacock tops, kemp stones and tiny pearl drops, finished in a soft antique tone.',
-    styles: ['Standard'],
-    images: [jewellery.img05, jewellery.img02, jewellery.img16, jewellery.img04],
+      'A floral open bangle with colourful gemstone petals — statement wrist piece for festive looks.',
+    styles: ['2.4', '2.6', '2.8'],
+    images: [jewellery.img05, jewellery.img01, jewellery.img06, jewellery.img19],
     details: {
       description:
-        'Hand-finished jhumkas modelled on vintage Chettinad designs, with delicate nakshi work around the dome.',
+        'Hand-set floral motifs with vibrant stones on a polished gold-tone band.',
       sizeAndMaterial:
-        'Antique matte finish on brass alloy, kemp-style stones, faux pearls. Length: approx. 55mm. Push-back fitting.',
+        'Gold-tone alloy with multi-colour stones. Openable / screw fitting. Sizes: 2.4, 2.6, 2.8.',
       shippingAndReturns:
         'Ships in 1-2 business days in protective gift packaging. 7-day return policy.',
     },
   },
   {
-    id: 'temple-mango-mala',
-    title: 'Temple Mango Mala Necklace',
+    id: 'floral-ruby-bangle',
+    title: 'Floral Ruby Bangle',
     originalPrice: '₹3,299',
     price: '₹2,499',
     rating: '5.0',
     reviewsCount: 94,
     onSale: true,
     description:
-      'A vintage mango-motif (manga malai) necklace — one of the oldest South Indian designs — in a rich antique finish with kemp accents.',
-    styles: ['Standard'],
-    images: [jewellery.img01, jewellery.img10, jewellery.img14, jewellery.img03],
+      'A bold floral bangle with ruby-red stones — the exact look shown in the product photo.',
+    styles: ['2.4', '2.6', '2.8'],
+    images: [jewellery.img01, jewellery.img19, jewellery.img14, jewellery.img23],
     details: {
       description:
-        'Rows of carved mango motifs strung in the traditional style, made to pair with silk sarees and bridal wear.',
+        'Wide floral cuff-style bangle with deep red stone centres and gold-tone detailing.',
       sizeAndMaterial:
-        'Antique matte finish on brass alloy, kemp-style stones. Length: approx. 22 inches, adjustable back chain.',
+        'Gold-tone alloy with ruby-red stones. Openable fitting. Sizes: 2.4, 2.6, 2.8.',
       shippingAndReturns:
-        'Free standard shipping across India. Keep away from water and perfume to preserve the antique finish.',
+        'Free standard shipping across India. Keep away from water and perfume.',
     },
   },
   {
-    id: 'peacock-nakshi-choker',
-    title: 'Peacock Nakshi Choker',
+    id: 'ornate-pearl-earrings',
+    title: 'Ornate Pearl Earrings',
     originalPrice: '₹2,899',
     price: '₹2,199',
     rating: '4.9',
     reviewsCount: 68,
     onSale: true,
     description:
-      'A close-fitting antique choker with twin peacock nakshi work, green stones and pearl drops — a vintage bridal favourite.',
+      'Ornate drop earrings with pearl centres and detailed metal work — elegant for weddings and evenings.',
     styles: ['Standard'],
-    images: [jewellery.img13, jewellery.img18, jewellery.img19, jewellery.img06],
+    images: [jewellery.img13, jewellery.img04, jewellery.img18, jewellery.img02],
     details: {
       description:
-        'Peacocks carved in deep relief, oxidised by hand so every feather stands out against the dull antique surface.',
+        'Intricate drop earrings finished with faux pearls and crystal accents.',
       sizeAndMaterial:
-        'Antique matte finish on brass alloy, stone and faux pearl detailing. Adjustable dori / back chain fitting.',
+        'Gold-tone alloy, faux pearls and crystal detailing. Push-back fitting.',
       shippingAndReturns:
         'Free shipping across India. 7-day return in original condition.',
     },
   },
   {
-    id: 'antique-kada-bangle',
-    title: 'Antique Kada Bangle',
+    id: 'ornate-pendant-necklace',
+    title: 'Ornate Pendant Necklace',
     originalPrice: '₹2,499',
     price: '₹1,899',
     rating: '5.0',
     reviewsCount: 142,
     onSale: true,
     description:
-      'A broad antique-finish kada with temple carvings and screw opening, modelled on bangles worn generations ago.',
-    styles: ['2.4', '2.6', '2.8'],
-    images: [jewellery.img03, jewellery.img21, jewellery.img17, jewellery.img22],
+      'An ornate pendant necklace with detailed metalwork — matches the product photograph exactly.',
+    styles: ['Standard'],
+    images: [jewellery.img03, jewellery.img12, jewellery.img07, jewellery.img20],
     details: {
       description:
-        'Heavy nakshi carving all around, with an aged, matte surface that pairs beautifully with silk and cotton sarees alike.',
+        'Statement pendant on a fine chain, designed as a single standout neckpiece.',
       sizeAndMaterial:
-        'Antique matte finish on brass alloy. Screw-opening fitting. Sizes: 2.4, 2.6, 2.8.',
+        'Gold-tone alloy pendant with crystal accents. Chain length: approx. 18 inches, adjustable.',
       shippingAndReturns:
         'Includes complimentary velvet pouch. Free shipping across India, 7-day returns.',
     },

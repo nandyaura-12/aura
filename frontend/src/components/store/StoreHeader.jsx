@@ -10,19 +10,19 @@ import '../../styles/components/StoreHeader.css';
 import '../../styles/pages/Wishlist.css';
 
 const COLLECTION_CATEGORIES = [
-  'Harams & Necklaces',
-  'Temple Pendant Sets',
-  'Jhumkas & Earrings',
-  'Bangles & Kadas',
-  'Vanki / Arm Cuffs',
-  'Saree Brooches',
+  'Necklace Sets',
+  'Pendant Sets',
+  'Earrings',
+  'Bangles',
+  'Rings',
+  'Hand Chains',
 ];
 
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const collectionsRef = useRef(null);
-  const [banner, setBanner] = useState('Festive Sale — up to 25% off on Antique Temple Jewellery');
+  const [banner, setBanner] = useState('Festive Sale — up to 25% off on Jewellery Sets & Bangles');
   const [user, setUser] = useState(() => getStoredUser());
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();

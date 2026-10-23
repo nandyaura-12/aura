@@ -230,7 +230,7 @@ const Home = () => {
             <div>
               <span className="pill">Most Loved</span>
               <h2 className="section-title bestsellers-title">
-                <span>Temple classics and vintage</span>
+                <span>Bangles, sets &amp; everyday sparkle</span>
                 <span>pieces, loved for generations</span>
               </h2>
             </div>
@@ -288,18 +288,18 @@ const Home = () => {
       <section className="grace-section" id="about">
         <div className="store-container grace-grid">
           <div className="grace-image">
-            <img src={grace.image} alt="Antique hand ornament with nakshi detailing" />
+            <img src={grace.image} alt="Gemstone hand chain bracelet" />
           </div>
           <div className="grace-copy">
-            <p className="eyebrow">ANTIQUE HAND ORNAMENT</p>
+            <p className="eyebrow">GEMSTONE HAND CHAIN</p>
             <h2>
               Grace in Every
               <br />
               Detail
             </h2>
             <p>
-              An antique-finish hand ornament with nakshi filigree work and kemp accents,
-              inspired by ornaments worn in old temple towns. A graceful finishing touch for festive wear.
+              A delicate gemstone hand chain that links finger to wrist — light sparkle for festive looks
+              and everyday elegance.
             </p>
             <a href="#curated" className="text-link light">
               EXPLORE MORE →

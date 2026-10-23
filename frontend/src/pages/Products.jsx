@@ -92,7 +92,7 @@ const Products = () => {
       setFormData({
         name: '',
         description: '',
-        category: categories[0]?.name || 'Temple Sets',
+        category: categories[0]?.name || 'Necklace Sets',
         price: '',
         discountPrice: '',
         stock: '1',
@@ -160,7 +160,7 @@ const Products = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">Antique Jewellery Catalogue</h1>
-          <p className="page-subtitle">Manage Temple Sets, Kemp Jhumkas, Antique Harams, Bangles &amp; Bridal Antique Sets</p>
+          <p className="page-subtitle">Manage Necklace Sets, Earrings, Pendant Sets, Bangles &amp; Rings</p>
         </div>
         <button className="btn btn-primary" onClick={() => handleOpenModal()}>
           <Plus size={18} /> Add Antique Piece
@@ -292,7 +292,7 @@ const Products = () => {
               type="text"
               className="form-control"
               required
-              placeholder="e.g. Lakshmi Nakshi Temple Haram"
+              placeholder="e.g. Floral Ruby Bangle"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />

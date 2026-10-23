@@ -31,10 +31,10 @@ const StoreFooter = () => {
 
         <div className="footer-col">
           <h4>Shop</h4>
-          <Link to="/#shop">Temple Sets</Link>
-          <Link to="/#shop">Jhumkas</Link>
-          <Link to="/#shop">Harams & Necklaces</Link>
-          <Link to="/#shop">Bangles & Kadas</Link>
+          <Link to="/#shop">Necklace Sets</Link>
+          <Link to="/#shop">Earrings</Link>
+          <Link to="/#shop">Pendant Sets</Link>
+          <Link to="/#shop">Bangles</Link>
         </div>
 
         <div className="footer-social">

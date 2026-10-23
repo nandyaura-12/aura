@@ -9,7 +9,7 @@ import {
 } from '../data/checkout';
 import { createOrderApi, fetchOffers } from '../services/api';
 
-const STORAGE_KEY = 'aura-checkout-v2';
+const STORAGE_KEY = 'aura-checkout-v3';
 const CartContext = createContext(null);
 
 const defaultCard = {
