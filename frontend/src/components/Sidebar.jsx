@@ -8,6 +8,7 @@ import {
   Users,
   Tag,
   BarChart3,
+  Settings,
   Store,
   ChevronDown,
 } from 'lucide-react';
@@ -117,6 +118,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
     { path: '/admin/customers', label: 'Valued Clients', icon: Users },
     { path: '/admin/offers', label: 'Festive Offers', icon: Tag },
     { path: '/admin/reports', label: 'Sales & Revenue Reports', icon: BarChart3 },
+    { path: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   return (

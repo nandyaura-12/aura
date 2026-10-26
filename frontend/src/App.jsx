@@ -19,6 +19,7 @@ import Orders from './pages/Orders';
 import Customers from './pages/Customers';
 import Offers from './pages/Offers';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 import AdminLogin from './pages/AdminLogin';
 import UserLogin from './pages/UserLogin';
 import Account from './pages/Account';
@@ -80,6 +81,7 @@ function AdminLayout() {
             <Route path="customers" element={<Customers />} />
             <Route path="offers" element={<Offers />} />
             <Route path="reports" element={<Reports />} />
+            <Route path="settings" element={<Settings />} />
           </Routes>
         </div>
       </div>
