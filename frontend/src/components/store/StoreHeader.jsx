@@ -6,6 +6,11 @@ import { getStoredUser, USER_CHANGED_EVENT } from '../../data/userAuth';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { fetchOffers } from '../../services/api';
+import {
+  DEFAULT_STORE_SETTINGS,
+  getStoreSettings,
+  STORE_SETTINGS_CHANGED,
+} from '../../data/storeSettings';
 import '../../styles/components/StoreHeader.css';
 import '../../styles/pages/Wishlist.css';
 
@@ -22,7 +27,12 @@ const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const collectionsRef = useRef(null);
-  const [banner, setBanner] = useState('Flat 20% off on VA for Online Gold Jewellery.');
+  const [banner, setBanner] = useState(() => {
+    const settings = getStoreSettings();
+    return settings.useCustomBanner
+      ? settings.bannerText
+      : DEFAULT_STORE_SETTINGS.bannerText;
+  });
   const [user, setUser] = useState(() => getStoredUser());
   const { itemCount } = useCart();
   const { wishlistCount } = useWishlist();
@@ -34,6 +44,22 @@ const StoreHeader = () => {
     return () => {
       window.removeEventListener(USER_CHANGED_EVENT, refresh);
       window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  useEffect(() => {
+    const applyCustomBanner = () => {
+      const settings = getStoreSettings();
+      if (settings.useCustomBanner) {
+        setBanner(settings.bannerText || DEFAULT_STORE_SETTINGS.bannerText);
+      }
+    };
+    applyCustomBanner();
+    window.addEventListener(STORE_SETTINGS_CHANGED, applyCustomBanner);
+    window.addEventListener('storage', applyCustomBanner);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_CHANGED, applyCustomBanner);
+      window.removeEventListener('storage', applyCustomBanner);
     };
   }, []);
 
@@ -59,22 +85,32 @@ const StoreHeader = () => {
 
   useEffect(() => {
     let cancelled = false;
-    fetchOffers()
-      .then((res) => {
-        const active = (res.data || []).find((offer) => offer.status === 'Active');
-        if (!active || cancelled) return;
-        // Keep the Figma-style short promo line
-        if (active.discountType === 'Percentage') {
-          setBanner(`Flat ${active.discountValue}% off on VA for Online Gold Jewellery.`);
-        } else {
-          setBanner(
-            `Flat ₹${Number(active.discountValue).toLocaleString('en-IN')} off on VA for Online Gold Jewellery.`
-          );
-        }
-      })
-      .catch(() => {});
+    const loadOfferBanner = () => {
+      if (getStoreSettings().useCustomBanner) return;
+      fetchOffers()
+        .then((res) => {
+          if (cancelled || getStoreSettings().useCustomBanner) return;
+          const active = (res.data || []).find((offer) => offer.status === 'Active');
+          if (!active) return;
+          if (active.discountType === 'Percentage') {
+            setBanner(`Flat ${active.discountValue}% off on VA for Online Gold Jewellery.`);
+          } else {
+            setBanner(
+              `Flat ₹${Number(active.discountValue).toLocaleString('en-IN')} off on VA for Online Gold Jewellery.`
+            );
+          }
+        })
+        .catch(() => {});
+    };
+    loadOfferBanner();
+    const onSettings = () => {
+      if (getStoreSettings().useCustomBanner) return;
+      loadOfferBanner();
+    };
+    window.addEventListener(STORE_SETTINGS_CHANGED, onSettings);
     return () => {
       cancelled = true;
+      window.removeEventListener(STORE_SETTINGS_CHANGED, onSettings);
     };
   }, []);
 

@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Instagram, Facebook, Linkedin, ChevronDown } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
+import {
+  getStoreSettings,
+  phoneTelHref,
+  STORE_SETTINGS_CHANGED,
+  whatsappHref,
+} from '../data/storeSettings';
 import '../styles/pages/storefront.css';
 import '../styles/pages/Contact.css';
 
@@ -45,6 +51,17 @@ const Contact = () => {
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
   const [sent, setSent] = useState(false);
+  const [settings, setSettings] = useState(() => getStoreSettings());
+
+  useEffect(() => {
+    const refresh = () => setSettings(getStoreSettings());
+    window.addEventListener(STORE_SETTINGS_CHANGED, refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_CHANGED, refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
 
   const update = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }));
@@ -101,24 +118,40 @@ const Contact = () => {
 
               <div className="contact-detail">
                 <span>Email:</span>
-                <a href="mailto:hello@nandysaura.com">hello@nandysaura.com</a>
+                <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
               </div>
 
               <div className="contact-detail">
                 <span>Phone:</span>
-                <a href="tel:+914448500321">+91 44 4850 0321</a>
+                <a href={phoneTelHref(settings.contactPhone)}>{settings.contactPhone}</a>
               </div>
+
+              {settings.contactWhatsapp && (
+                <div className="contact-detail">
+                  <span>WhatsApp:</span>
+                  <a href={whatsappHref(settings.contactWhatsapp)} target="_blank" rel="noreferrer">
+                    {settings.contactWhatsapp}
+                  </a>
+                </div>
+              )}
+
+              {settings.contactAddress && (
+                <div className="contact-detail">
+                  <span>Address:</span>
+                  <span>{settings.contactAddress}</span>
+                </div>
+              )}
 
               <div className="contact-social">
                 <span>Follow Us</span>
                 <div className="contact-social-row">
-                  <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+                  <a href={settings.socialInstagram || '#'} target="_blank" rel="noreferrer" aria-label="Instagram">
                     <Instagram size={16} strokeWidth={1.6} />
                   </a>
-                  <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
+                  <a href={settings.socialFacebook || '#'} target="_blank" rel="noreferrer" aria-label="Facebook">
                     <Facebook size={16} strokeWidth={1.6} />
                   </a>
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                  <a href={settings.socialLinkedin || '#'} target="_blank" rel="noreferrer" aria-label="LinkedIn">
                     <Linkedin size={16} strokeWidth={1.6} />
                   </a>
                   <a href="https://pinterest.com" target="_blank" rel="noreferrer" aria-label="Pinterest">

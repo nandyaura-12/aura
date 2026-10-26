@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import {
-  adminEmailHint,
+  getAdminEmail,
   isAdminLoggedIn,
   isCustomAdminPassword,
   loginAdmin,
@@ -18,6 +18,7 @@ const AdminLogin = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const adminEmail = getAdminEmail();
 
   if (isAdminLoggedIn()) return <Navigate to="/admin" replace />;
 
@@ -62,7 +63,7 @@ const AdminLogin = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={adminEmailHint}
+                placeholder={adminEmail}
                 autoComplete="username"
                 required
               />
@@ -94,7 +95,7 @@ const AdminLogin = () => {
 
           {!isCustomAdminPassword() && (
             <p className="admin-login__hint">
-              Default: <strong>{adminEmailHint}</strong> / <strong>Aura@123</strong>
+              Default: <strong>{adminEmail}</strong> / <strong>Aura@123</strong>
               <br />
               Override in <code>frontend/.env</code> with <code>VITE_ADMIN_EMAIL</code> and{' '}
               <code>VITE_ADMIN_PASSWORD</code>.

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { X, Copy, Check, Sparkles, PartyPopper } from 'lucide-react';
 import { fetchOffers } from '../../services/api';
 import { festivalOfferConfig } from '../../data/festivalOffer';
+import { getStoreSettings, STORE_SETTINGS_CHANGED } from '../../data/storeSettings';
 import '../../styles/components/FestivalOfferPopup.css';
 
 const DISMISS_KEY = 'nandys-festival-popup-dismissed';
@@ -40,12 +41,29 @@ const FestivalOfferPopup = () => {
   const [offer, setOffer] = useState(null);
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [settings, setSettings] = useState(() => getStoreSettings());
+
+  useEffect(() => {
+    const refresh = () => setSettings(getStoreSettings());
+    window.addEventListener(STORE_SETTINGS_CHANGED, refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_CHANGED, refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  const festivalEnabled =
+    settings.festivalEnabled !== false && festivalOfferConfig.enabled !== false;
+  const festivalDelayMs = Number(settings.festivalDelayMs ?? festivalOfferConfig.delayMs) || 0;
+  const festivalShowAgain =
+    settings.festivalShowAgain === 'forever' ? 'forever' : festivalOfferConfig.showAgain || 'session';
 
   const shouldShowOnPage = useMemo(() => {
-    if (!festivalOfferConfig.enabled) return false;
+    if (!festivalEnabled) return false;
     if (pathname.startsWith('/admin') || pathname.startsWith('/cart') || pathname.startsWith('/checkout')) return false;
     return festivalOfferConfig.showOnPaths.includes(pathname);
-  }, [pathname]);
+  }, [pathname, festivalEnabled]);
 
   const dismissId = offer ? `${offer.code}:${offer.endDate || ''}` : '';
   const countdown = useCountdown(visible ? offer?.endDate : null);
@@ -53,10 +71,10 @@ const FestivalOfferPopup = () => {
   const close = useCallback(() => {
     setVisible(false);
     try {
-      const store = festivalOfferConfig.showAgain === 'session' ? sessionStorage : localStorage;
+      const store = festivalShowAgain === 'session' ? sessionStorage : localStorage;
       store.setItem(DISMISS_KEY, dismissId);
     } catch { /* ignore */ }
-  }, [dismissId]);
+  }, [dismissId, festivalShowAgain]);
 
   const openManually = () => { setCopied(false); setVisible(true); };
 
@@ -100,12 +118,12 @@ const FestivalOfferPopup = () => {
   useEffect(() => {
     if (!offer || !shouldShowOnPage) return undefined;
     try {
-      const store = festivalOfferConfig.showAgain === 'session' ? sessionStorage : localStorage;
+      const store = festivalShowAgain === 'session' ? sessionStorage : localStorage;
       if (dismissId && store.getItem(DISMISS_KEY) === dismissId) return undefined;
     } catch { /* ignore */ }
-    const id = setTimeout(() => setVisible(true), festivalOfferConfig.delayMs);
+    const id = setTimeout(() => setVisible(true), festivalDelayMs);
     return () => clearTimeout(id);
-  }, [offer, shouldShowOnPage, dismissId]);
+  }, [offer, shouldShowOnPage, dismissId, festivalDelayMs, festivalShowAgain]);
 
   useEffect(() => {
     if (!visible) return undefined;

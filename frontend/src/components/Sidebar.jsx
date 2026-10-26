@@ -26,6 +26,9 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
   const [collectionsOpen, setCollectionsOpen] = useState(
     () => location.pathname.startsWith('/admin/categories')
   );
+  const [settingsOpen, setSettingsOpen] = useState(
+    () => location.pathname.startsWith('/admin/settings')
+  );
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -42,6 +45,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
 
   useEffect(() => {
     if (location.pathname.startsWith('/admin/categories')) setCollectionsOpen(true);
+    if (location.pathname.startsWith('/admin/settings')) setSettingsOpen(true);
   }, [location.pathname]);
 
   const handleCollectionsToggle = () => {
@@ -51,6 +55,15 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
       return;
     }
     setCollectionsOpen((open) => !open);
+  };
+
+  const handleSettingsToggle = () => {
+    if (!effectiveExpanded) {
+      onSetExpanded(true);
+      setSettingsOpen(true);
+      return;
+    }
+    setSettingsOpen((open) => !open);
   };
 
   // Drag the right edge: sidebar follows the pointer, then snaps open/closed.
@@ -118,7 +131,14 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
     { path: '/admin/customers', label: 'Valued Clients', icon: Users },
     { path: '/admin/offers', label: 'Festive Offers', icon: Tag },
     { path: '/admin/reports', label: 'Sales & Revenue Reports', icon: BarChart3 },
-    { path: '/admin/settings', label: 'Settings', icon: Settings },
+  ];
+
+  const settingsSubItems = [
+    { path: '/admin/settings#password', label: 'Change password' },
+    { path: '/admin/settings#email', label: 'Admin email' },
+    { path: '/admin/settings#banner', label: 'Store banner' },
+    { path: '/admin/settings#contact', label: 'Contact details' },
+    { path: '/admin/settings#festival', label: 'Festival popup' },
   ];
 
   return (
@@ -215,6 +235,42 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
             </NavLink>
           );
         })}
+
+        <div className="sidebar-nav-group">
+          <button
+            type="button"
+            className={`nav-item nav-group-toggle ${location.pathname.startsWith('/admin/settings') ? 'active' : ''}`}
+            onClick={handleSettingsToggle}
+            aria-expanded={settingsOpen}
+            title="Settings"
+          >
+            <Settings />
+            <span>Settings</span>
+            <ChevronDown
+              size={15}
+              className={`nav-group-chevron${settingsOpen ? ' is-open' : ''}`}
+            />
+          </button>
+          {settingsOpen && effectiveExpanded && (
+            <div className="nav-submenu">
+              {settingsSubItems.map((item) => {
+                const currentHash = location.hash || '#password';
+                const active =
+                  location.pathname === '/admin/settings' &&
+                  item.path.endsWith(currentHash);
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`nav-subitem ${active ? 'active' : ''}`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </nav>
 
       <Link to="/" className="admin-home-link" title="View Storefront">

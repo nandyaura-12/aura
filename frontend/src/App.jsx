@@ -97,13 +97,18 @@ function ScrollToTop() {
       const id = hash.slice(1);
       const scrollToSection = () => {
         const section = document.getElementById(id);
-        if (section) section.scrollIntoView();
-        else window.scrollTo(0, 0);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo(0, 0);
+        }
       };
-      requestAnimationFrame(scrollToSection);
-      return;
+      // Wait a tick so settings sections are in the DOM before scrolling.
+      const timer = window.setTimeout(scrollToSection, 50);
+      return () => window.clearTimeout(timer);
     }
     window.scrollTo(0, 0);
+    return undefined;
   }, [pathname, hash]);
 
   return null;

@@ -6,6 +6,7 @@ const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'Aura@123';
 
 const SESSION_KEY = 'aura-admin-session';
 const PASSWORD_KEY = 'aura-admin-password';
+const EMAIL_KEY = 'aura-admin-email';
 
 const readStoredPassword = () => {
   try {
@@ -15,9 +16,21 @@ const readStoredPassword = () => {
   }
 };
 
+const readStoredEmail = () => {
+  try {
+    return (localStorage.getItem(EMAIL_KEY) || '').trim().toLowerCase();
+  } catch {
+    return '';
+  }
+};
+
 export const getAdminPassword = () => readStoredPassword() || ADMIN_PASSWORD;
 
+export const getAdminEmail = () => readStoredEmail() || ADMIN_EMAIL;
+
 export const isCustomAdminPassword = () => Boolean(readStoredPassword());
+
+export const isCustomAdminEmail = () => Boolean(readStoredEmail());
 
 export const isAdminLoggedIn = () => {
   try {
@@ -29,7 +42,8 @@ export const isAdminLoggedIn = () => {
 
 export const loginAdmin = (email, password) => {
   const ok =
-    String(email || '').trim().toLowerCase() === ADMIN_EMAIL && password === getAdminPassword();
+    String(email || '').trim().toLowerCase() === getAdminEmail() &&
+    password === getAdminPassword();
   if (ok) sessionStorage.setItem(SESSION_KEY, '1');
   return ok;
 };
@@ -53,6 +67,26 @@ export const changeAdminPassword = (currentPassword, nextPassword) => {
   return { ok: true };
 };
 
+export const changeAdminEmail = (currentPassword, nextEmail) => {
+  if (String(currentPassword || '') !== getAdminPassword()) {
+    return { ok: false, message: 'Current password is incorrect.' };
+  }
+  const email = String(nextEmail || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, message: 'Enter a valid email address.' };
+  }
+  if (email === getAdminEmail()) {
+    return { ok: false, message: 'That is already the current admin email.' };
+  }
+  try {
+    localStorage.setItem(EMAIL_KEY, email);
+  } catch {
+    return { ok: false, message: 'Could not save the new email in this browser.' };
+  }
+  return { ok: true, email };
+};
+
 export const logoutAdmin = () => sessionStorage.removeItem(SESSION_KEY);
 
+/** @deprecated Prefer getAdminEmail() — kept for older call sites. */
 export const adminEmailHint = ADMIN_EMAIL;

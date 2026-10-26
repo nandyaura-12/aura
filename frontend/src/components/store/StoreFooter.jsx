@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { brandLogo } from '../../data/images';
+import { getStoreSettings, STORE_SETTINGS_CHANGED } from '../../data/storeSettings';
 import '../../styles/components/StoreFooter.css';
 
 const StoreFooter = () => {
+  const [settings, setSettings] = useState(() => getStoreSettings());
+
+  useEffect(() => {
+    const refresh = () => setSettings(getStoreSettings());
+    window.addEventListener(STORE_SETTINGS_CHANGED, refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener(STORE_SETTINGS_CHANGED, refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
   return (
     <footer className="store-footer" id="contact">
       <div className="store-container footer-grid">
@@ -37,10 +50,18 @@ const StoreFooter = () => {
         </div>
 
         <div className="footer-social">
-          <a href="#" aria-label="X">𝕏</a>
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="#" aria-label="Instagram">◎</a>
-          <a href="#" aria-label="LinkedIn">in</a>
+          <a href={settings.socialX || '#'} target="_blank" rel="noreferrer" aria-label="X">
+            𝕏
+          </a>
+          <a href={settings.socialFacebook || '#'} target="_blank" rel="noreferrer" aria-label="Facebook">
+            f
+          </a>
+          <a href={settings.socialInstagram || '#'} target="_blank" rel="noreferrer" aria-label="Instagram">
+            ◎
+          </a>
+          <a href={settings.socialLinkedin || '#'} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+            in
+          </a>
         </div>
       </div>
 
