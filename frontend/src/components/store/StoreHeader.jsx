@@ -155,18 +155,6 @@ const StoreHeader = () => {
               {wishlistCount > 0 && <span className="wishlist-count">{wishlistCount}</span>}
             </Link>
             <Link
-              to={user ? '/account' : '/login'}
-              aria-label={user ? `Account — ${user.name}` : 'Login'}
-              title={user ? `${user.name} · My Orders` : 'Login'}
-              className="account-link"
-            >
-              {user ? (
-                <span className="account-initial">{user.name?.charAt(0)?.toUpperCase() || 'U'}</span>
-              ) : (
-                <User size={20} strokeWidth={1.5} />
-              )}
-            </Link>
-            <Link
               to="/cart"
               className="cart-link"
               aria-label={
@@ -177,6 +165,18 @@ const StoreHeader = () => {
             >
               <ShoppingBag size={20} strokeWidth={1.5} />
               {itemCount > 0 && <span className="cart-count">{itemCount}</span>}
+            </Link>
+            <Link
+              to={user ? '/account' : '/login'}
+              aria-label={user ? `Account — ${user.name}` : 'Login'}
+              title={user ? `${user.name} · My Orders` : 'Login'}
+              className="account-link"
+            >
+              {user ? (
+                <span className="account-initial">{user.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+              ) : (
+                <User size={20} strokeWidth={1.5} />
+              )}
             </Link>
             <button
               type="button"
