@@ -286,7 +286,8 @@ const Settings = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              persistStore();
+              // Save always applies this text on the storefront
+              persistStore({ useCustomBanner: true });
             }}
           >
             <label className="settings-check">
@@ -300,12 +301,32 @@ const Settings = () => {
             <TextField
               label="Banner text"
               value={store.bannerText}
-              onChange={updateStore('bannerText')}
+              onChange={(e) => {
+                setStore((prev) => ({
+                  ...prev,
+                  bannerText: e.target.value,
+                  useCustomBanner: true,
+                }));
+              }}
               placeholder={DEFAULT_STORE_SETTINGS.bannerText}
             />
-            <button type="submit" className="btn btn-primary">
-              Save banner
-            </button>
+            <div className="settings-actions">
+              <button type="submit" className="btn btn-primary">
+                Save banner
+              </button>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() =>
+                  persistStore({
+                    useCustomBanner: false,
+                    bannerText: DEFAULT_STORE_SETTINGS.bannerText,
+                  })
+                }
+              >
+                Remove banner
+              </button>
+            </div>
           </form>
         </section>
       )}

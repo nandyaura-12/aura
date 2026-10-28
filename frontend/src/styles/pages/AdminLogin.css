@@ -1,5 +1,7 @@
 /* Admin login — same split shell as the store login, full viewport */
 .admin-login {
+  font-family: var(--font-admin);
+  font-size: 0.9rem;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
@@ -8,6 +10,11 @@
   padding: 1.25rem;
   background: #f3f1ec;
   box-sizing: border-box;
+}
+
+.admin-login .auth-hero__tagline,
+.admin-login .auth-panel h1 {
+  font-family: var(--font-admin);
 }
 
 .admin-login .auth-shell {

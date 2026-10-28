@@ -3,10 +3,32 @@
 .hero {
   position: relative;
   width: 100%;
-  height: min(78vh, 720px);
-  min-height: 540px;
+  height: min(62vh, 560px);
+  min-height: 420px;
   overflow: hidden;
   background: #1a1612;
+}
+
+/* Compact home sections — keep page shorter */
+.storefront .section {
+  padding: 3rem 0;
+}
+
+.storefront .category-section .section-title {
+  margin-bottom: 1.35rem;
+}
+
+.storefront .collections-head {
+  margin-bottom: 1.75rem;
+}
+
+.storefront .collections-mosaic {
+  max-height: 400px;
+}
+
+.storefront .hero-thumbs img {
+  width: 84px;
+  height: 104px;
 }
 
 .hero-bg {

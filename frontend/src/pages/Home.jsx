@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Star, Recycle, Hand, Award, Heart, MoveHorizontal } from 'lucide-react';
+import { ArrowUpRight, Star, Heart, MoveHorizontal } from 'lucide-react';
 import StoreHeader from '../components/store/StoreHeader';
 import { useWishlist } from '../context/WishlistContext';
 import StoreFooter from '../components/store/StoreFooter';
@@ -10,22 +10,25 @@ import {
   collections,
   featured as staticFeatured,
   bestSellers as staticBestSellers,
-  curated as staticCurated,
-  grace,
   testimonials,
   jewellery,
 } from '../data/images';
 import { formatInr } from '../data/catalog';
+import { SHOP_CATEGORIES, categoryPath, getCategoryByName } from '../data/shopCategories';
 import { fetchCategories, fetchProducts } from '../services/api';
 import '../styles/pages/storefront.css';
 import '../styles/pages/Home.css';
 
+const homeCategoryFallback = SHOP_CATEGORIES.filter((c) => c.group === 'type').slice(0, 4).map((c) => ({
+  name: c.name,
+  image: c.image,
+}));
+
 const Home = () => {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
-  const [categories, setCategories] = useState(staticCategories);
+  const [categories, setCategories] = useState(homeCategoryFallback.length ? homeCategoryFallback : staticCategories);
   const [featured, setFeatured] = useState(staticFeatured);
   const [bestSellers, setBestSellers] = useState(staticBestSellers);
-  const [curated, setCurated] = useState(staticCurated);
   const [sellerIndex, setSellerIndex] = useState(0);
   const sellersViewportRef = useRef(null);
   const { toggleWishlist, isWishlisted } = useWishlist();
@@ -69,7 +72,6 @@ const Home = () => {
           }));
           setFeatured(cards.slice(0, 4));
           setBestSellers(cards);
-          setCurated(cards.slice(0, 4));
         }
       }
 
@@ -159,7 +161,11 @@ const Home = () => {
           <h2 className="section-title center">Shop By Antique Category</h2>
           <div className="category-grid">
             {categories.map((cat) => (
-              <Link key={cat.name} to="/collections" className="category-card">
+              <Link
+                key={cat.name}
+                to={getCategoryByName(cat.name) ? categoryPath(cat.name) : '/collections'}
+                className="category-card"
+              >
                 <img src={cat.image} alt={cat.name} />
                 <span>{cat.name}</span>
               </Link>
@@ -280,75 +286,6 @@ const Home = () => {
                 {String(sellerIndex + 1).padStart(2, '0')} / {String(bestSellers.length).padStart(2, '0')}
               </span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Grace in Every Detail */}
-      <section className="grace-section" id="about">
-        <div className="store-container grace-grid">
-          <div className="grace-image">
-            <img src={grace.image} alt="Gemstone hand chain bracelet" />
-          </div>
-          <div className="grace-copy">
-            <p className="eyebrow">GEMSTONE HAND CHAIN</p>
-            <h2>
-              Grace in Every
-              <br />
-              Detail
-            </h2>
-            <p>
-              A delicate gemstone hand chain that links finger to wrist — light sparkle for festive looks
-              and everyday elegance.
-            </p>
-            <a href="#curated" className="text-link light">
-              EXPLORE MORE →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Curated Essentials */}
-      <section className="section curated-section" id="curated">
-        <div className="store-container">
-          <h2 className="section-title">Curated Heirlooms</h2>
-          <p className="section-sub">Heritage pieces meant to be treasured, gifted and passed on.</p>
-          <div className="curated-grid">
-            {curated.map((item, i) => (
-              <Link
-                key={item.slug || item.name}
-                to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
-                className={`curated-card h-${i}`}
-              >
-                {renderHeart(item)}
-                <img src={item.image} alt={item.name} />
-                <div className="product-meta">
-                  <span>{item.name}</span>
-                  <strong>{item.price}</strong>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Trust bar */}
-      <section className="trust-section">
-        <div className="store-container trust-grid">
-          <div className="trust-item">
-            <Recycle size={28} strokeWidth={1.25} />
-            <h3>HERITAGE DESIGNS</h3>
-            <p>Motifs drawn from temple art, old nakshi work and vintage family heirlooms.</p>
-          </div>
-          <div className="trust-item">
-            <Hand size={28} strokeWidth={1.25} />
-            <h3>MASTER CRAFTSMANSHIP</h3>
-            <p>Cast, carved and antique-finished by hand using time-honoured techniques.</p>
-          </div>
-          <div className="trust-item">
-            <Award size={28} strokeWidth={1.25} />
-            <h3>CARE &amp; RESTORATION</h3>
-            <p>Antique-finish care, re-polishing and repair support for every piece.</p>
           </div>
         </div>
       </section>

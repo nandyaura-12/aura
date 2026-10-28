@@ -103,6 +103,12 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 .sidebar.collapsed .sidebar-nav {
@@ -196,6 +202,16 @@
   margin: 0.15rem 0 0.35rem;
 }
 
+.nav-sublabel {
+  display: block;
+  padding: 0.55rem 0.85rem 0.2rem 2.55rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.38);
+}
+
 .nav-subitem {
   display: block;
   padding: 0.45rem 0.85rem 0.45rem 2.55rem;
@@ -208,6 +224,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-subitem--indent {
+  padding-left: 2.95rem;
 }
 
 .nav-subitem:hover {

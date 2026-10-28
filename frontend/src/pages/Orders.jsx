@@ -1,18 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { fetchOrders, updateOrderStatusApi, deleteOrderApi } from '../services/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { fetchOrders, updateOrderStatusApi } from '../services/api';
 import Modal from '../components/Modal';
 import { toast } from 'react-toastify';
-import { Eye, Search, Filter, ShoppingBag } from 'lucide-react';
+import { Eye, Search, ChevronDown } from 'lucide-react';
 import { formatInr } from '../data/catalog';
+import '../styles/pages/Orders.css';
+
+const STATUS_FILTERS = ['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+const ORDER_STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+const statusLabel = (status) => (status === 'All' ? 'All Statuses' : status);
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [statusMenuOpen, setStatusMenuOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const statusMenuRef = useRef(null);
 
   // Invoice Modal
   const [selectedOrder, setSelectedOrder] = useState(null);
+
+  useEffect(() => {
+    if (!statusMenuOpen) return;
+    const onPointerDown = (e) => {
+      if (!statusMenuRef.current?.contains(e.target)) setStatusMenuOpen(false);
+    };
+    const onKey = (e) => {
+      if (e.key === 'Escape') setStatusMenuOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [statusMenuOpen]);
 
   const loadOrders = async () => {
     try {
@@ -49,7 +73,7 @@ const Orders = () => {
         </div>
       </div>
 
-      <div className="filter-bar">
+      <div className="filter-bar orders-filter-bar">
         <div className="search-box" style={{ flex: 1 }}>
           <Search size={18} />
           <input
@@ -60,19 +84,36 @@ const Orders = () => {
           />
         </div>
 
-        <select
-          className="form-control"
-          style={{ width: '180px' }}
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="All">All Statuses</option>
-          <option value="Pending">Pending</option>
-          <option value="Processing">Processing</option>
-          <option value="Shipped">Shipped</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+        <div className="status-dropdown" ref={statusMenuRef}>
+          <button
+            type="button"
+            className={`status-dropdown__trigger${statusMenuOpen ? ' is-open' : ''}`}
+            aria-haspopup="listbox"
+            aria-expanded={statusMenuOpen}
+            onClick={() => setStatusMenuOpen((open) => !open)}
+          >
+            <span>{statusLabel(statusFilter)}</span>
+            <ChevronDown size={15} aria-hidden />
+          </button>
+          {statusMenuOpen && (
+            <ul className="status-dropdown__menu" role="listbox" aria-label="Filter by status">
+              {STATUS_FILTERS.map((status) => (
+                <li key={status} role="option" aria-selected={statusFilter === status}>
+                  <button
+                    type="button"
+                    className={`status-dropdown__option${statusFilter === status ? ' is-active' : ''}`}
+                    onClick={() => {
+                      setStatusFilter(status);
+                      setStatusMenuOpen(false);
+                    }}
+                  >
+                    {statusLabel(status)}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
 
       <div className="card-table-wrapper">
@@ -106,18 +147,21 @@ const Orders = () => {
                       </span>
                     </td>
                     <td>
-                      <select
-                        className="form-control"
-                        style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', width: '130px' }}
-                        value={order.orderStatus}
-                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
+                      <label className="status-select-wrap">
+                        <select
+                          className="status-select"
+                          value={order.orderStatus}
+                          onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                          aria-label={`Status for ${order.orderId}`}
+                        >
+                          {ORDER_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown size={14} aria-hidden />
+                      </label>
                     </td>
                     <td style={{ fontWeight: '700' }}>{formatInr(order.totalAmount)}</td>
                     <td style={{ color: 'var(--text-muted)' }}>

@@ -28,21 +28,13 @@ const seedData = async () => {
 
     console.log('Cleared existing database records.');
 
-    // Seed categories — names match the jewellery photos
+    // Seed categories — matches storefront Shop by Category menu
     const categories = await Category.insertMany([
       {
         name: 'Necklace Sets',
         slug: 'necklace-sets',
         description: 'Coordinated necklace and earring sets in soft mint, green and gold tones',
         image: cld('aura/jewellery/img21'),
-        productCount: 1,
-        status: 'Active',
-      },
-      {
-        name: 'Earrings',
-        slug: 'earrings',
-        description: 'Pearl studs, ornate drops and pendant earring sets',
-        image: cld('aura/jewellery/img13'),
         productCount: 1,
         status: 'Active',
       },
@@ -55,11 +47,59 @@ const seedData = async () => {
         status: 'Active',
       },
       {
+        name: 'Earrings',
+        slug: 'earrings',
+        description: 'Pearl studs, ornate drops and pendant earring sets',
+        image: cld('aura/jewellery/img13'),
+        productCount: 1,
+        status: 'Active',
+      },
+      {
         name: 'Bangles',
         slug: 'bangles',
         description: 'Floral gemstone bangles and statement emerald / ruby wrist pieces',
         image: cld('aura/jewellery/img23'),
         productCount: 2,
+        status: 'Active',
+      },
+      {
+        name: 'Rings',
+        slug: 'rings',
+        description: 'Everyday and statement rings with antique matte finishes',
+        image: cld('aura/jewellery/img16'),
+        productCount: 0,
+        status: 'Active',
+      },
+      {
+        name: 'Hand Chains',
+        slug: 'hand-chains',
+        description: 'Delicate hand chains and hath phools for festive looks',
+        image: cld('aura/jewellery/img10'),
+        productCount: 0,
+        status: 'Active',
+      },
+      {
+        name: 'Festive & Bridal Wear',
+        slug: 'festive-bridal-wear',
+        description: 'Statement bridal and festive pieces for weddings and celebrations',
+        image: cld('aura/jewellery/img07'),
+        productCount: 0,
+        status: 'Active',
+      },
+      {
+        name: 'Everyday Essentials',
+        slug: 'everyday-essentials',
+        description: 'Light, wearable pieces made for daily polish',
+        image: cld('aura/jewellery/img04'),
+        productCount: 0,
+        status: 'Active',
+      },
+      {
+        name: "Men's Collection",
+        slug: 'mens-collection',
+        description: 'Subtle antique pieces styled for him',
+        image: cld('aura/jewellery/img03'),
+        productCount: 0,
         status: 'Active',
       },
     ]);

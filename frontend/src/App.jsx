@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
+import CategoryShop from './pages/CategoryShop';
 import About from './pages/About';
 import Cart from './pages/Cart';
 import Shipping from './pages/Shipping';
@@ -164,6 +165,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collections" element={<Collections />} />
+          <Route path="/shop/:categorySlug" element={<CategoryShop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/cart" element={<Cart />} />

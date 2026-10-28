@@ -3,6 +3,19 @@
   display: flex;
   min-height: 100vh;
   background: var(--cream);
+  font-family: var(--font-admin);
+  font-size: 0.9rem;
+}
+
+.app-container h1,
+.app-container h2,
+.app-container h3,
+.app-container h4,
+.app-container button,
+.app-container input,
+.app-container select,
+.app-container textarea {
+  font-family: var(--font-admin);
 }
 
 .admin-sidebar-backdrop {

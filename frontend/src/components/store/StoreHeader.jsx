@@ -11,17 +11,13 @@ import {
   getStoreSettings,
   STORE_SETTINGS_CHANGED,
 } from '../../data/storeSettings';
+import {
+  TYPE_CATEGORIES,
+  OCCASION_CATEGORIES,
+  categoryPath,
+} from '../../data/shopCategories';
 import '../../styles/components/StoreHeader.css';
 import '../../styles/pages/Wishlist.css';
-
-const COLLECTION_CATEGORIES = [
-  'Necklace Sets',
-  'Pendant Sets',
-  'Earrings',
-  'Bangles',
-  'Rings',
-  'Hand Chains',
-];
 
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,6 +48,8 @@ const StoreHeader = () => {
       const settings = getStoreSettings();
       if (settings.useCustomBanner) {
         setBanner(settings.bannerText || DEFAULT_STORE_SETTINGS.bannerText);
+      } else {
+        setBanner(DEFAULT_STORE_SETTINGS.bannerText);
       }
     };
     applyCustomBanner();
@@ -147,19 +145,25 @@ const StoreHeader = () => {
                 <Link to="/collections" onClick={closeCollections}>Just Arrived</Link>
                 <Link to="/#bestsellers" onClick={closeCollections}>Best Sellers</Link>
                 <span className="collections-dropdown__label">Shop by Category</span>
-                {COLLECTION_CATEGORIES.map((category) => (
+                {TYPE_CATEGORIES.map((category) => (
                   <Link
-                    key={category}
-                    to="/#shop"
+                    key={category.slug}
+                    to={categoryPath(category.slug)}
                     className="collections-dropdown__sub"
                     onClick={closeCollections}
                   >
-                    {category}
+                    {category.name}
                   </Link>
                 ))}
-                <Link to="/collections" onClick={closeCollections}>Festive &amp; Bridal Wear</Link>
-                <Link to="/collections" onClick={closeCollections}>Everyday Essentials</Link>
-                <Link to="/collections" onClick={closeCollections}>Men&apos;s Collection</Link>
+                {OCCASION_CATEGORIES.map((category) => (
+                  <Link
+                    key={category.slug}
+                    to={categoryPath(category.slug)}
+                    onClick={closeCollections}
+                  >
+                    {category.name}
+                  </Link>
+                ))}
               </div>
             )}
           </div>
@@ -253,14 +257,24 @@ const StoreHeader = () => {
               <Link to="/collections" onClick={() => setMenuOpen(false)}>Just Arrived</Link>
               <Link to="/#bestsellers" onClick={() => setMenuOpen(false)}>Best Sellers</Link>
               <span>Shop by Category</span>
-              {COLLECTION_CATEGORIES.map((category) => (
-                <Link key={category} to="/#shop" onClick={() => setMenuOpen(false)}>
-                  {category}
+              {TYPE_CATEGORIES.map((category) => (
+                <Link
+                  key={category.slug}
+                  to={categoryPath(category.slug)}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {category.name}
                 </Link>
               ))}
-              <Link to="/collections" onClick={() => setMenuOpen(false)}>Festive &amp; Bridal Wear</Link>
-              <Link to="/collections" onClick={() => setMenuOpen(false)}>Everyday Essentials</Link>
-              <Link to="/collections" onClick={() => setMenuOpen(false)}>Men&apos;s Collection</Link>
+              {OCCASION_CATEGORIES.map((category) => (
+                <Link
+                  key={category.slug}
+                  to={categoryPath(category.slug)}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {category.name}
+                </Link>
+              ))}
             </div>
           )}
           <Link to="/about" onClick={() => setMenuOpen(false)}>ABOUT US</Link>

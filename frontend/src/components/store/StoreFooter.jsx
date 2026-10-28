@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { brandLogo } from '../../data/images';
 import { getStoreSettings, STORE_SETTINGS_CHANGED } from '../../data/storeSettings';
+import { categoryPath } from '../../data/shopCategories';
 import '../../styles/components/StoreFooter.css';
 
 const StoreFooter = () => {
@@ -44,9 +45,10 @@ const StoreFooter = () => {
 
         <div className="footer-col">
           <h4>Shop</h4>
-          <Link to="/#shop">Rings</Link>
-          <Link to="/#shop">Earrings</Link>
-          <Link to="/#shop">Necklaces &amp; Pendants</Link>
+          <Link to={categoryPath('rings')}>Rings</Link>
+          <Link to={categoryPath('earrings')}>Earrings</Link>
+          <Link to={categoryPath('necklace-sets')}>Necklace Sets</Link>
+          <Link to={categoryPath('pendant-sets')}>Pendant Sets</Link>
         </div>
 
         <div className="footer-social">

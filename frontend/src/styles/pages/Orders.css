@@ -1,0 +1,133 @@
+/* Orders — status filter dropdown + row status select */
+
+.status-dropdown {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.status-dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  min-width: 10.5rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-admin);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.status-dropdown__trigger:hover,
+.status-dropdown__trigger.is-open {
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px rgba(61, 67, 30, 0.08);
+}
+
+.status-dropdown__trigger svg {
+  flex-shrink: 0;
+  color: var(--olive-soft);
+  transition: transform 0.2s ease;
+}
+
+.status-dropdown__trigger.is-open svg {
+  transform: rotate(180deg);
+}
+
+.status-dropdown__menu {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  z-index: 40;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 28px rgba(26, 26, 20, 0.12);
+}
+
+.status-dropdown__option {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  font-family: var(--font-admin);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.status-dropdown__option:hover {
+  background: rgba(61, 67, 30, 0.08);
+  color: var(--olive);
+}
+
+.status-dropdown__option.is-active {
+  background: var(--olive);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* Row status select — hide native OS chrome */
+.status-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 8.5rem;
+}
+
+.status-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: 0.4rem 1.75rem 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-admin);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.status-select:focus {
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px rgba(61, 67, 30, 0.08);
+}
+
+.status-select-wrap > svg {
+  position: absolute;
+  right: 0.55rem;
+  pointer-events: none;
+  color: var(--olive-soft);
+}
+
+@media (max-width: 720px) {
+  .status-dropdown {
+    width: 100%;
+  }
+
+  .status-dropdown__trigger {
+    width: 100%;
+  }
+
+  .status-dropdown__menu {
+    left: 0;
+    right: 0;
+  }
+}

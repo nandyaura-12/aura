@@ -18,6 +18,7 @@
   --radius-pill: 9999px;
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-sans: 'DM Sans', 'Montserrat', system-ui, sans-serif;
+  --font-admin: 'Poppins', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Admin aliases (same theme) */

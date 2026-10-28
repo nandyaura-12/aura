@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
-  Gem,
   Layers,
   ShoppingBag,
   Users,
@@ -13,7 +12,7 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { brandLogo } from '../data/images';
-import { fetchCategories } from '../services/api';
+import { TYPE_CATEGORIES, OCCASION_CATEGORIES } from '../data/shopCategories';
 import '../styles/components/Sidebar.css';
 
 const EXPANDED_WIDTH = 270;
@@ -29,22 +28,11 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
   const [settingsOpen, setSettingsOpen] = useState(
     () => location.pathname.startsWith('/admin/settings')
   );
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    let cancelled = false;
-    fetchCategories()
-      .then((res) => {
-        if (!cancelled) setCategories(res.data || []);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (location.pathname.startsWith('/admin/categories')) setCollectionsOpen(true);
+    if (location.pathname.startsWith('/admin/categories') || location.pathname.startsWith('/admin/products')) {
+      setCollectionsOpen(true);
+    }
     if (location.pathname.startsWith('/admin/settings')) setSettingsOpen(true);
   }, [location.pathname]);
 
@@ -134,7 +122,6 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
   };
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-    { path: '/admin/products', label: 'Antique Catalogue', icon: Gem },
     { path: '/admin/orders', label: 'Orders & Deliveries', icon: ShoppingBag },
     { path: '/admin/customers', label: 'Valued Clients', icon: Users },
     { path: '/admin/offers', label: 'Festive Offers', icon: Tag },
@@ -171,7 +158,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
       </div>
 
       <nav className="sidebar-nav">
-        {navItems.slice(0, 2).map((item) => {
+        {navItems.slice(0, 1).map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
@@ -179,7 +166,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
               to={item.path}
               end={item.end}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-              title={item.label}
+              title={effectiveExpanded ? undefined : item.label}
             >
               <Icon />
               <span>{item.label}</span>
@@ -187,14 +174,19 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
           );
         })}
 
-        {/* Antique Collections dropdown — same logic as the storefront */}
+        {/* Antique Collections — catalogue + storefront categories in one place */}
         <div className="sidebar-nav-group">
           <button
             type="button"
-            className={`nav-item nav-group-toggle ${location.pathname.startsWith('/admin/categories') ? 'active' : ''}`}
+            className={`nav-item nav-group-toggle ${
+              location.pathname.startsWith('/admin/categories') ||
+              location.pathname.startsWith('/admin/products')
+                ? 'active'
+                : ''
+            }`}
             onClick={handleCollectionsToggle}
             aria-expanded={collectionsOpen}
-            title="Antique Collections"
+            title={effectiveExpanded ? undefined : 'Antique Collections'}
           >
             <Layers />
             <span>Antique Collections</span>
@@ -206,14 +198,64 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
           {collectionsOpen && effectiveExpanded && (
             <div className="nav-submenu">
               <NavLink
+                to="/admin/products"
+                end
+                className={({ isActive }) =>
+                  `nav-subitem ${
+                    isActive &&
+                    !new URLSearchParams(location.search).get('category') &&
+                    !new URLSearchParams(location.search).get('filter')
+                      ? 'active'
+                      : ''
+                  }`
+                }
+              >
+                All Products
+              </NavLink>
+              <NavLink
                 to="/admin/categories"
+                end
                 className={({ isActive }) => `nav-subitem ${isActive ? 'active' : ''}`}
               >
                 All Collections
               </NavLink>
-              {categories.map((cat) => (
+              <Link
+                to="/admin/products?filter=just-arrived"
+                className={`nav-subitem ${
+                  new URLSearchParams(location.search).get('filter') === 'just-arrived'
+                    ? 'active'
+                    : ''
+                }`}
+              >
+                Just Arrived
+              </Link>
+              <Link
+                to="/admin/products?filter=best-sellers"
+                className={`nav-subitem ${
+                  new URLSearchParams(location.search).get('filter') === 'best-sellers'
+                    ? 'active'
+                    : ''
+                }`}
+              >
+                Best Sellers
+              </Link>
+              <span className="nav-sublabel">Shop by Category</span>
+              {TYPE_CATEGORIES.map((cat) => (
                 <Link
-                  key={cat._id || cat.name}
+                  key={cat.slug}
+                  to={`/admin/products?category=${encodeURIComponent(cat.name)}`}
+                  className={`nav-subitem nav-subitem--indent ${
+                    new URLSearchParams(location.search).get('category') === cat.name
+                      ? 'active'
+                      : ''
+                  }`}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+              {OCCASION_CATEGORIES.map((cat) => (
+                <Link
+                  key={cat.slug}
                   to={`/admin/products?category=${encodeURIComponent(cat.name)}`}
                   className={`nav-subitem ${
                     new URLSearchParams(location.search).get('category') === cat.name
@@ -228,7 +270,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
           )}
         </div>
 
-        {navItems.slice(2).map((item) => {
+        {navItems.slice(1).map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
@@ -236,7 +278,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
               to={item.path}
               end={item.end}
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-              title={item.label}
+              title={effectiveExpanded ? undefined : item.label}
             >
               <Icon />
               <span>{item.label}</span>
@@ -250,7 +292,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
             className={`nav-item nav-group-toggle ${location.pathname.startsWith('/admin/settings') ? 'active' : ''}`}
             onClick={handleSettingsToggle}
             aria-expanded={settingsOpen}
-            title="Settings"
+            title={effectiveExpanded ? undefined : 'Settings'}
           >
             <Settings />
             <span>Settings</span>
@@ -281,7 +323,7 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
         </div>
       </nav>
 
-      <Link to="/" className="admin-home-link" title="View Storefront">
+      <Link to="/" className="admin-home-link" title={effectiveExpanded ? undefined : 'View Storefront'}>
         <Store size={18} className="admin-home-icon" />
         <span>← View Storefront</span>
       </Link>
