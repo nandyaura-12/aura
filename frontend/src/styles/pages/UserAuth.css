@@ -666,3 +666,25 @@
 .account-order footer strong {
   color: var(--ink);
 }
+
+@media (max-width: 640px) {
+  .account-main {
+    padding: 1.75rem 0 3rem;
+  }
+
+  .account-profile h1 {
+    font-size: 1.4rem;
+  }
+
+  .account-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .account-order {
+    padding: 1rem;
+  }
+
+  .account-order-badges {
+    flex-wrap: wrap;
+  }
+}

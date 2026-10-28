@@ -231,6 +231,10 @@ const StoreHeader = () => {
 
       {menuOpen && (
         <div className="mobile-nav">
+          <div className="mobile-nav__search">
+            <Search size={16} />
+            <input type="search" placeholder="Search anything..." aria-label="Search" />
+          </div>
           <Link to="/#shop" onClick={() => setMenuOpen(false)}>SHOP</Link>
           <button
             type="button"

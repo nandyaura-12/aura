@@ -5,6 +5,18 @@
 
 .filter-select {
   width: 220px;
+  max-width: 100%;
+}
+
+@media (max-width: 720px) {
+  .filter-select {
+    width: 100%;
+  }
+
+  .filter-bar .search-box--grow {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .th-right,

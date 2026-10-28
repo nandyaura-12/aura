@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Bell, Sparkles, LogOut, ChevronDown } from 'lucide-react';
+import { Search, Bell, Sparkles, LogOut, ChevronDown, Menu, X } from 'lucide-react';
 import { logoutAdmin } from '../data/adminAuth';
 import '../styles/components/Navbar.css';
 
-const Navbar = ({ searchTerm, setSearchTerm }) => {
+const Navbar = ({ searchTerm, setSearchTerm, onToggleSidebar, sidebarOpen }) => {
   const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -33,14 +33,25 @@ const Navbar = ({ searchTerm, setSearchTerm }) => {
 
   return (
     <header className="navbar">
-      <div className="search-box">
-        <Search size={18} />
-        <input
-          type="text"
-          placeholder="Search antique pieces, orders or SKU..."
-          value={searchTerm || ''}
-          onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
-        />
+      <div className="navbar-leading">
+        <button
+          type="button"
+          className="admin-menu-btn"
+          onClick={onToggleSidebar}
+          aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={Boolean(sidebarOpen)}
+        >
+          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+        <div className="search-box">
+          <Search size={18} />
+          <input
+            type="text"
+            placeholder="Search pieces, orders, SKU..."
+            value={searchTerm || ''}
+            onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className="navbar-actions">

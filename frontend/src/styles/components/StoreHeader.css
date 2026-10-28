@@ -304,6 +304,31 @@
   font-size: 0.9rem;
 }
 
+.mobile-nav__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.9rem;
+  margin-bottom: 0.35rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.mobile-nav__search input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  width: 100%;
+  font-size: 0.88rem;
+}
+
+.mobile-nav__search input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
 /* Tablet: keep Figma desktop header (links + search) as long as possible */
 @media (max-width: 1100px) {
   .nav-links-inner {
@@ -325,12 +350,59 @@
   }
 }
 
-/* Phone only — collapse to hamburger (Figma desktop stays above this) */
+@media (max-width: 860px) {
+  .nav-links-bar {
+    display: none;
+  }
+
+  .brand-actions .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .mobile-nav {
+    display: flex;
+  }
+
+  .brand-bar-inner {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .store-search {
+    display: none;
+  }
+
+  .brand-logo-img {
+    height: 52px;
+  }
+}
+
+/* Phone only */
 @media (max-width: 640px) {
-  .nav-links-inner { display: none; }
-  .brand-actions .mobile-menu-btn { display: inline-flex; }
-  .mobile-nav { display: flex; }
-  .brand-bar-inner { grid-template-columns: auto 1fr auto; }
-  .store-search { display: none; }
-  .brand-logo-img { height: 48px; }
+  .announce-bar {
+    font-size: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    line-height: 1.35;
+  }
+
+  .brand-bar-inner {
+    min-height: 60px;
+    gap: 0.5rem;
+  }
+
+  .brand-actions {
+    gap: 0.7rem;
+  }
+
+  .brand-actions a,
+  .brand-actions button {
+    min-width: 40px;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .brand-logo-img {
+    height: 44px;
+    max-width: min(180px, 42vw);
+  }
 }

@@ -23,6 +23,23 @@
   box-shadow: 0 24px 60px rgba(47, 52, 24, 0.25);
 }
 
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .modal-content {
+    max-height: min(92vh, 100%);
+    padding: 1.25rem;
+    border-radius: 18px 18px 14px 14px;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+  }
+}
+
 .modal-header {
   display: flex;
   align-items: center;

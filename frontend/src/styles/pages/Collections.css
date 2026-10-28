@@ -557,6 +557,10 @@
 }
 
 @media (max-width: 576px) {
+  .collections-detail-section {
+    padding: 1.75rem 0 3rem;
+  }
+
   .thumbnails-grid {
     gap: 0.65rem;
   }
@@ -566,6 +570,13 @@
   }
 
   .product-title-serif {
-    font-size: 2.1rem;
+    font-size: 1.85rem;
+  }
+
+  .collection-toast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    justify-content: center;
   }
 }

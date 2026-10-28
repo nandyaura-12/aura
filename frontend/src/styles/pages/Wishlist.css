@@ -251,3 +251,26 @@
   place-items: center;
   line-height: 1;
 }
+
+@media (max-width: 720px) {
+  .wishlist-main {
+    padding: 1.75rem 0 3rem;
+  }
+
+  .wishlist-title {
+    font-size: 1.7rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .wishlist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .wishlist-grid {
+    grid-template-columns: 1fr;
+  }
+}

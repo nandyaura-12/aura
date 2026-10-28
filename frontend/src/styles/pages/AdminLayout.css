@@ -5,6 +5,10 @@
   background: var(--cream);
 }
 
+.admin-sidebar-backdrop {
+  display: none;
+}
+
 .main-content {
   flex: 1;
   margin-left: var(--sidebar-width);
@@ -24,4 +28,34 @@
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .page-wrapper {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(26, 26, 20, 0.45);
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+  }
+
+  .main-content,
+  .main-content.sidebar-collapsed {
+    margin-left: 0 !important;
+  }
+
+  .page-wrapper {
+    padding: 1.15rem 0.9rem 1.75rem;
+  }
 }

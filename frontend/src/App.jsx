@@ -42,18 +42,41 @@ function AdminLayout() {
 
   useEffect(() => {
     const onResize = () => {
-      if (window.innerWidth <= 1024) setSidebarExpanded(false);
+      if (window.innerWidth <= 1024) {
+        setSidebarExpanded(false);
+        setSidebarHoverOpen(false);
+      }
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  useEffect(() => {
+    if (window.innerWidth <= 768) {
+      setSidebarExpanded(false);
+      setSidebarHoverOpen(false);
+    }
+  }, [location.pathname]);
+
   if (!isAdminLoggedIn()) {
     return <Navigate to="/admin/login" state={{ from: location.pathname }} replace />;
   }
 
+  const sidebarOpen = sidebarExpanded || sidebarHoverOpen;
+
   return (
-    <div className="app-container">
+    <div className={`app-container${sidebarOpen ? ' sidebar-is-open' : ''}`}>
+      {sidebarOpen && (
+        <button
+          type="button"
+          className="admin-sidebar-backdrop"
+          aria-label="Close menu"
+          onClick={() => {
+            setSidebarExpanded(false);
+            setSidebarHoverOpen(false);
+          }}
+        />
+      )}
       <Sidebar
         expanded={sidebarExpanded}
         onToggle={() => setSidebarExpanded((open) => !open)}
@@ -64,14 +87,22 @@ function AdminLayout() {
         onHoverChange={setSidebarHoverOpen}
       />
       <div
-        className={`main-content ${sidebarExpanded || sidebarHoverOpen ? '' : 'sidebar-collapsed'}`}
+        className={`main-content ${sidebarOpen ? '' : 'sidebar-collapsed'}`}
         style={
           sidebarDragWidth != null
             ? { marginLeft: `${sidebarDragWidth}px`, transition: 'none' }
             : undefined
         }
       >
-        <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <Navbar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          onToggleSidebar={() => {
+            setSidebarHoverOpen(false);
+            setSidebarExpanded((open) => !open);
+          }}
+          sidebarOpen={sidebarOpen}
+        />
         <div className="page-wrapper">
           <Routes>
             <Route index element={<Dashboard />} />

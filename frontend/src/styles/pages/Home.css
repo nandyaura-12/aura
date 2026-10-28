@@ -745,17 +745,36 @@
   .stagger-card.offset-1,
   .curated-card.h-1,
   .curated-card.h-3 { margin-top: 0; }
-  .hero { height: auto; min-height: 68vh; }
-  .hero-bg { object-position: 50% 16%; }
+  .hero {
+    height: min(72vh, 560px);
+    min-height: 420px;
+  }
+  .hero-bg { object-position: 58% 28%; }
   .hero-content {
-    left: 1.25rem;
-    right: 1.25rem;
-    top: 55%;
+    left: 1.15rem;
+    right: 1.15rem;
+    top: auto;
+    bottom: 1.5rem;
+    transform: none;
     width: auto;
-    max-width: calc(100% - 2.5rem);
+    max-width: calc(100% - 2.3rem);
+  }
+  .hero-content h1 {
+    margin-bottom: 0.85rem;
+  }
+  .hero-copy {
+    margin-bottom: 1.15rem;
   }
   .hero-copy span { white-space: normal; }
-  .hero-thumbs { right: 1rem; bottom: 1rem; }
-  .hero-thumbs img { width: 72px; height: 90px; border-radius: 12px; }
+  .hero-thumbs { display: none; }
+  .category-card span {
+    white-space: normal;
+    text-align: center;
+    max-width: calc(100% - 1.5rem);
+    line-height: 1.3;
+  }
+  .grace-grid {
+    gap: 1.75rem;
+  }
   .section-head.row { flex-direction: column; align-items: flex-start; }
 }

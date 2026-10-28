@@ -73,9 +73,27 @@ a {
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font-family: inherit;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 480px) {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 }

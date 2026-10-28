@@ -98,15 +98,23 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
   // Touch / hover on a collapsed sidebar auto-opens it: mouse hover opens it
   // and pushes the page content aside (closes again when the pointer leaves),
   // a touch tap pins it open.
+  const isMobileNav = () =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+
   const handleMouseEnter = () => {
+    if (isMobileNav()) return;
     if (!expanded) onHoverChange(true);
   };
   // mouseEnter only fires when crossing the sidebar edge — if the pointer is
   // already inside after a collapse click, moving it must open the sidebar too.
   const handleMouseMove = () => {
+    if (isMobileNav()) return;
     if (!expanded && !hoverOpen) onHoverChange(true);
   };
-  const handleMouseLeave = () => onHoverChange(false);
+  const handleMouseLeave = () => {
+    if (isMobileNav()) return;
+    onHoverChange(false);
+  };
   const handleTouchOpen = (e) => {
     if (expanded) return;
     if (e.target.closest('button, a')) return;
