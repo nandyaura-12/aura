@@ -53,8 +53,13 @@ export const changeAdminPassword = (currentPassword, nextPassword) => {
     return { ok: false, message: 'Current password is incorrect.' };
   }
   const next = String(nextPassword || '');
-  if (next.length < 6) {
-    return { ok: false, message: 'New password must be at least 6 characters.' };
+  // Letters + numbers + special character, min 8
+  if (next.length < 8 || !/[A-Za-z]/.test(next) || !/[0-9]/.test(next) || !/[^A-Za-z0-9]/.test(next)) {
+    return {
+      ok: false,
+      message:
+        'New password must be at least 8 characters and include letters, numbers, and a special character.',
+    };
   }
   if (next === currentPassword) {
     return { ok: false, message: 'Choose a password different from the current one.' };

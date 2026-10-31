@@ -46,20 +46,20 @@ const Customers = () => {
       </div>
 
       <div className="filter-bar">
-        <div className="search-box" style={{ flex: 1 }}>
+        <div className="search-box search-box--grow">
           <Search size={18} />
           <input
             type="text"
-            placeholder="Search customer by name, email or phone..."
+            placeholder="Search name, email or phone…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="card-table-wrapper">
+      <div className="card-table-wrapper admin-mobile-table-wrap">
         <div className="table-container">
-          <table className="custom-table">
+          <table className="custom-table admin-mobile-table">
             <thead>
               <tr>
                 <th>Customer</th>
@@ -74,7 +74,7 @@ const Customers = () => {
               {customers.length > 0 ? (
                 customers.map((cust) => (
                   <tr key={cust._id}>
-                    <td>
+                    <td data-label="Customer" data-span="full" data-hide-label>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                         <div className="avatar">{cust.name?.charAt(0)}</div>
                         <div>
@@ -83,17 +83,17 @@ const Customers = () => {
                         </div>
                       </div>
                     </td>
-                    <td>{cust.phone || 'N/A'}</td>
-                    <td style={{ fontWeight: '600' }}>{cust.ordersCount || 0} orders</td>
-                    <td style={{ fontWeight: '700', color: 'var(--primary-orange)' }}>
+                    <td data-label="Phone">{cust.phone || 'N/A'}</td>
+                    <td data-label="Orders" style={{ fontWeight: '600' }}>{cust.ordersCount || 0} orders</td>
+                    <td data-label="Spent" style={{ fontWeight: '700', color: 'var(--primary-orange)' }}>
                       {formatInr(cust.totalSpent)}
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <span className={`badge badge-${cust.status.toLowerCase()}`}>
                         {cust.status}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="mobile-actions" data-label="Actions">
                       <button
                         className={`btn ${cust.status === 'Active' ? 'btn-danger' : 'btn-secondary'}`}
                         style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}

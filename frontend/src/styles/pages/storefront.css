@@ -16,17 +16,39 @@
 }
 
 @media (max-width: 720px) {
+  .storefront {
+    overflow-x: hidden;
+  }
+
   .store-container {
-    width: min(1180px, calc(100% - 1.5rem));
+    width: min(1180px, calc(100% - 2rem));
   }
 
   .section {
-    padding: 3rem 0;
+    padding: 2.5rem 0;
+  }
+
+  .section-title {
+    font-size: clamp(1.55rem, 7vw, 2rem);
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .section-head.row {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.85rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .section-head.row .text-link {
+    align-self: flex-start;
+  }
+
+  /* Clear sticky store header when jumping to #featured etc. */
+  .section[id] {
+    scroll-margin-top: 6.5rem;
   }
 }
 

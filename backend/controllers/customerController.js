@@ -1,5 +1,10 @@
+import { OAuth2Client } from 'google-auth-library';
 import Customer from '../models/Customer.js';
 import { hashPassword, verifyPassword } from '../utils/password.js';
+import { validatePassword } from '../utils/passwordValidation.js';
+
+const getGoogleClient = () =>
+  new OAuth2Client(process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID);
 
 const publicCustomer = (customer) => ({
   _id: customer._id,
@@ -10,8 +15,35 @@ const publicCustomer = (customer) => ({
   ordersCount: customer.ordersCount || 0,
   totalSpent: customer.totalSpent || 0,
   status: customer.status,
+  authProvider: customer.authProvider || 'local',
   createdAt: customer.createdAt,
 });
+
+const upsertGoogleCustomer = async ({ googleId, email, name }) => {
+  let customer =
+    (googleId && (await Customer.findOne({ googleId }))) ||
+    (email && (await Customer.findOne({ email })));
+
+  if (customer) {
+    if (customer.status === 'Blocked') {
+      const err = new Error('This account is blocked. Please contact us.');
+      err.status = 403;
+      throw err;
+    }
+    customer.googleId = googleId || customer.googleId;
+    customer.authProvider = customer.authProvider === 'local' && customer.passwordHash ? customer.authProvider : 'google';
+    if (name && !customer.name) customer.name = name;
+    if (name && customer.authProvider === 'google') customer.name = name;
+    return customer.save();
+  }
+
+  return Customer.create({
+    name: name || email.split('@')[0],
+    email,
+    googleId,
+    authProvider: 'google',
+  });
+};
 
 // @desc    Register a storefront user
 // @route   POST /api/customers/register
@@ -25,8 +57,9 @@ export const registerCustomer = async (req, res) => {
     if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ message: 'Enter your name and a valid email.' });
     }
-    if (password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters.' });
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      return res.status(400).json({ message: passwordError });
     }
 
     const existing = await Customer.findOne({ email });
@@ -73,6 +106,66 @@ export const loginCustomer = async (req, res) => {
     res.json(publicCustomer(customer));
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// @desc    Login / register with Google (ID token or access token)
+// @route   POST /api/customers/google
+export const googleLoginCustomer = async (req, res) => {
+  try {
+    const credential = String(req.body.credential || '').trim();
+    const accessToken = String(req.body.accessToken || '').trim();
+    const clientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID;
+
+    if (!clientId) {
+      return res.status(503).json({
+        message: 'Google sign-in is not configured on the server. Add GOOGLE_CLIENT_ID to backend/.env.',
+      });
+    }
+
+    let googleId = '';
+    let email = '';
+    let name = '';
+
+    if (credential) {
+      const ticket = await getGoogleClient().verifyIdToken({
+        idToken: credential,
+        audience: clientId,
+      });
+      const payload = ticket.getPayload() || {};
+      if (!payload.email_verified) {
+        return res.status(401).json({ message: 'Google email is not verified.' });
+      }
+      googleId = payload.sub;
+      email = String(payload.email || '').trim().toLowerCase();
+      name = String(payload.name || '').trim();
+    } else if (accessToken) {
+      const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (!profileRes.ok) {
+        return res.status(401).json({ message: 'Could not verify Google account.' });
+      }
+      const profile = await profileRes.json();
+      if (!profile.email || profile.email_verified === false) {
+        return res.status(401).json({ message: 'Google email is not verified.' });
+      }
+      googleId = String(profile.sub || '');
+      email = String(profile.email || '').trim().toLowerCase();
+      name = String(profile.name || '').trim();
+    } else {
+      return res.status(400).json({ message: 'Missing Google credential.' });
+    }
+
+    if (!email || !googleId) {
+      return res.status(401).json({ message: 'Google account details incomplete.' });
+    }
+
+    const customer = await upsertGoogleCustomer({ googleId, email, name });
+    res.json(publicCustomer(customer));
+  } catch (error) {
+    const status = error.status || 400;
+    res.status(status).json({ message: error.message || 'Google sign-in failed.' });
   }
 };
 

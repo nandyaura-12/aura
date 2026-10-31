@@ -100,14 +100,19 @@ export const CartProvider = ({ children }) => {
   const itemCount = state.items.reduce((sum, item) => sum + item.qty, 0);
 
   const updateQty = (id, qty) => {
-    setState((prev) => ({
-      ...prev,
-      items: prev.items.map((item) => {
-        if (item.id !== id) return item;
-        const next = Math.max(1, Math.min(item.stock, qty));
-        return { ...item, qty: next };
-      }),
-    }));
+    setState((prev) => {
+      if (qty < 1) {
+        return { ...prev, items: prev.items.filter((item) => item.id !== id) };
+      }
+      return {
+        ...prev,
+        items: prev.items.map((item) => {
+          if (item.id !== id) return item;
+          const next = Math.min(item.stock, qty);
+          return { ...item, qty: next };
+        }),
+      };
+    });
   };
 
   const removeItem = (id) => {

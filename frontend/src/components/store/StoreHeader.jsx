@@ -5,7 +5,7 @@ import { brandLogo } from '../../data/images';
 import { getStoredUser, USER_CHANGED_EVENT } from '../../data/userAuth';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
-import { fetchOffers } from '../../services/api';
+import { fetchOffers, fetchCategories, CATEGORIES_CHANGED_EVENT } from '../../services/api';
 import {
   DEFAULT_STORE_SETTINGS,
   getStoreSettings,
@@ -15,14 +15,22 @@ import {
   TYPE_CATEGORIES,
   OCCASION_CATEGORIES,
   categoryPath,
+  groupCategoriesByMenu,
 } from '../../data/shopCategories';
 import '../../styles/components/StoreHeader.css';
 import '../../styles/pages/Wishlist.css';
 
+const fallbackMenuSections = groupCategoriesByMenu([
+  ...TYPE_CATEGORIES,
+  ...OCCASION_CATEGORIES,
+]);
+
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const [menuSections, setMenuSections] = useState(fallbackMenuSections);
   const collectionsRef = useRef(null);
+  const headerRef = useRef(null);
   const [banner, setBanner] = useState(() => {
     const settings = getStoreSettings();
     return settings.useCustomBanner
@@ -79,6 +87,24 @@ const StoreHeader = () => {
     };
   }, [collectionsOpen]);
 
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return undefined;
+    const syncHeight = () => {
+      document.documentElement.style.setProperty(
+        '--store-header-height',
+        `${el.offsetHeight}px`
+      );
+    };
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty('--store-header-height');
+    };
+  }, [menuOpen, banner]);
+
   const closeCollections = () => setCollectionsOpen(false);
 
   useEffect(() => {
@@ -112,76 +138,48 @@ const StoreHeader = () => {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    const loadNavCategories = () => {
+      fetchCategories()
+        .then((res) => {
+          if (cancelled) return;
+          const active = (res.data || [])
+            .filter((category) => category.status !== 'Inactive')
+            .sort(
+              (a, b) =>
+                new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+            );
+          if (!active.length) return;
+          setMenuSections(groupCategoriesByMenu(active));
+        })
+        .catch(() => {});
+    };
+    loadNavCategories();
+    window.addEventListener(CATEGORIES_CHANGED_EVENT, loadNavCategories);
+    return () => {
+      cancelled = true;
+      window.removeEventListener(CATEGORIES_CHANGED_EVENT, loadNavCategories);
+    };
+  }, []);
+
+  const searchField = (className) => (
+    <div className={className}>
+      <Search size={16} aria-hidden="true" />
+      <input type="search" placeholder="Search anything..." aria-label="Search" />
+    </div>
+  );
+
   return (
-    <header className="store-header">
-      <div className="announce-bar">
-        {banner}
-      </div>
-
-      <nav className="nav-links-bar">
-        <div className="store-container nav-links-inner">
-          <Link to="/#shop">SHOP</Link>
-          <div
-            className="nav-dropdown"
-            ref={collectionsRef}
-            onMouseEnter={() => setCollectionsOpen(true)}
-            onMouseLeave={() => setCollectionsOpen(false)}
-          >
-            <button
-              type="button"
-              className="nav-dropdown__toggle"
-              onClick={() => setCollectionsOpen((open) => !open)}
-              aria-haspopup="true"
-              aria-expanded={collectionsOpen}
-            >
-              COLLECTIONS
-              <ChevronDown
-                size={15}
-                className={`nav-dropdown__chevron${collectionsOpen ? ' is-open' : ''}`}
-              />
-            </button>
-            {collectionsOpen && (
-              <div className="collections-dropdown">
-                <Link to="/collections" onClick={closeCollections}>Just Arrived</Link>
-                <Link to="/#bestsellers" onClick={closeCollections}>Best Sellers</Link>
-                <span className="collections-dropdown__label">Shop by Category</span>
-                {TYPE_CATEGORIES.map((category) => (
-                  <Link
-                    key={category.slug}
-                    to={categoryPath(category.slug)}
-                    className="collections-dropdown__sub"
-                    onClick={closeCollections}
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-                {OCCASION_CATEGORIES.map((category) => (
-                  <Link
-                    key={category.slug}
-                    to={categoryPath(category.slug)}
-                    onClick={closeCollections}
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <Link to="/about">ABOUT US</Link>
-          <Link to="/contact">CONTACT US</Link>
-        </div>
-      </nav>
-
+    <header className="store-header" ref={headerRef}>
+      {/* 1. Logo first */}
       <div className="brand-bar">
         <div className="store-container brand-bar-inner">
-          <div className="store-search">
-            <Search size={16} />
-            <input type="search" placeholder="Search anything..." aria-label="Search" />
-          </div>
-
           <Link to="/" className="brand-mark" aria-label="Nandys Aura home">
             <img src={brandLogo} alt="Nandys Aura" className="brand-logo-img" />
           </Link>
+
+          {searchField('store-search')}
 
           <div className="brand-actions">
             <Link
@@ -233,12 +231,69 @@ const StoreHeader = () => {
         </div>
       </div>
 
+      {/* Mobile search — always visible below logo bar */}
+      <div className="mobile-search-bar">
+        <div className="store-container">{searchField('mobile-nav__search')}</div>
+      </div>
+
+      {/* 2. Collection navbar after logo */}
+      <nav className="nav-links-bar">
+        <div className="store-container nav-links-inner">
+          <Link to="/#shop">SHOP</Link>
+          <div
+            className="nav-dropdown"
+            ref={collectionsRef}
+            onMouseEnter={() => setCollectionsOpen(true)}
+            onMouseLeave={() => setCollectionsOpen(false)}
+          >
+            <button
+              type="button"
+              className="nav-dropdown__toggle"
+              onClick={() => setCollectionsOpen((open) => !open)}
+              aria-haspopup="true"
+              aria-expanded={collectionsOpen}
+            >
+              COLLECTIONS
+              <ChevronDown
+                size={15}
+                className={`nav-dropdown__chevron${collectionsOpen ? ' is-open' : ''}`}
+              />
+            </button>
+            {collectionsOpen && (
+              <div className="collections-dropdown">
+                <Link to="/collections" onClick={closeCollections}>Just Arrived</Link>
+                <Link to="/#bestsellers" onClick={closeCollections}>Best Sellers</Link>
+                {menuSections.map((section) => (
+                  <React.Fragment key={section.menuName}>
+                    <span className="collections-dropdown__label">{section.menuName}</span>
+                    {section.categories.map((category) => (
+                      <Link
+                        key={category.slug || category._id}
+                        to={categoryPath(category.slug || category.name)}
+                        className="collections-dropdown__sub"
+                        onClick={closeCollections}
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+          </div>
+          <Link to="/about">ABOUT US</Link>
+          <Link to="/contact">CONTACT US</Link>
+          <Link to="/returns-policy">RETURNS</Link>
+        </div>
+      </nav>
+
+      {/* 3. Offer bar below Collection navbar */}
+      <div className="announce-bar" role="note">
+        {banner}
+      </div>
+
       {menuOpen && (
         <div className="mobile-nav">
-          <div className="mobile-nav__search">
-            <Search size={16} />
-            <input type="search" placeholder="Search anything..." aria-label="Search" />
-          </div>
           <Link to="/#shop" onClick={() => setMenuOpen(false)}>SHOP</Link>
           <button
             type="button"
@@ -256,29 +311,25 @@ const StoreHeader = () => {
             <div className="mobile-nav__sub">
               <Link to="/collections" onClick={() => setMenuOpen(false)}>Just Arrived</Link>
               <Link to="/#bestsellers" onClick={() => setMenuOpen(false)}>Best Sellers</Link>
-              <span>Shop by Category</span>
-              {TYPE_CATEGORIES.map((category) => (
-                <Link
-                  key={category.slug}
-                  to={categoryPath(category.slug)}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {category.name}
-                </Link>
-              ))}
-              {OCCASION_CATEGORIES.map((category) => (
-                <Link
-                  key={category.slug}
-                  to={categoryPath(category.slug)}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {category.name}
-                </Link>
+              {menuSections.map((section) => (
+                <React.Fragment key={section.menuName}>
+                  <span>{section.menuName}</span>
+                  {section.categories.map((category) => (
+                    <Link
+                      key={category.slug || category._id}
+                      to={categoryPath(category.slug || category.name)}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {category.name}
+                    </Link>
+                  ))}
+                </React.Fragment>
               ))}
             </div>
           )}
           <Link to="/about" onClick={() => setMenuOpen(false)}>ABOUT US</Link>
           <Link to="/contact" onClick={() => setMenuOpen(false)}>CONTACT US</Link>
+          <Link to="/returns-policy" onClick={() => setMenuOpen(false)}>RETURNS &amp; POLICY</Link>
           <Link to="/wishlist" onClick={() => setMenuOpen(false)}>
             WISHLIST{wishlistCount ? ` (${wishlistCount})` : ''}
           </Link>

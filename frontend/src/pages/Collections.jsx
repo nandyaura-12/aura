@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Star,
-  ChevronDown,
-  ChevronUp,
   ChevronLeft,
   ChevronRight,
   Package,
@@ -41,10 +39,15 @@ const fallbackCatalog = [
     details: {
       description:
         'A coordinated necklace and earring set with delicate stone work in a soft mint palette.',
-      sizeAndMaterial:
-        'Gold-tone alloy with mint enamel and crystal accents. Necklace length: approx. 18 inches with adjustable chain.',
-      shippingAndReturns:
-        'Free shipping across India. Delivery in 3-5 business days. Easy 7-day return in original condition.',
+      sizeAndMaterial: [
+        'Gold-tone alloy with mint enamel and crystal accents',
+        'Necklace length: approx. 18 inches with adjustable chain',
+      ],
+      shippingAndReturns: [
+        'Free shipping across India',
+        'Delivery in 3–5 business days',
+        'Easy 7-day return in original condition',
+      ],
     },
   },
   {
@@ -62,10 +65,16 @@ const fallbackCatalog = [
     details: {
       description:
         'Hand-set floral motifs with vibrant stones on a polished gold-tone band.',
-      sizeAndMaterial:
-        'Gold-tone alloy with multi-colour stones. Openable / screw fitting. Sizes: 2.4, 2.6, 2.8.',
-      shippingAndReturns:
-        'Ships in 1-2 business days in protective gift packaging. 7-day return policy.',
+      sizeAndMaterial: [
+        'Gold-tone alloy with multi-colour stones',
+        'Openable / screw fitting',
+        'Sizes: 2.4, 2.6, 2.8',
+      ],
+      shippingAndReturns: [
+        'Ships in 1–2 business days',
+        'Protective gift packaging',
+        '7-day return policy',
+      ],
     },
   },
   {
@@ -83,10 +92,15 @@ const fallbackCatalog = [
     details: {
       description:
         'Wide floral cuff-style bangle with deep red stone centres and gold-tone detailing.',
-      sizeAndMaterial:
-        'Gold-tone alloy with ruby-red stones. Openable fitting. Sizes: 2.4, 2.6, 2.8.',
-      shippingAndReturns:
-        'Free standard shipping across India. Keep away from water and perfume.',
+      sizeAndMaterial: [
+        'Gold-tone alloy with ruby-red stones',
+        'Openable fitting',
+        'Sizes: 2.4, 2.6, 2.8',
+      ],
+      shippingAndReturns: [
+        'Free standard shipping across India',
+        'Keep away from water and perfume',
+      ],
     },
   },
   {
@@ -104,10 +118,14 @@ const fallbackCatalog = [
     details: {
       description:
         'Intricate drop earrings finished with faux pearls and crystal accents.',
-      sizeAndMaterial:
-        'Gold-tone alloy, faux pearls and crystal detailing. Push-back fitting.',
-      shippingAndReturns:
-        'Free shipping across India. 7-day return in original condition.',
+      sizeAndMaterial: [
+        'Gold-tone alloy, faux pearls and crystal detailing',
+        'Push-back fitting',
+      ],
+      shippingAndReturns: [
+        'Free shipping across India',
+        '7-day return in original condition',
+      ],
     },
   },
   {
@@ -125,13 +143,27 @@ const fallbackCatalog = [
     details: {
       description:
         'Statement pendant on a fine chain, designed as a single standout neckpiece.',
-      sizeAndMaterial:
-        'Gold-tone alloy pendant with crystal accents. Chain length: approx. 18 inches, adjustable.',
-      shippingAndReturns:
-        'Includes complimentary velvet pouch. Free shipping across India, 7-day returns.',
+      sizeAndMaterial: [
+        'Gold-tone alloy pendant with crystal accents',
+        'Chain length: approx. 18 inches, adjustable',
+      ],
+      shippingAndReturns: [
+        'Includes complimentary velvet pouch',
+        'Free shipping across India',
+        '7-day returns',
+      ],
     },
   },
 ];
+
+const asDetailLines = (value) => {
+  if (Array.isArray(value)) return value.filter(Boolean);
+  if (!value) return [];
+  return String(value)
+    .split(/\.\s+/)
+    .map((line) => line.replace(/\.$/, '').trim())
+    .filter(Boolean);
+};
 
 const Collections = () => {
   const navigate = useNavigate();
@@ -160,11 +192,6 @@ const Collections = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedStyle, setSelectedStyle] = useState('Medium');
   const [quantity, setQuantity] = useState(1);
-  const [openAccordion, setOpenAccordion] = useState({
-    description: true,
-    sizeAndMaterial: false,
-    shippingAndReturns: false,
-  });
   const [toast, setToast] = useState('');
 
   useEffect(() => {
@@ -186,13 +213,6 @@ const Collections = () => {
       price: product.price,
       image: product.images[0],
     }));
-
-  const toggleAccordion = (key) => {
-    setOpenAccordion((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
-  };
 
   const pushCurrentToCart = () => {
     if (!currentProduct || currentProduct.stock === 0) return;
@@ -327,22 +347,38 @@ const Collections = () => {
                 <span className="review-count">({currentProduct.reviewsCount})</span>
               </div>
 
-              {/* Product Lead Copy */}
-              <p className="product-lead-copy">{currentProduct.description}</p>
+              {/* Product description — always visible on the detail page */}
+              <div className="product-lead-copy">
+                <p>{currentProduct.description}</p>
+                {currentProduct.details?.description &&
+                  currentProduct.details.description !== currentProduct.description && (
+                    <p>{currentProduct.details.description}</p>
+                  )}
+              </div>
 
               {currentProduct.specs ? (
                 <dl className="product-spec-grid">
-                  <div>
-                    <dt>Finish</dt>
-                    <dd>{currentProduct.specs.purity || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt>Weight</dt>
-                    <dd>{currentProduct.specs.weightGrams ? `${currentProduct.specs.weightGrams} g` : '—'}</dd>
-                  </div>
+                  {currentProduct.specs.ringType && (
+                    <div>
+                      <dt>Ring Type</dt>
+                      <dd>{currentProduct.specs.ringType}</dd>
+                    </div>
+                  )}
+                  {currentProduct.specs.purity && (
+                    <div>
+                      <dt>Finish</dt>
+                      <dd>{currentProduct.specs.purity}</dd>
+                    </div>
+                  )}
+                  {!!currentProduct.specs.weightGrams && (
+                    <div>
+                      <dt>Weight</dt>
+                      <dd>{`${currentProduct.specs.weightGrams} g`}</dd>
+                    </div>
+                  )}
                   <div>
                     <dt>Craft</dt>
-                    <dd>{currentProduct.specs.makingCharge ? `Hand-finished` : 'Hand-finished'}</dd>
+                    <dd>Hand-finished</dd>
                   </div>
                   <div>
                     <dt>Stock</dt>
@@ -450,58 +486,34 @@ const Collections = () => {
                 </button>
               </div>
 
-              {/* Accordions */}
-              <div className="accordions-wrapper">
-                {/* Description Accordion */}
-                <div className="accordion-block">
-                  <button
-                    type="button"
-                    className="accordion-toggle"
-                    onClick={() => toggleAccordion('description')}
-                  >
-                    <span>Description</span>
-                    {openAccordion.description ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </button>
-                  {openAccordion.description && (
-                    <div className="accordion-content">
-                      <p>{currentProduct.details.description}</p>
-                    </div>
-                  )}
-                </div>
+              {/* Full product details — single page, always expanded */}
+              <div className="product-details-panel">
+                <section className="product-detail-block">
+                  <h3>Product details</h3>
+                  <p className="product-detail-copy">
+                    {currentProduct.details?.description || currentProduct.description}
+                  </p>
+                </section>
 
-                {/* Size & Material Accordion */}
-                <div className="accordion-block">
-                  <button
-                    type="button"
-                    className="accordion-toggle"
-                    onClick={() => toggleAccordion('sizeAndMaterial')}
-                  >
-                    <span>Size &amp; Material</span>
-                    {openAccordion.sizeAndMaterial ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </button>
-                  {openAccordion.sizeAndMaterial && (
-                    <div className="accordion-content">
-                      <p>{currentProduct.details.sizeAndMaterial}</p>
-                    </div>
-                  )}
-                </div>
+                {asDetailLines(currentProduct.details?.sizeAndMaterial).length > 0 && (
+                  <section className="product-detail-block">
+                    <h3>Size &amp; material</h3>
+                    <ul className="product-detail-list">
+                      {asDetailLines(currentProduct.details.sizeAndMaterial).map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
 
-                {/* Shipping & Returns Accordion */}
-                <div className="accordion-block">
-                  <button
-                    type="button"
-                    className="accordion-toggle"
-                    onClick={() => toggleAccordion('shippingAndReturns')}
-                  >
-                    <span>Shipping &amp; Returns</span>
-                    {openAccordion.shippingAndReturns ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                  </button>
-                  {openAccordion.shippingAndReturns && (
-                    <div className="accordion-content">
-                      <p>{currentProduct.details.shippingAndReturns}</p>
-                    </div>
-                  )}
-                </div>
+                <section className="product-detail-block">
+                  <h3>Delivery &amp; returns</h3>
+                  <ul className="product-detail-list">
+                    {asDetailLines(currentProduct.details?.shippingAndReturns).map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                </section>
               </div>
             </div>
           </div>

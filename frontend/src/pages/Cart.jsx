@@ -66,8 +66,11 @@ const Cart = () => {
                           <button
                             type="button"
                             onClick={() => updateQty(item.id, item.qty - 1)}
-                            disabled={item.qty <= 1}
-                            aria-label={`Decrease ${item.title} quantity`}
+                            aria-label={
+                              item.qty <= 1
+                                ? `Remove ${item.title} from cart`
+                                : `Decrease ${item.title} quantity`
+                            }
                           >
                             −
                           </button>
@@ -85,6 +88,7 @@ const Cart = () => {
                           type="button"
                           className="co-remove"
                           onClick={() => removeItem(item.id)}
+                          aria-label={`Remove ${item.title}`}
                         >
                           <Trash2 size={14} />
                           Remove

@@ -33,6 +33,8 @@ const seedData = async () => {
       {
         name: 'Necklace Sets',
         slug: 'necklace-sets',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Coordinated necklace and earring sets in soft mint, green and gold tones',
         image: cld('aura/jewellery/img21'),
         productCount: 1,
@@ -41,6 +43,8 @@ const seedData = async () => {
       {
         name: 'Pendant Sets',
         slug: 'pendant-sets',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Pendant necklaces and matching sets with floral and pearl detailing',
         image: cld('aura/jewellery/img18'),
         productCount: 1,
@@ -49,6 +53,8 @@ const seedData = async () => {
       {
         name: 'Earrings',
         slug: 'earrings',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Pearl studs, ornate drops and pendant earring sets',
         image: cld('aura/jewellery/img13'),
         productCount: 1,
@@ -57,6 +63,8 @@ const seedData = async () => {
       {
         name: 'Bangles',
         slug: 'bangles',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Floral gemstone bangles and statement emerald / ruby wrist pieces',
         image: cld('aura/jewellery/img23'),
         productCount: 2,
@@ -65,6 +73,8 @@ const seedData = async () => {
       {
         name: 'Rings',
         slug: 'rings',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Everyday and statement rings with antique matte finishes',
         image: cld('aura/jewellery/img16'),
         productCount: 0,
@@ -73,6 +83,8 @@ const seedData = async () => {
       {
         name: 'Hand Chains',
         slug: 'hand-chains',
+        group: 'type',
+        menuName: 'Shop by Category',
         description: 'Delicate hand chains and hath phools for festive looks',
         image: cld('aura/jewellery/img10'),
         productCount: 0,
@@ -81,6 +93,8 @@ const seedData = async () => {
       {
         name: 'Festive & Bridal Wear',
         slug: 'festive-bridal-wear',
+        group: 'occasion',
+        menuName: 'Shop by Occasion',
         description: 'Statement bridal and festive pieces for weddings and celebrations',
         image: cld('aura/jewellery/img07'),
         productCount: 0,
@@ -89,6 +103,8 @@ const seedData = async () => {
       {
         name: 'Everyday Essentials',
         slug: 'everyday-essentials',
+        group: 'occasion',
+        menuName: 'Shop by Occasion',
         description: 'Light, wearable pieces made for daily polish',
         image: cld('aura/jewellery/img04'),
         productCount: 0,
@@ -97,6 +113,8 @@ const seedData = async () => {
       {
         name: "Men's Collection",
         slug: 'mens-collection',
+        group: 'occasion',
+        menuName: 'Shop by Occasion',
         description: 'Subtle antique pieces styled for him',
         image: cld('aura/jewellery/img03'),
         productCount: 0,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -12,13 +12,23 @@ import {
   ChevronDown,
 } from 'lucide-react';
 import { brandLogo } from '../data/images';
-import { TYPE_CATEGORIES, OCCASION_CATEGORIES } from '../data/shopCategories';
+import { fetchCategories, CATEGORIES_CHANGED_EVENT } from '../services/api';
+import {
+  TYPE_CATEGORIES,
+  OCCASION_CATEGORIES,
+  groupCategoriesByMenu,
+} from '../data/shopCategories';
 import '../styles/components/Sidebar.css';
 
 const EXPANDED_WIDTH = 270;
 const COLLAPSED_WIDTH = 80;
 const SNAP_WIDTH = 170;
 const clampWidth = (w) => Math.min(EXPANDED_WIDTH, Math.max(COLLAPSED_WIDTH, w));
+
+const fallbackMenuSections = groupCategoriesByMenu([
+  ...TYPE_CATEGORIES,
+  ...OCCASION_CATEGORIES,
+]);
 
 const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, hoverOpen, onHoverChange }) => {
   const location = useLocation();
@@ -28,13 +38,61 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
   const [settingsOpen, setSettingsOpen] = useState(
     () => location.pathname.startsWith('/admin/settings')
   );
+  const [menuSections, setMenuSections] = useState(fallbackMenuSections);
+  const [openMenuSections, setOpenMenuSections] = useState(() =>
+    Object.fromEntries(fallbackMenuSections.map((s) => [s.menuName, true]))
+  );
+
+  const loadNavCategories = useCallback(() => {
+    fetchCategories()
+      .then((res) => {
+        const active = (res.data || [])
+          .filter((category) => category.status !== 'Inactive')
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+          );
+        if (!active.length) return;
+        const sections = groupCategoriesByMenu(active);
+        setMenuSections(sections);
+        setOpenMenuSections((prev) => {
+          const next = { ...prev };
+          sections.forEach((s) => {
+            if (next[s.menuName] === undefined) next[s.menuName] = true;
+          });
+          return next;
+        });
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    loadNavCategories();
+    window.addEventListener(CATEGORIES_CHANGED_EVENT, loadNavCategories);
+    return () => window.removeEventListener(CATEGORIES_CHANGED_EVENT, loadNavCategories);
+  }, [loadNavCategories]);
 
   useEffect(() => {
     if (location.pathname.startsWith('/admin/categories') || location.pathname.startsWith('/admin/products')) {
       setCollectionsOpen(true);
     }
     if (location.pathname.startsWith('/admin/settings')) setSettingsOpen(true);
-  }, [location.pathname]);
+
+    const activeCategory = new URLSearchParams(location.search).get('category');
+    if (!activeCategory) return;
+    const match = menuSections.find((section) =>
+      section.categories.some((cat) => cat.name === activeCategory)
+    );
+    if (match) {
+      setOpenMenuSections((prev) =>
+        prev[match.menuName] ? prev : { ...prev, [match.menuName]: true }
+      );
+    }
+  }, [location.pathname, location.search, menuSections]);
+
+  const toggleMenuSection = (menuName) => {
+    setOpenMenuSections((prev) => ({ ...prev, [menuName]: !prev[menuName] }));
+  };
 
   const handleCollectionsToggle = () => {
     if (!effectiveExpanded) {
@@ -239,33 +297,39 @@ const Sidebar = ({ expanded, onToggle, onSetExpanded, dragWidth, setDragWidth, h
               >
                 Best Sellers
               </Link>
-              <span className="nav-sublabel">Shop by Category</span>
-              {TYPE_CATEGORIES.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  to={`/admin/products?category=${encodeURIComponent(cat.name)}`}
-                  className={`nav-subitem nav-subitem--indent ${
-                    new URLSearchParams(location.search).get('category') === cat.name
-                      ? 'active'
-                      : ''
-                  }`}
-                >
-                  {cat.name}
-                </Link>
-              ))}
-              {OCCASION_CATEGORIES.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  to={`/admin/products?category=${encodeURIComponent(cat.name)}`}
-                  className={`nav-subitem ${
-                    new URLSearchParams(location.search).get('category') === cat.name
-                      ? 'active'
-                      : ''
-                  }`}
-                >
-                  {cat.name}
-                </Link>
-              ))}
+              {menuSections.map((section) => {
+                const sectionOpen = !!openMenuSections[section.menuName];
+                return (
+                  <div key={section.menuName} className="nav-section">
+                    <button
+                      type="button"
+                      className={`nav-sublabel nav-sublabel--toggle${sectionOpen ? ' is-open' : ''}`}
+                      onClick={() => toggleMenuSection(section.menuName)}
+                      aria-expanded={sectionOpen}
+                    >
+                      <span>{section.menuName}</span>
+                      <ChevronDown
+                        size={13}
+                        className={`nav-section-chevron${sectionOpen ? ' is-open' : ''}`}
+                      />
+                    </button>
+                    {sectionOpen &&
+                      section.categories.map((cat) => (
+                        <Link
+                          key={cat.slug || cat._id}
+                          to={`/admin/products?category=${encodeURIComponent(cat.name)}`}
+                          className={`nav-subitem nav-subitem--indent ${
+                            new URLSearchParams(location.search).get('category') === cat.name
+                              ? 'active'
+                              : ''
+                          }`}
+                        >
+                          {cat.name}
+                        </Link>
+                      ))}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

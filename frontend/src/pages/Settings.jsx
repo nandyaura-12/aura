@@ -227,7 +227,10 @@ const Settings = () => {
               onToggle={() => setShowConfirm((open) => !open)}
             />
             {passwordError && <p className="settings-error">{passwordError}</p>}
-            <p className="settings-note">Password is saved in this browser. Use at least 6 characters.</p>
+            <p className="settings-note">
+              Password is saved in this browser. Use at least 8 characters with letters, numbers, and a
+              special character.
+            </p>
             <button type="submit" className="btn btn-primary">
               Update password
             </button>

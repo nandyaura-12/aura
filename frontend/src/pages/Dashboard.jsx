@@ -85,7 +85,7 @@ const Dashboard = () => {
         />
       </div>
 
-      <div className="card-table-wrapper">
+      <div className="card-table-wrapper admin-mobile-table-wrap">
         <div className="table-header-bar">
           <div>
             <h3 style={{ fontSize: '1.15rem', fontWeight: '800' }}>Recent Antique Purchases</h3>
@@ -99,7 +99,7 @@ const Dashboard = () => {
         </div>
 
         <div className="table-container">
-          <table className="custom-table">
+          <table className="custom-table admin-mobile-table">
             <thead>
               <tr>
                 <th>Order ID</th>
@@ -114,25 +114,25 @@ const Dashboard = () => {
               {recentOrders.length > 0 ? (
                 recentOrders.map((order) => (
                   <tr key={order._id || order.orderId}>
-                    <td style={{ fontWeight: '700', fontFamily: 'var(--font-mono)', color: 'var(--primary-gold)' }}>
+                    <td data-label="Order ID" data-span="full" style={{ fontWeight: '700', fontFamily: 'var(--font-mono)', color: 'var(--primary-gold)' }}>
                       {order.orderId}
                     </td>
-                    <td>
+                    <td data-label="Client" data-span="full">
                       <div style={{ fontWeight: '700' }}>{order.customerName}</div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{order.customerEmail}</div>
                     </td>
-                    <td style={{ fontWeight: '800' }}>{formatInr(order.totalAmount)}</td>
-                    <td>
+                    <td data-label="Total" style={{ fontWeight: '800' }}>{formatInr(order.totalAmount)}</td>
+                    <td data-label="Payment">
                       <span className={`badge badge-${order.paymentStatus?.toLowerCase()}`}>
                         {order.paymentStatus}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Delivery">
                       <span className={`badge badge-${order.orderStatus?.toLowerCase()}`}>
                         {order.orderStatus}
                       </span>
                     </td>
-                    <td style={{ color: 'var(--text-muted)' }}>
+                    <td data-label="Date" style={{ color: 'var(--text-muted)' }}>
                       {new Date(order.createdAt || Date.now()).toLocaleDateString()}
                     </td>
                   </tr>

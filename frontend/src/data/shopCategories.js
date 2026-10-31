@@ -70,6 +70,54 @@ export const SHOP_CATEGORIES = [
 export const TYPE_CATEGORIES = SHOP_CATEGORIES.filter((c) => c.group === 'type');
 export const OCCASION_CATEGORIES = SHOP_CATEGORIES.filter((c) => c.group === 'occasion');
 
+/** Known occasion slugs — used when older DB rows have no menuName yet. */
+export const OCCASION_SLUGS = new Set(OCCASION_CATEGORIES.map((c) => c.slug));
+
+export const DEFAULT_MENU_NAMES = ['Shop by Category', 'Shop by Occasion'];
+
+export const resolveCategoryMenuName = (category = {}) => {
+  const named = String(category.menuName || '').trim();
+  if (named) return named;
+  if (category.group === 'occasion' || OCCASION_SLUGS.has(category.slug)) {
+    return 'Shop by Occasion';
+  }
+  return 'Shop by Category';
+};
+
+/**
+ * Group categories under free-text menu names for Collections nav.
+ * Returns [{ menuName, categories }] in first-seen order.
+ */
+export const groupCategoriesByMenu = (categories = []) => {
+  const order = [];
+  const map = new Map();
+
+  categories.forEach((category) => {
+    const menuName = resolveCategoryMenuName(category);
+    if (!map.has(menuName)) {
+      map.set(menuName, []);
+      order.push(menuName);
+    }
+    map.get(menuName).push(category);
+  });
+
+  return order.map((menuName) => ({
+    menuName,
+    categories: map.get(menuName),
+  }));
+};
+
+/** @deprecated Prefer groupCategoriesByMenu — kept for older callers. */
+export const splitNavCategories = (categories = []) => {
+  const sections = groupCategoriesByMenu(categories);
+  const type =
+    sections.find((s) => s.menuName === 'Shop by Category')?.categories ||
+    sections.filter((s) => s.menuName !== 'Shop by Occasion').flatMap((s) => s.categories);
+  const occasion =
+    sections.find((s) => s.menuName === 'Shop by Occasion')?.categories || [];
+  return { type, occasion };
+};
+
 export const slugifyCategory = (name = '') =>
   String(name)
     .toLowerCase()
@@ -90,5 +138,7 @@ export const categoryPath = (nameOrSlug) => {
   if (bySlug) return `/shop/${bySlug.slug}`;
   const byName = getCategoryByName(nameOrSlug);
   if (byName) return `/shop/${byName.slug}`;
-  return `/shop/${slugifyCategory(nameOrSlug)}`;
+  const value = String(nameOrSlug || '').trim();
+  if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) return `/shop/${value}`;
+  return `/shop/${slugifyCategory(value)}`;
 };

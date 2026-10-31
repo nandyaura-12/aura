@@ -5,6 +5,8 @@ const customerSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     passwordHash: { type: String, default: '' },
+    googleId: { type: String, default: '', index: true },
+    authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
     phone: { type: String, default: '' },
     address: { type: String, default: '' },
     ordersCount: { type: Number, default: 0 },

@@ -89,10 +89,10 @@ const Reports = () => {
       </div>
 
       {/* Date Range & Product Filter Bar */}
-      <div className="filter-bar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <div className="filter-bar reports-filter-bar">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
           <Calendar size={18} style={{ color: 'var(--primary-gold)' }} />
-          <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>Customized Date Range:</span>
+          <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>Date Range:</span>
         </div>
 
         <div className="date-picker-group">
@@ -113,12 +113,11 @@ const Reports = () => {
           />
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
+        <div className="reports-piece-filter">
           <Filter size={18} style={{ color: 'var(--primary-gold)' }} />
           <span style={{ fontSize: '0.85rem', fontWeight: '700' }}>Antique Piece Filter:</span>
           <select
-            className="form-control"
-            style={{ width: '230px' }}
+            className="form-control filter-select"
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value)}
           >
@@ -217,12 +216,12 @@ const Reports = () => {
       </div>
 
       {/* Breakdown Data Table */}
-      <div className="card-table-wrapper">
+      <div className="card-table-wrapper admin-mobile-table-wrap">
         <div className="table-header-bar">
           <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Antique Sales Performance Breakdown</h3>
         </div>
         <div className="table-container">
-          <table className="custom-table">
+          <table className="custom-table admin-mobile-table">
             <thead>
               <tr>
                 <th>Antique Item</th>
@@ -235,12 +234,12 @@ const Reports = () => {
               {reportData.topProducts && reportData.topProducts.length > 0 ? (
                 reportData.topProducts.map((prod, idx) => (
                   <tr key={idx}>
-                    <td style={{ fontWeight: '700' }}>{prod.name}</td>
-                    <td style={{ fontWeight: '800', color: 'var(--primary-gold)' }}>
+                    <td data-label="Item" data-span="full" style={{ fontWeight: '700' }}>{prod.name}</td>
+                    <td data-label="Revenue" style={{ fontWeight: '800', color: 'var(--primary-gold)' }}>
                       {formatInr(prod.revenue)}
                     </td>
-                    <td>{prod.units} pcs</td>
-                    <td>{prod.orders} orders</td>
+                    <td data-label="Units">{prod.units} pcs</td>
+                    <td data-label="Orders">{prod.orders} orders</td>
                   </tr>
                 ))
               ) : (

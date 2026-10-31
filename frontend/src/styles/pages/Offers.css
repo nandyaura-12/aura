@@ -1,0 +1,42 @@
+/* Offers admin — mobile-friendly layout */
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.offers-popup-banner {
+  flex-wrap: wrap;
+}
+
+.offers-popup-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+@media (max-width: 720px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .offers-popup-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .offers-popup-banner__actions {
+    width: 100%;
+  }
+
+  .offers-popup-banner__actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .page-header .btn {
+    width: 100%;
+  }
+}

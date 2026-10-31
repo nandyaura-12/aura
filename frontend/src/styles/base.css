@@ -45,6 +45,7 @@
   --status-shipped: var(--olive-mid);
   --sidebar-width: 270px;
   --navbar-height: 72px;
+  --store-header-height: 160px;
   --font-main: var(--font-sans);
 }
 
@@ -54,8 +55,28 @@
   padding: 0;
 }
 
+/* Hide scrollbars everywhere — scrolling still works */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / old Edge */
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none; /* Chrome, Safari, Edge */
+}
+
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 body {
@@ -64,6 +85,14 @@ body {
   color: var(--ink);
   line-height: 1.5;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 a {

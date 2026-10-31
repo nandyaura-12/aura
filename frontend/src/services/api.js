@@ -17,6 +17,10 @@ export const updateProductApi = (id, productData) => api.put(`/products/${id}`, 
 export const deleteProductApi = (id) => api.delete(`/products/${id}`);
 
 // Categories API
+export const CATEGORIES_CHANGED_EVENT = 'aura-categories-changed';
+export const notifyCategoriesChanged = () => {
+  window.dispatchEvent(new Event(CATEGORIES_CHANGED_EVENT));
+};
 export const fetchCategories = () => api.get(`/categories`);
 export const createCategoryApi = (categoryData) => api.post(`/categories`, categoryData);
 export const updateCategoryApi = (id, categoryData) => api.put(`/categories/${id}`, categoryData);
@@ -45,6 +49,7 @@ export const deleteOfferApi = (id) => api.delete(`/offers/${id}`);
 // Storefront User Auth API
 export const registerUserApi = (userData) => api.post(`/customers/register`, userData);
 export const loginUserApi = (credentials) => api.post(`/customers/login`, credentials);
+export const googleLoginApi = (payload) => api.post(`/customers/google`, payload);
 export const fetchMyOrders = (email) => api.get(`/orders`, { params: { email } });
 
 // Reports API (Customized date range & product based)

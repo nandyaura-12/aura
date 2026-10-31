@@ -41,6 +41,8 @@
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 @media (max-width: 1024px) {
@@ -66,9 +68,17 @@
   .main-content,
   .main-content.sidebar-collapsed {
     margin-left: 0 !important;
+    width: 100%;
+    max-width: 100%;
   }
 
   .page-wrapper {
-    padding: 1.15rem 0.9rem 1.75rem;
+    padding: 1rem 0.85rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-wrapper {
+    padding: 0.85rem 0.7rem 1.35rem;
   }
 }

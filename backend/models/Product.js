@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema(
     purity: { type: String, default: 'Antique Matte Finish (Brass Alloy)' }, // finish / material — antique-finish, NOT solid gold or silver
     weightGrams: { type: Number, default: 0 }, // approx. weight in grams
     makingCharge: { type: Number, default: 0 }, // crafting charge (%)
+    ringType: { type: String, default: '' }, // Rings only — Temple, Cocktail, Bridal, etc.
     images: [{ type: String }],
     isFeatured: { type: Boolean, default: false },
     offerTag: { type: String, default: '' },

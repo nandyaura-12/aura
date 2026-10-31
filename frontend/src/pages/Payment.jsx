@@ -386,7 +386,6 @@ const Payment = () => {
               <div className="co-pay-logos" aria-label="Accepted payment methods">
                 <span className="co-visa">VISA</span>
                 <span className="co-mc" aria-hidden="true" />
-                <span className="co-amex">AMEX</span>
                 <span className="co-upi-word">UPI</span>
                 <span className="co-paypal">PayPal</span>
               </div>

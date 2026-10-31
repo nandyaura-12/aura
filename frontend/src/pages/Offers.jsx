@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { confirmToast } from '../lib/confirmToast';
 import { Plus, Tag, Edit2, Trash2, Calendar, Upload, Megaphone, Eye, X } from 'lucide-react';
 import '../styles/components/FestivalOfferPopup.css';
+import '../styles/pages/Offers.css';
 
 const Offers = () => {
   const [offers, setOffers] = useState([]);
@@ -142,9 +143,9 @@ const Offers = () => {
       </div>
 
       {/* Festival Offer Popup — Admin Setting */}
-      <div className="stat-card" style={{ width: '100%', marginBottom: '1.25rem', border: '1.5px solid var(--gold)', background: 'var(--cream)' }}>
+      <div className="stat-card offers-popup-banner" style={{ width: '100%', marginBottom: '1.25rem', border: '1.5px solid var(--gold)', background: 'var(--cream)' }}>
         <Megaphone size={26} style={{ color: 'var(--olive)', flexShrink: 0 }} />
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 800 }}>🎉 Festival Offer Popup (Website)</h3>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
             {popupOffer
@@ -153,18 +154,18 @@ const Offers = () => {
           </p>
         </div>
         {popupOffer && (
-          <>
+          <div className="offers-popup-banner__actions">
             <button type="button" className="btn btn-secondary" onClick={() => setPreviewOffer(popupOffer)}>
               <Eye size={16} /> Preview Popup
             </button>
             <button type="button" className="btn btn-secondary" onClick={() => handleSetPopup(popupOffer)}>
               <X size={16} /> Turn Off
             </button>
-          </>
+          </div>
         )}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+      <div className="offers-grid">
         {offers.map((offer) => (
           <div key={offer._id} className="stat-card" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
             {offer.bannerImage && (

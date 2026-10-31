@@ -160,4 +160,14 @@
   .settings-grid {
     grid-template-columns: 1fr;
   }
+
+  .settings-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

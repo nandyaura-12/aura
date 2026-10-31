@@ -1210,6 +1210,7 @@
       "photo copy"
       "photo price"
       "qty remove";
+    gap: 0.65rem 0.75rem;
   }
 
   .co-item > img {
@@ -1220,6 +1221,20 @@
   .co-item-price {
     text-align: left;
     align-self: end;
+  }
+
+  .co-qty {
+    padding: 0.3rem 0.65rem;
+  }
+
+  .co-qty button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .co-remove {
+    min-height: 40px;
+    padding: 0.35rem 0.25rem;
   }
 
   .co-city-row,

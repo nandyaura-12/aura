@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
-import { loginUserApi, registerUserApi } from '../services/api';
+import { loginUserApi, registerUserApi, googleLoginApi } from '../services/api';
 import { loginAdmin } from '../data/adminAuth';
 import { storeUser } from '../data/userAuth';
+import { PASSWORD_RULE, validatePassword } from '../lib/passwordValidation';
 import loginHero from '../assets/auth/login-hero.jpg';
 import '../styles/pages/storefront.css';
 import '../styles/pages/UserAuth.css';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
@@ -32,7 +36,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const UserLogin = () => {
+const UserLoginInner = () => {
   const navigate = useNavigate();
   const [mode, setMode] = useState('login');
   const [showPassword, setShowPassword] = useState(false);
@@ -55,14 +59,54 @@ const UserLogin = () => {
     setShowConfirm(false);
   };
 
+  const finishGoogleLogin = async (accessToken) => {
+    try {
+      setBusy(true);
+      const res = await googleLoginApi({ accessToken });
+      storeUser(res.data);
+      toast.success(`Welcome, ${res.data.name}!`);
+      navigate('/account');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Google sign-in failed. Please try again.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      if (!tokenResponse?.access_token) {
+        toast.error('Google did not return a token. Please try again.');
+        return;
+      }
+      finishGoogleLogin(tokenResponse.access_token);
+    },
+    onError: () => toast.error('Google sign-in was cancelled or failed.'),
+    flow: 'implicit',
+    scope: 'openid email profile',
+  });
+
   const handleGoogle = () => {
-    toast.info('Google sign-in is coming soon. Please use email for now.');
+    if (!GOOGLE_CLIENT_ID) {
+      toast.error('Google sign-in is not configured. Add VITE_GOOGLE_CLIENT_ID in frontend/.env.');
+      return;
+    }
+    if (mode === 'register' && !agree) {
+      toast.error('Please agree to the Terms & Privacy Policy.');
+      return;
+    }
+    googleLogin();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (mode === 'register') {
+      const passwordError = validatePassword(form.password);
+      if (passwordError) {
+        toast.error(passwordError);
+        return;
+      }
       if (form.password !== form.confirmPassword) {
         toast.error('Passwords do not match.');
         return;
@@ -159,7 +203,7 @@ const UserLogin = () => {
 
           {!isLogin && (
             <>
-              <button type="button" className="auth-google" onClick={handleGoogle}>
+              <button type="button" className="auth-google" onClick={handleGoogle} disabled={busy}>
                 <GoogleIcon /> Sign up with Google
               </button>
               <div className="auth-or" role="separator">
@@ -214,42 +258,46 @@ const UserLogin = () => {
                 </span>
               </label>
             ) : (
-              <div className="auth-row">
-                <label className="auth-field">
-                  <span>Password</span>
-                  <span className="auth-password">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      minLength={6}
-                      autoComplete="new-password"
-                      placeholder="••••••••"
-                      value={form.password}
-                      onChange={update('password')}
-                    />
-                    <button type="button" onClick={() => setShowPassword((v) => !v)}>
-                      {showPassword ? 'HIDE' : 'SHOW'}
-                    </button>
-                  </span>
-                </label>
-                <label className="auth-field">
-                  <span>Confirm password</span>
-                  <span className="auth-password">
-                    <input
-                      type={showConfirm ? 'text' : 'password'}
-                      required
-                      minLength={6}
-                      autoComplete="new-password"
-                      placeholder="••••••••"
-                      value={form.confirmPassword}
-                      onChange={update('confirmPassword')}
-                    />
-                    <button type="button" onClick={() => setShowConfirm((v) => !v)}>
-                      {showConfirm ? 'HIDE' : 'SHOW'}
-                    </button>
-                  </span>
-                </label>
-              </div>
+              <>
+                <div className="auth-row">
+                  <label className="auth-field">
+                    <span>Password</span>
+                    <span className="auth-password">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        minLength={8}
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        title={PASSWORD_RULE}
+                        value={form.password}
+                        onChange={update('password')}
+                      />
+                      <button type="button" onClick={() => setShowPassword((v) => !v)}>
+                        {showPassword ? 'HIDE' : 'SHOW'}
+                      </button>
+                    </span>
+                  </label>
+                  <label className="auth-field">
+                    <span>Confirm password</span>
+                    <span className="auth-password">
+                      <input
+                        type={showConfirm ? 'text' : 'password'}
+                        required
+                        minLength={8}
+                        autoComplete="new-password"
+                        placeholder="••••••••"
+                        value={form.confirmPassword}
+                        onChange={update('confirmPassword')}
+                      />
+                      <button type="button" onClick={() => setShowConfirm((v) => !v)}>
+                        {showConfirm ? 'HIDE' : 'SHOW'}
+                      </button>
+                    </span>
+                  </label>
+                </div>
+                <p className="auth-hint">{PASSWORD_RULE}</p>
+              </>
             )}
 
             {isLogin ? (
@@ -274,8 +322,8 @@ const UserLogin = () => {
                   onChange={(e) => setAgree(e.target.checked)}
                 />
                 <span>
-                  I agree to the <Link to="/">Terms &amp; Conditions</Link> and{' '}
-                  <Link to="/">Privacy Policy</Link>.
+                  I agree to the <Link to="/returns-policy">Terms &amp; Conditions</Link> and{' '}
+                  <Link to="/returns-policy">Privacy Policy</Link>.
                 </span>
               </label>
             )}
@@ -290,7 +338,7 @@ const UserLogin = () => {
               <div className="auth-or" role="separator">
                 <span>OR</span>
               </div>
-              <button type="button" className="auth-google" onClick={handleGoogle}>
+              <button type="button" className="auth-google" onClick={handleGoogle} disabled={busy}>
                 <GoogleIcon /> Continue with Google
               </button>
             </>
@@ -328,5 +376,13 @@ const UserLogin = () => {
     </div>
   );
 };
+
+const UserLogin = () => (
+  <GoogleOAuthProvider
+    clientId={GOOGLE_CLIENT_ID || '000000000000-unconfigured.apps.googleusercontent.com'}
+  >
+    <UserLoginInner />
+  </GoogleOAuthProvider>
+);
 
 export default UserLogin;

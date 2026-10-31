@@ -74,11 +74,11 @@ const Orders = () => {
       </div>
 
       <div className="filter-bar orders-filter-bar">
-        <div className="search-box" style={{ flex: 1 }}>
+        <div className="search-box search-box--grow">
           <Search size={18} />
           <input
             type="text"
-            placeholder="Search by Order ID or Customer Name..."
+            placeholder="Search order or customer…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -116,9 +116,9 @@ const Orders = () => {
         </div>
       </div>
 
-      <div className="card-table-wrapper">
+      <div className="card-table-wrapper admin-mobile-table-wrap">
         <div className="table-container">
-          <table className="custom-table">
+          <table className="custom-table admin-mobile-table">
             <thead>
               <tr>
                 <th>Order ID</th>
@@ -134,19 +134,19 @@ const Orders = () => {
               {orders.length > 0 ? (
                 orders.map((order) => (
                   <tr key={order._id || order.orderId}>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>
+                    <td data-label="Order ID" data-span="full" style={{ fontFamily: 'var(--font-mono)', fontWeight: '700' }}>
                       {order.orderId}
                     </td>
-                    <td>
+                    <td data-label="Customer" data-span="full">
                       <div style={{ fontWeight: '600' }}>{order.customerName}</div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{order.customerEmail}</div>
                     </td>
-                    <td>
+                    <td data-label="Payment">
                       <span className={`badge badge-${order.paymentStatus?.toLowerCase()}`}>
                         {order.paymentStatus}
                       </span>
                     </td>
-                    <td>
+                    <td data-label="Status">
                       <label className="status-select-wrap">
                         <select
                           className="status-select"
@@ -163,11 +163,11 @@ const Orders = () => {
                         <ChevronDown size={14} aria-hidden />
                       </label>
                     </td>
-                    <td style={{ fontWeight: '700' }}>{formatInr(order.totalAmount)}</td>
-                    <td style={{ color: 'var(--text-muted)' }}>
+                    <td data-label="Total" style={{ fontWeight: '700' }}>{formatInr(order.totalAmount)}</td>
+                    <td data-label="Date" style={{ color: 'var(--text-muted)' }}>
                       {new Date(order.createdAt || Date.now()).toLocaleDateString()}
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="mobile-actions" data-label="Actions">
                       <button className="btn btn-secondary" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }} onClick={() => setSelectedOrder(order)}>
                         <Eye size={14} /> View Invoice
                       </button>

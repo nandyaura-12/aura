@@ -11,11 +11,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsDir = path.join(__dirname, '..', 'uploads');
 
+const isPlaceholder = (value = '') => {
+  const v = String(value).trim().toLowerCase();
+  return (
+    !v ||
+    v.startsWith('your_') ||
+    v.includes('your_api') ||
+    v.includes('changeme') ||
+    v.includes('replace')
+  );
+};
+
 const cloudinaryConfigured = () =>
   Boolean(
     process.env.CLOUDINARY_CLOUD_NAME &&
+      !isPlaceholder(process.env.CLOUDINARY_CLOUD_NAME) &&
       process.env.CLOUDINARY_API_KEY &&
-      process.env.CLOUDINARY_API_SECRET
+      !isPlaceholder(process.env.CLOUDINARY_API_KEY) &&
+      process.env.CLOUDINARY_API_SECRET &&
+      !isPlaceholder(process.env.CLOUDINARY_API_SECRET)
   );
 
 const streamUpload = (fileBuffer, options = {}) =>
@@ -34,7 +48,7 @@ const streamUpload = (fileBuffer, options = {}) =>
     stream.end(fileBuffer);
   });
 
-// Local fallback (no Cloudinary keys): save under backend/uploads, served at /uploads/*
+// Local fallback (no / invalid Cloudinary keys): save under backend/uploads, served at /uploads/*
 const saveLocally = async (file) => {
   await fs.promises.mkdir(uploadsDir, { recursive: true });
   const ext = path.extname(file.originalname || '').toLowerCase() || '.jpg';
@@ -43,8 +57,15 @@ const saveLocally = async (file) => {
   return { url: `/uploads/${filename}`, public_id: filename };
 };
 
-const uploadOne = async (file) =>
-  cloudinaryConfigured() ? streamUpload(file.buffer) : saveLocally(file);
+const uploadOne = async (file) => {
+  if (!cloudinaryConfigured()) return saveLocally(file);
+  try {
+    return await streamUpload(file.buffer);
+  } catch (error) {
+    console.warn('Cloudinary upload failed, using local storage:', error.message);
+    return saveLocally(file);
+  }
+};
 
 // @desc    Upload single image (Cloudinary if configured, else local disk)
 // @route   POST /api/upload

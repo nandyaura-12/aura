@@ -13,6 +13,7 @@ import OrderConfirmed from './pages/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import Contact from './pages/Contact';
+import ReturnsPolicy from './pages/ReturnsPolicy';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Categories from './pages/Categories';
@@ -160,6 +161,8 @@ function App() {
           closeOnClick
           pauseOnHover
           draggable
+          theme="colored"
+          toastClassName="aura-toast"
         />
         <FestivalOfferPopup />
         <Routes>
@@ -168,6 +171,7 @@ function App() {
           <Route path="/shop/:categorySlug" element={<CategoryShop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/returns-policy" element={<ReturnsPolicy />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<UserLogin />} />
           <Route path="/account" element={<Account />} />

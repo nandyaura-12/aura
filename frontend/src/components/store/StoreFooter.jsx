@@ -39,7 +39,7 @@ const StoreFooter = () => {
           <h4>Quick Links</h4>
           <Link to="/about">About Us</Link>
           <Link to="/contact">Contact Us</Link>
-          <a href="#">Blog & Insights</a>
+          <Link to="/returns-policy">Returns &amp; Policy</Link>
           <a href="#">FAQ&apos;s</a>
         </div>
 
@@ -70,8 +70,8 @@ const StoreFooter = () => {
       <div className="footer-bottom store-container">
         <p>Copyright © 2026 Nandys Aura. All Rights Reserved.</p>
         <div>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Privacy Policy</a>
+          <Link to="/returns-policy">Terms &amp; Conditions</Link>
+          <Link to="/returns-policy">Privacy Policy</Link>
         </div>
       </div>
     </footer>

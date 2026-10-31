@@ -11,6 +11,7 @@ export const getProducts = async (req, res) => {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
         { purity: { $regex: search, $options: 'i' } },
+        { ringType: { $regex: search, $options: 'i' } },
         { sku: { $regex: search, $options: 'i' } },
       ];
     }
@@ -52,12 +53,14 @@ export const createProduct = async (req, res) => {
       purity,
       weightGrams,
       makingCharge,
+      ringType,
       images,
       offerTag,
       status,
     } = req.body;
 
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const isRings = String(category || '').toLowerCase() === 'rings';
 
     const product = new Product({
       name,
@@ -68,9 +71,10 @@ export const createProduct = async (req, res) => {
       discountPrice: Number(discountPrice) || 0,
       stock: Number(stock),
       sku: sku || `SKU-AQ-${Math.floor(1000 + Math.random() * 9000)}`,
-      purity: purity || 'Antique Matte Finish (Brass Alloy)',
-      weightGrams: Number(weightGrams) || 0,
+      purity: isRings ? '' : purity || 'Antique Matte Finish (Brass Alloy)',
+      weightGrams: isRings ? 0 : Number(weightGrams) || 0,
       makingCharge: Number(makingCharge) || 0,
+      ringType: isRings ? String(ringType || '').trim() : '',
       images: images || [],
       offerTag: offerTag || '',
       status: status || (Number(stock) > 0 ? 'Active' : 'Out of Stock'),
@@ -93,6 +97,14 @@ export const updateProduct = async (req, res) => {
     Object.assign(product, req.body);
     if (req.body.name) {
       product.slug = req.body.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+    const nextCategory = req.body.category ?? product.category;
+    if (String(nextCategory || '').toLowerCase() === 'rings') {
+      product.purity = '';
+      product.weightGrams = 0;
+      product.ringType = String(req.body.ringType ?? product.ringType ?? '').trim();
+    } else if (req.body.category) {
+      product.ringType = '';
     }
 
     const updatedProduct = await product.save();
