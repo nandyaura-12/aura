@@ -53,12 +53,18 @@ export const changeAdminPassword = (currentPassword, nextPassword) => {
     return { ok: false, message: 'Current password is incorrect.' };
   }
   const next = String(nextPassword || '');
-  // Letters + numbers + special character, min 8
-  if (next.length < 8 || !/[A-Za-z]/.test(next) || !/[0-9]/.test(next) || !/[^A-Za-z0-9]/.test(next)) {
+  // Letters + numbers + special character, min 8, no spaces
+  if (
+    /\s/.test(next) ||
+    next.length < 8 ||
+    !/[A-Za-z]/.test(next) ||
+    !/[0-9]/.test(next) ||
+    !/[^A-Za-z0-9]/.test(next)
+  ) {
     return {
       ok: false,
       message:
-        'New password must be at least 8 characters and include letters, numbers, and a special character.',
+        'New password must be at least 8 characters and include letters, numbers, and a special character. Spaces are not allowed.',
     };
   }
   if (next === currentPassword) {

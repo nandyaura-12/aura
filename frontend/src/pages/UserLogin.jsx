@@ -8,7 +8,7 @@ import StoreFooter from '../components/store/StoreFooter';
 import { loginUserApi, registerUserApi, googleLoginApi } from '../services/api';
 import { loginAdmin } from '../data/adminAuth';
 import { storeUser } from '../data/userAuth';
-import { PASSWORD_RULE, validatePassword } from '../lib/passwordValidation';
+import { PASSWORD_RULE, stripPasswordSpaces, validatePassword } from '../lib/passwordValidation';
 import loginHero from '../assets/auth/login-hero.jpg';
 import '../styles/pages/storefront.css';
 import '../styles/pages/UserAuth.css';
@@ -51,7 +51,12 @@ const UserLoginInner = () => {
     confirmPassword: '',
   });
 
-  const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+  const update = (field) => (e) => {
+    const raw = e.target.value;
+    const value =
+      field === 'password' || field === 'confirmPassword' ? stripPasswordSpaces(raw) : raw;
+    setForm((f) => ({ ...f, [field]: value }));
+  };
 
   const switchMode = (next) => {
     setMode(next);

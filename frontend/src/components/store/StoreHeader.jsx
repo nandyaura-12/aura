@@ -28,6 +28,7 @@ const fallbackMenuSections = groupCategoriesByMenu([
 const StoreHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
   const [menuSections, setMenuSections] = useState(fallbackMenuSections);
   const collectionsRef = useRef(null);
   const headerRef = useRef(null);
@@ -70,8 +71,10 @@ const StoreHeader = () => {
   }, []);
 
   useEffect(() => {
-    if (!collectionsOpen) return undefined;
+    // Desktop dropdown only — ignore clicks inside the mobile hamburger menu.
+    if (!collectionsOpen || menuOpen) return undefined;
     const onPointerDown = (e) => {
+      if (e.target.closest?.('.mobile-nav')) return;
       if (collectionsRef.current && !collectionsRef.current.contains(e.target)) {
         setCollectionsOpen(false);
       }
@@ -85,7 +88,7 @@ const StoreHeader = () => {
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [collectionsOpen]);
+  }, [collectionsOpen, menuOpen]);
 
   useEffect(() => {
     const el = headerRef.current;
@@ -103,7 +106,7 @@ const StoreHeader = () => {
       observer.disconnect();
       document.documentElement.style.removeProperty('--store-header-height');
     };
-  }, [menuOpen, banner]);
+  }, [menuOpen, mobileCollectionsOpen, banner]);
 
   const closeCollections = () => setCollectionsOpen(false);
 
@@ -223,7 +226,13 @@ const StoreHeader = () => {
               type="button"
               className="mobile-menu-btn"
               aria-label="Menu"
-              onClick={() => setMenuOpen((v) => !v)}
+              onClick={() => {
+                setMenuOpen((v) => {
+                  const next = !v;
+                  if (!next) setMobileCollectionsOpen(false);
+                  return next;
+                });
+              }}
             >
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -239,6 +248,7 @@ const StoreHeader = () => {
       {/* 2. Collection navbar after logo */}
       <nav className="nav-links-bar">
         <div className="store-container nav-links-inner">
+          <Link to="/">HOME</Link>
           <Link to="/#shop">SHOP</Link>
           <div
             className="nav-dropdown"
@@ -294,23 +304,60 @@ const StoreHeader = () => {
 
       {menuOpen && (
         <div className="mobile-nav">
-          <Link to="/#shop" onClick={() => setMenuOpen(false)}>SHOP</Link>
+          <Link
+            to="/"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
+            HOME
+          </Link>
+          <Link
+            to="/#shop"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
+            SHOP
+          </Link>
           <button
             type="button"
             className="mobile-nav__toggle"
-            onClick={() => setCollectionsOpen((open) => !open)}
-            aria-expanded={collectionsOpen}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setMobileCollectionsOpen((open) => !open);
+            }}
+            aria-expanded={mobileCollectionsOpen}
           >
             COLLECTIONS
             <ChevronDown
               size={15}
-              className={`nav-dropdown__chevron${collectionsOpen ? ' is-open' : ''}`}
+              className={`nav-dropdown__chevron${mobileCollectionsOpen ? ' is-open' : ''}`}
             />
           </button>
-          {collectionsOpen && (
+          {mobileCollectionsOpen && (
             <div className="mobile-nav__sub">
-              <Link to="/collections" onClick={() => setMenuOpen(false)}>Just Arrived</Link>
-              <Link to="/#bestsellers" onClick={() => setMenuOpen(false)}>Best Sellers</Link>
+              <Link
+                to="/collections"
+                onClick={() => {
+                  setMenuOpen(false);
+                  setMobileCollectionsOpen(false);
+                }}
+              >
+                Just Arrived
+              </Link>
+              <Link
+                to="/#bestsellers"
+                onClick={() => {
+                  setMenuOpen(false);
+                  setMobileCollectionsOpen(false);
+                }}
+              >
+                Best Sellers
+              </Link>
               {menuSections.map((section) => (
                 <React.Fragment key={section.menuName}>
                   <span>{section.menuName}</span>
@@ -318,7 +365,10 @@ const StoreHeader = () => {
                     <Link
                       key={category.slug || category._id}
                       to={categoryPath(category.slug || category.name)}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        setMobileCollectionsOpen(false);
+                      }}
                     >
                       {category.name}
                     </Link>
@@ -327,13 +377,49 @@ const StoreHeader = () => {
               ))}
             </div>
           )}
-          <Link to="/about" onClick={() => setMenuOpen(false)}>ABOUT US</Link>
-          <Link to="/contact" onClick={() => setMenuOpen(false)}>CONTACT US</Link>
-          <Link to="/returns-policy" onClick={() => setMenuOpen(false)}>RETURNS &amp; POLICY</Link>
-          <Link to="/wishlist" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/about"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
+            ABOUT US
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
+            CONTACT US
+          </Link>
+          <Link
+            to="/returns-policy"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
+            RETURNS &amp; POLICY
+          </Link>
+          <Link
+            to="/wishlist"
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
             WISHLIST{wishlistCount ? ` (${wishlistCount})` : ''}
           </Link>
-          <Link to={user ? '/account' : '/login'} onClick={() => setMenuOpen(false)}>
+          <Link
+            to={user ? '/account' : '/login'}
+            onClick={() => {
+              setMenuOpen(false);
+              setMobileCollectionsOpen(false);
+            }}
+          >
             {user ? 'MY ORDERS' : 'LOGIN'}
           </Link>
         </div>

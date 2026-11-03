@@ -14,6 +14,7 @@ import {
   saveStoreSettings,
   STORE_SETTINGS_CHANGED,
 } from '../data/storeSettings';
+import { stripPasswordSpaces } from '../lib/passwordValidation';
 import '../styles/pages/Settings.css';
 
 const SETTINGS_SECTIONS = {
@@ -205,7 +206,7 @@ const Settings = () => {
             <PasswordField
               label="Current password"
               value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              onChange={(e) => setCurrentPassword(stripPasswordSpaces(e.target.value))}
               autoComplete="current-password"
               visible={showCurrent}
               onToggle={() => setShowCurrent((open) => !open)}
@@ -213,7 +214,7 @@ const Settings = () => {
             <PasswordField
               label="New password"
               value={nextPassword}
-              onChange={(e) => setNextPassword(e.target.value)}
+              onChange={(e) => setNextPassword(stripPasswordSpaces(e.target.value))}
               autoComplete="new-password"
               visible={showNext}
               onToggle={() => setShowNext((open) => !open)}
@@ -221,7 +222,7 @@ const Settings = () => {
             <PasswordField
               label="Confirm new password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => setConfirmPassword(stripPasswordSpaces(e.target.value))}
               autoComplete="new-password"
               visible={showConfirm}
               onToggle={() => setShowConfirm((open) => !open)}
@@ -229,7 +230,7 @@ const Settings = () => {
             {passwordError && <p className="settings-error">{passwordError}</p>}
             <p className="settings-note">
               Password is saved in this browser. Use at least 8 characters with letters, numbers, and a
-              special character.
+              special character. Spaces are not allowed.
             </p>
             <button type="submit" className="btn btn-primary">
               Update password
@@ -261,7 +262,7 @@ const Settings = () => {
             <PasswordField
               label="Confirm with current password"
               value={emailPassword}
-              onChange={(e) => setEmailPassword(e.target.value)}
+              onChange={(e) => setEmailPassword(stripPasswordSpaces(e.target.value))}
               autoComplete="current-password"
               visible={showEmailPassword}
               onToggle={() => setShowEmailPassword((open) => !open)}

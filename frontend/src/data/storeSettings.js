@@ -3,6 +3,7 @@ const STORAGE_KEY = 'aura-store-settings';
 export const STORE_SETTINGS_CHANGED = 'aura-store-settings-changed';
 
 export const DEFAULT_STORE_SETTINGS = {
+  bannerEnabled: true,
   bannerText: 'Flat 20% off on VA for Online Gold Jewellery.',
   useCustomBanner: false,
   contactEmail: 'hello@nandysaura.com',

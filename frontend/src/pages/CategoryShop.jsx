@@ -5,7 +5,6 @@ import {
   ShieldCheck,
   CreditCard,
   Truck,
-  RotateCcw,
   Sparkles,
   SlidersHorizontal,
   X,
@@ -38,7 +37,6 @@ const TRUST_ITEMS = [
   { icon: ShieldCheck, title: 'Certified Quality', text: 'Antique finish guarantee' },
   { icon: CreditCard, title: 'Secure Payments', text: 'UPI, cards & COD' },
   { icon: Truck, title: 'Free Shipping', text: 'Insured, pan India' },
-  { icon: RotateCcw, title: 'Easy Returns', text: '7-day, no questions' },
   { icon: Sparkles, title: 'Personal Stylist', text: 'WhatsApp styling help' },
 ];
 

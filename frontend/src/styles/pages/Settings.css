@@ -47,11 +47,26 @@
   font-size: 0.9rem;
 }
 
+.settings-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.settings-card form .btn {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+}
+
+.settings-field {
+  margin-bottom: 0;
+}
+
 .settings-field > span:first-child {
   display: block;
   font-size: 0.85rem;
   font-weight: 700;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.65rem;
   color: var(--muted);
 }
 

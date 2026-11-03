@@ -7,6 +7,7 @@ import {
   isCustomAdminPassword,
   loginAdmin,
 } from '../data/adminAuth';
+import { stripPasswordSpaces } from '../lib/passwordValidation';
 import loginHero from '../assets/auth/login-hero.jpg';
 import '../styles/pages/UserAuth.css';
 import '../styles/pages/AdminLogin.css';
@@ -75,7 +76,7 @@ const AdminLogin = () => {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(stripPasswordSpaces(e.target.value))}
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
