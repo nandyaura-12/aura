@@ -13,7 +13,7 @@ import {
   testimonials,
   jewellery,
 } from '../data/images';
-import { formatInr } from '../data/catalog';
+import { formatInr, productPath } from '../data/catalog';
 import { SHOP_CATEGORIES, categoryPath, getCategoryByName } from '../data/shopCategories';
 import { fetchCategories, fetchProducts } from '../services/api';
 import '../styles/pages/storefront.css';
@@ -214,7 +214,7 @@ const Home = () => {
             {featured.map((item) => (
               <Link
                 key={item.slug || item.name}
-                to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
+                to={productPath(item)}
                 className="product-card"
               >
                 {renderHeart(item)}
@@ -247,7 +247,7 @@ const Home = () => {
               {bestSellers.map((item, i) => (
                 <Link
                   key={`${item.slug || item.name}-${i}`}
-                  to={item.slug ? `/collections?piece=${item.slug}` : '/collections'}
+                  to={productPath(item)}
                   className={`stagger-card ${item.tall ? 'tall' : ''} ${i % 2 === 1 ? 'offset-1' : ''}`}
                 >
                   {renderHeart(item)}

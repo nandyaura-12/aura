@@ -16,14 +16,16 @@ const orderSchema = new mongoose.Schema(
       },
     ],
     totalAmount: { type: Number, required: true },
-    paymentStatus: { type: String, enum: ['Paid', 'Pending', 'Failed', 'Refunded'], default: 'Paid' },
+    paymentStatus: { type: String, enum: ['Paid', 'Pending', 'Failed', 'Refunded'], default: 'Pending' },
     orderStatus: {
       type: String,
       enum: ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'],
       default: 'Pending',
     },
-    paymentMethod: { type: String, default: 'Credit Card' },
+    paymentMethod: { type: String, default: 'Cashfree' },
     shippingAddress: { type: String, required: true },
+    cashfreeOrderId: { type: String, default: '' },
+    paymentSessionId: { type: String, default: '' },
   },
   { timestamps: true }
 );

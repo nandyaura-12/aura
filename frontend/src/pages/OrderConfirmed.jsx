@@ -12,6 +12,7 @@ const methodLabel = {
   card: 'Card',
   upi: 'UPI',
   paypal: 'PayPal',
+  cashfree: 'Cashfree',
 };
 
 const OrderConfirmed = () => {
@@ -60,7 +61,7 @@ const OrderConfirmed = () => {
                 </div>
                 <div>
                   <dt>Payment</dt>
-                  <dd>{methodLabel[order.paymentMethod] || 'Card'}</dd>
+                  <dd>{methodLabel[order.paymentMethod] || 'Cashfree'}</dd>
                 </div>
                 <div>
                   <dt>Total</dt>

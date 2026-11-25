@@ -527,6 +527,12 @@
     display: block;
   }
 
+  /* Status alone often leaves an empty half-column — stretch it */
+  .admin-mobile-table td[data-label='Status'],
+  .admin-mobile-table td[data-label='Payment'] {
+    grid-column: 1 / -1;
+  }
+
   .admin-mobile-table .status-select-wrap {
     width: 100%;
   }

@@ -5,6 +5,12 @@ const fallbackGallery = [jewellery.img21, jewellery.img07, jewellery.img12, jewe
 export const formatInr = (amount) =>
   `₹${Number(amount || 0).toLocaleString('en-IN')}`;
 
+/** Canonical storefront product URL (slug preferred). */
+export const productPath = (product) => {
+  const key = product?.slug || product?.id || product?._id;
+  return key ? `/product/${key}` : '/collections';
+};
+
 export const toStoreProduct = (product) => {
   const listPrice = Number(product.price) || 0;
   const salePrice = Number(product.discountPrice) || 0;

@@ -4,11 +4,13 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Collections from './pages/Collections';
+import ProductDetail from './pages/ProductDetail';
 import CategoryShop from './pages/CategoryShop';
 import About from './pages/About';
 import Cart from './pages/Cart';
 import Shipping from './pages/Shipping';
 import Payment from './pages/Payment';
+import PaymentReturn from './pages/PaymentReturn';
 import OrderConfirmed from './pages/OrderConfirmed';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -168,6 +170,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collections" element={<Collections />} />
+          <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="/shop/:categorySlug" element={<CategoryShop />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -178,6 +181,7 @@ function App() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/checkout/shipping" element={<Shipping />} />
           <Route path="/checkout/payment" element={<Payment />} />
+          <Route path="/checkout/payment-return" element={<PaymentReturn />} />
           <Route path="/checkout/confirmation" element={<OrderConfirmed />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/*" element={<AdminLayout />} />

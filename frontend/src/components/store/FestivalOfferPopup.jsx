@@ -62,7 +62,10 @@ const FestivalOfferPopup = () => {
   const shouldShowOnPage = useMemo(() => {
     if (!festivalEnabled) return false;
     if (pathname.startsWith('/admin') || pathname.startsWith('/cart') || pathname.startsWith('/checkout')) return false;
-    return festivalOfferConfig.showOnPaths.includes(pathname);
+    return (
+      festivalOfferConfig.showOnPaths.includes(pathname) ||
+      pathname.startsWith('/product/')
+    );
   }, [pathname, festivalEnabled]);
 
   const dismissId = offer ? `${offer.code}:${offer.endDate || ''}` : '';

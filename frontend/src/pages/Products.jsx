@@ -343,11 +343,11 @@ const Products = () => {
             <thead>
               <tr>
                 <th>Antique Piece</th>
-                <th>Category</th>
-                <th>Ring Type</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Status</th>
+                <th className="th-category">Category</th>
+                <th className="th-ring">Ring Type</th>
+                <th className="th-price">Price</th>
+                <th className="th-stock">Stock</th>
+                <th className="th-status">Status</th>
                 <th className="th-right">Actions</th>
               </tr>
             </thead>
@@ -375,13 +375,17 @@ const Products = () => {
                         </div>
                       </div>
                     </td>
-                    <td data-label="Category">{product.category}</td>
-                    <td data-label="Ring Type">
-                      <span className="badge badge-gold">
-                        {isRingsCategory(product.category) ? product.ringType || '—' : '—'}
-                      </span>
+                    <td className="td-category" data-label="Category">{product.category}</td>
+                    <td className="td-ring" data-label="Ring Type">
+                      {isRingsCategory(product.category) && product.ringType ? (
+                        <span className="badge badge-gold">{product.ringType}</span>
+                      ) : (
+                        <span className="td-ring-empty" aria-hidden="true">
+                          —
+                        </span>
+                      )}
                     </td>
-                    <td data-label="Price">
+                    <td className="td-price" data-label="Price">
                       {product.discountPrice > 0 && product.discountPrice < product.price ? (
                         <>
                           <span className="product-price">
@@ -398,7 +402,7 @@ const Products = () => {
                       )}
                     </td>
                     <td className="td-stock" data-label="Stock">{product.stock} pcs</td>
-                    <td data-label="Status">
+                    <td className="td-status" data-label="Status">
                       <span className={`badge badge-${product.status.toLowerCase().replace(/\s+/g, '-')}`}>
                         {product.status}
                       </span>

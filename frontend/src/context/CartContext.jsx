@@ -7,9 +7,15 @@ import {
   initialContact,
   roundMoney,
 } from '../data/checkout';
-import { createOrderApi, fetchOffers } from '../services/api';
+import {
+  createCashfreeSessionApi,
+  createOrderApi,
+  fetchOffers,
+  verifyCashfreePaymentApi,
+} from '../services/api';
 
 const STORAGE_KEY = 'aura-checkout-v3';
+const PENDING_CASHFREE_KEY = 'aura-cashfree-pending';
 const CartContext = createContext(null);
 
 const defaultCard = {
@@ -27,7 +33,7 @@ const defaultState = {
   promoCode: '',
   discountRate: 0,
   discountFixed: 0,
-  paymentMethod: 'card',
+  paymentMethod: 'cashfree',
   upiApp: 'gpay',
   upiId: '',
   upiVerified: false,
@@ -227,28 +233,108 @@ export const CartProvider = ({ children }) => {
     setState((prev) => ({ ...prev, card: { ...prev.card, ...patch } }));
   };
 
-  const placeOrder = async () => {
+  const buildCheckoutPayload = () => {
     const address = state.addresses.find((item) => item.id === state.selectedAddressId);
     if (!address) {
       throw new Error('Choose a shipping address.');
     }
+    if (!state.items.length) {
+      throw new Error('Your cart is empty.');
+    }
 
     const totalAmount = roundMoney(totals.reduce((sum, group) => sum + group.total, 0));
     const customerName = `${address.firstName} ${address.lastName}`.trim();
-    const response = await createOrderApi({
-      customerName,
-      customerEmail: state.contact.email,
-      customerPhone: state.contact.phone || address.phone,
-      shippingAddress: addressSummary(address),
-      paymentMethod: state.paymentMethod,
+    const customerPhone = state.contact.phone || address.phone || '';
+
+    return {
+      address,
       totalAmount,
-      items: state.items.map((item) => ({
-        productId: item.id,
-        productName: item.title,
-        quantity: item.qty,
-        price: item.unitPrice,
-        image: item.image,
-      })),
+      payload: {
+        customerName,
+        customerEmail: state.contact.email,
+        customerPhone,
+        shippingAddress: addressSummary(address),
+        paymentMethod: 'cashfree',
+        totalAmount,
+        items: state.items.map((item) => ({
+          productId: item.id,
+          productName: item.title,
+          quantity: item.qty,
+          price: item.unitPrice,
+          image: item.image,
+        })),
+      },
+    };
+  };
+
+  const startCashfreePayment = async () => {
+    const { address, payload } = buildCheckoutPayload();
+    const response = await createCashfreeSessionApi(payload);
+    const session = response.data;
+
+    try {
+      sessionStorage.setItem(
+        PENDING_CASHFREE_KEY,
+        JSON.stringify({
+          orderId: session.orderId,
+          items: state.items,
+          totals,
+          address,
+          contact: state.contact,
+        })
+      );
+    } catch {
+      /* ignore storage errors */
+    }
+
+    setState((prev) => ({ ...prev, paymentMethod: 'cashfree' }));
+    return session;
+  };
+
+  const completeCashfreePayment = async (orderId) => {
+    const response = await verifyCashfreePaymentApi(orderId);
+    let pending = null;
+    try {
+      pending = JSON.parse(sessionStorage.getItem(PENDING_CASHFREE_KEY) || 'null');
+    } catch {
+      pending = null;
+    }
+
+    const apiOrder = response.data.order;
+    const order = {
+      id: apiOrder?.orderId || orderId,
+      items: pending?.items || state.items,
+      totals: pending?.totals || totals,
+      address: pending?.address || state.addresses.find((item) => item.id === state.selectedAddressId),
+      contact: pending?.contact || state.contact,
+      paymentMethod: 'cashfree',
+      placedAt: apiOrder?.createdAt || new Date().toISOString(),
+    };
+
+    setState((prev) => ({
+      ...prev,
+      order,
+      items: [],
+      promoCode: '',
+      discountRate: 0,
+      discountFixed: 0,
+      paymentMethod: 'cashfree',
+    }));
+
+    try {
+      sessionStorage.removeItem(PENDING_CASHFREE_KEY);
+    } catch {
+      /* ignore */
+    }
+
+    return order;
+  };
+
+  const placeOrder = async () => {
+    const { address, payload } = buildCheckoutPayload();
+    const response = await createOrderApi({
+      ...payload,
+      paymentMethod: state.paymentMethod || 'cashfree',
     });
 
     const order = {
@@ -257,7 +343,7 @@ export const CartProvider = ({ children }) => {
       totals,
       address,
       contact: state.contact,
-      paymentMethod: state.paymentMethod,
+      paymentMethod: state.paymentMethod || 'cashfree',
       placedAt: response.data.createdAt,
     };
     setState((prev) => ({
@@ -287,6 +373,8 @@ export const CartProvider = ({ children }) => {
     setPayment,
     setCard,
     placeOrder,
+    startCashfreePayment,
+    completeCashfreePayment,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

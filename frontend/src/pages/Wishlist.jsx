@@ -6,7 +6,7 @@ import StoreHeader from '../components/store/StoreHeader';
 import StoreFooter from '../components/store/StoreFooter';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
-import { formatInr } from '../data/catalog';
+import { formatInr, productPath } from '../data/catalog';
 import '../styles/pages/storefront.css';
 import '../styles/pages/Wishlist.css';
 
@@ -63,7 +63,7 @@ const Wishlist = () => {
                   <button
                     type="button"
                     className="wishlist-card-media"
-                    onClick={() => navigate(item.slug ? `/collections?piece=${item.slug}` : '/collections')}
+                    onClick={() => navigate(productPath(item))}
                   >
                     {item.image && <img src={item.image} alt={item.title} />}
                   </button>

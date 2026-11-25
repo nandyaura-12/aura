@@ -134,6 +134,102 @@
   text-align: right;
 }
 
+/* Keep header + cell alignment matched per column */
+.products-table th.th-category,
+.products-table td.td-category {
+  text-align: left;
+}
+
+.products-table th.th-ring,
+.products-table td.td-ring,
+.products-table th.th-status,
+.products-table td.td-status {
+  text-align: center;
+}
+
+.products-table th.th-price,
+.products-table td.td-price,
+.products-table th.th-stock,
+.products-table td.td-stock {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.products-table td.td-ring .badge,
+.products-table td.td-status .badge {
+  justify-content: center;
+}
+
+.products-table .td-ring-empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  color: var(--text-muted, #8a867c);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.products-table td.td-price .product-price,
+.products-table td.td-price .product-price--strike {
+  display: block;
+}
+
+/* Mobile cards: keep label→value stack aligned; status full-width */
+@media (max-width: 768px) {
+  .page-wrapper .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .page-wrapper .page-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .products-table.admin-mobile-table tbody tr {
+    gap: 0.7rem 0.85rem;
+    padding: 1rem;
+  }
+
+  .products-table.admin-mobile-table td.td-category,
+  .products-table.admin-mobile-table td.td-ring,
+  .products-table.admin-mobile-table td.td-price,
+  .products-table.admin-mobile-table td.td-stock,
+  .products-table.admin-mobile-table td.td-status {
+    text-align: left !important;
+    align-items: flex-start !important;
+  }
+
+  .products-table.admin-mobile-table td.td-status {
+    grid-column: 1 / -1;
+  }
+
+  .products-table.admin-mobile-table td.td-ring .badge,
+  .products-table.admin-mobile-table td.td-status .badge {
+    justify-content: flex-start;
+  }
+
+  .products-table.admin-mobile-table .td-ring-empty {
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  .products-table.admin-mobile-table td.td-price .product-price,
+  .products-table.admin-mobile-table td.td-price .product-price--strike {
+    text-align: left;
+  }
+
+  .products-table.admin-mobile-table .product-cell {
+    width: 100%;
+  }
+
+  .products-table.admin-mobile-table td.mobile-actions {
+    justify-content: flex-end;
+  }
+}
+
 .product-cell {
   display: flex;
   align-items: center;

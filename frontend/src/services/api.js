@@ -12,6 +12,7 @@ const api = axios.create({
 // Products API
 export const fetchProducts = (search = '', category = '') =>
   api.get(`/products`, { params: { search, category } });
+export const fetchProduct = (idOrSlug) => api.get(`/products/${encodeURIComponent(idOrSlug)}`);
 export const createProductApi = (productData) => api.post(`/products`, productData);
 export const updateProductApi = (id, productData) => api.put(`/products/${id}`, productData);
 export const deleteProductApi = (id) => api.delete(`/products/${id}`);
@@ -33,6 +34,12 @@ export const createOrderApi = (orderData) => api.post(`/orders`, orderData);
 export const updateOrderStatusApi = (id, statusData) =>
   api.put(`/orders/${id}/status`, statusData);
 export const deleteOrderApi = (id) => api.delete(`/orders/${id}`);
+
+// Cashfree payments
+export const createCashfreeSessionApi = (payload) =>
+  api.post(`/payments/cashfree/session`, payload);
+export const verifyCashfreePaymentApi = (orderId) =>
+  api.post(`/payments/cashfree/verify`, { orderId });
 
 // Customers API
 export const fetchCustomers = (search = '', status = '') =>

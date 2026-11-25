@@ -15,7 +15,7 @@ import StoreFooter from '../components/store/StoreFooter';
 import { useWishlist } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { jewellery } from '../data/images';
-import { formatInr, toStoreProduct } from '../data/catalog';
+import { formatInr, productPath, toStoreProduct } from '../data/catalog';
 import {
   SHOP_CATEGORIES,
   getCategoryBySlug,
@@ -35,7 +35,7 @@ const SORT_OPTIONS = [
 
 const TRUST_ITEMS = [
   { icon: ShieldCheck, title: 'Certified Quality', text: 'Antique finish guarantee' },
-  { icon: CreditCard, title: 'Secure Payments', text: 'UPI, cards & COD' },
+  { icon: CreditCard, title: 'Secure Payments', text: 'UPI & cards via Cashfree' },
   { icon: Truck, title: 'Free Shipping', text: 'Insured, pan India' },
   { icon: Sparkles, title: 'Personal Stylist', text: 'WhatsApp styling help' },
 ];
@@ -461,7 +461,7 @@ const CategoryShop = () => {
                     ) : (
                       <article key={product.id} className="category-shop__card">
                         <div className="category-shop__card-media">
-                          <Link to={`/collections?piece=${product.id}`}>
+                          <Link to={productPath(product)}>
                             <img
                               src={product.images?.[0] || jewellery.img01}
                               alt={product.title}
@@ -497,7 +497,7 @@ const CategoryShop = () => {
                           </button>
                         </div>
                         <div className="category-shop__card-body">
-                          <Link to={`/collections?piece=${product.id}`}>
+                          <Link to={productPath(product)}>
                             <h3>{product.title}</h3>
                             <p className="category-shop__card-meta">
                               {product.specs?.purity || 'Antique matte finish'}

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 
 // @desc    Get all products with search & category filter
@@ -26,11 +27,19 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// @desc    Get single product
+// @desc    Get single product by Mongo id or slug
 // @route   GET /api/products/:id
 export const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
+    let product = null;
+
+    if (mongoose.isValidObjectId(id)) {
+      product = await Product.findById(id);
+    }
+    if (!product) {
+      product = await Product.findOne({ slug: id });
+    }
     if (!product) return res.status(404).json({ message: 'Antique item not found' });
     res.json(product);
   } catch (error) {

@@ -33,6 +33,7 @@ const paymentLabels = {
   card: 'Credit Card',
   upi: 'UPI',
   paypal: 'PayPal',
+  cashfree: 'Cashfree',
 };
 
 // @desc    Create an order from checkout
@@ -88,7 +89,7 @@ export const createOrder = async (req, res) => {
           customerPhone: String(customerPhone || '').trim(),
           items: normalizedItems,
           totalAmount: amount,
-          paymentStatus: 'Paid',
+          paymentStatus: method === 'Cashfree' ? 'Pending' : 'Paid',
           orderStatus: 'Pending',
           paymentMethod: method,
           shippingAddress: address,
